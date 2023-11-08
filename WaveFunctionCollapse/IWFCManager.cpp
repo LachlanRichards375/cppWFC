@@ -35,3 +35,8 @@ std::shared_ptr<WFCCell> IWFCManager::GetCell(std::shared_ptr <WFCPosition> posi
 {
 	return _grid->GetCell(position);
 }
+
+WFCPosition& IWFCManager::GetGridSize()
+{
+	return _grid->GetSize();
+}

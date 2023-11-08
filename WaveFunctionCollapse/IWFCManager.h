@@ -21,4 +21,5 @@ public:
 	~IWFCManager();
 
 	std::shared_ptr<WFCCell> GetCell(std::shared_ptr<WFCPosition> position);
+	WFCPosition& GetGridSize();
 };

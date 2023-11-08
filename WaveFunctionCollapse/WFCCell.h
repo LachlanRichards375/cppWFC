@@ -2,12 +2,13 @@
 class IWFCManager;
 struct WFCPosition;
 #include "WFCCellUpdate.h"
+#include <optional>
 
 class WFCCell
 {
 protected:
-	IWFCManager &manager;
-	WFCPosition &position;
+	IWFCManager& manager;
+	WFCPosition& position;
 	unsigned long domain;
 public:
 	WFCCell(IWFCManager &m, WFCPosition &p) : manager(m), position(p)
@@ -30,8 +31,10 @@ public:
 	//void SetDomain(const std::vector<unsigned long> newDomain);
 	//void RuleSetup() const;
 	float CalculateEntropy() const;
-	WFCCellUpdate Collapse();
-	WFCCellUpdate Collapse(unsigned long toCollapseTo);
+	WFCCellUpdate& Collapse();
+	WFCCellUpdate& Collapse(unsigned long toCollapseTo);
+	WFCPosition& GetPosition();
+	std::optional<WFCCellUpdate> DomainCheck(WFCCellUpdate& update);
 	// WFCCellUpdate? DomainCheck(WFCCellUpdate update);
 	//WFCPosition GetPosition() const;
 
