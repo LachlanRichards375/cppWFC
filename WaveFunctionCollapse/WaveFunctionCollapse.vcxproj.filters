@@ -48,6 +48,9 @@
     <ClInclude Include="Grid2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WFCExternRunner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -72,6 +75,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Grid2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WFCExternRunner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
