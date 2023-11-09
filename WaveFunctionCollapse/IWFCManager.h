@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "WFCposition.h"
+#include <vector>
 struct WFCCellUpdate;
 class IWFCGrid;
 class IWFCCollapseMethod;
@@ -22,4 +23,8 @@ public:
 
 	std::shared_ptr<WFCCell> GetCell(std::shared_ptr<WFCPosition> position);
 	WFCPosition& GetGridSize();
+
+	std::vector<std::shared_ptr<WFCCell>> GetAlertees(WFCPosition& position);
+	void Initialize();
+	void Generate();
 };

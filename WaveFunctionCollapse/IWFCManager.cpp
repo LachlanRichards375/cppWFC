@@ -3,14 +3,15 @@
 #include "IWFCCollapseMethod.h"
 #include "IWFCGrid.h"
 #include "WFCCell.h"
-
+#include <iostream>
 
 
 IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid) : _collapseMethod(collapse), _grid(grid)
 {
+	//Rule Setup
 }
 
-inline IWFCManager::~IWFCManager()
+IWFCManager::~IWFCManager()
 {
 }
 
@@ -22,7 +23,6 @@ void IWFCManager::GenerateOnce()
 
 void IWFCManager::Collapse()
 {
-	//CollapseMethod.Collapse(Grid.PopNextCellToCollapse());
 	_collapseMethod->Collapse(_grid->PopNextCellToCollapse());
 }
 
@@ -39,4 +39,22 @@ std::shared_ptr<WFCCell> IWFCManager::GetCell(std::shared_ptr <WFCPosition> posi
 WFCPosition& IWFCManager::GetGridSize()
 {
 	return _grid->GetSize();
+}
+
+std::vector<std::shared_ptr<WFCCell>> IWFCManager::GetAlertees(WFCPosition& position)
+{
+	return _grid->GetAlertees(position);
+}
+
+void IWFCManager::Initialize()
+{
+	_collapseMethod->SetManager(this);
+}
+
+void IWFCManager::Generate()
+{
+	std::cout << "In Generate";
+	while (_grid->RemainingCellsToCollapse() > 0) {
+		Collapse();
+	}
 }

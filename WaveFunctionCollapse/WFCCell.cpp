@@ -1,6 +1,11 @@
 #pragma once
 #include "WFCCell.h"
 
+void WFCCell::SetDomain(const unsigned long newDomain)
+{
+    domain = newDomain;
+}
+
 float WFCCell::CalculateEntropy() const
 {
     return 0.0f;

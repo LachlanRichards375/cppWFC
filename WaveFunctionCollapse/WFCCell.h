@@ -11,32 +11,29 @@ protected:
 	WFCPosition& position;
 	unsigned long domain;
 public:
-	WFCCell(IWFCManager &m, WFCPosition &p) : manager(m), position(p)
+	WFCCell(IWFCManager &m, WFCPosition &p, const unsigned long domain) : manager(m), position(p)
 	{
 		CollapsedTile = 0;
-		domain = 0;
+		WFCCell::domain = domain;
 	}
 	WFCCell(WFCCell& other) : manager(other.manager), position(other.position)
 	{
-		CollapsedTile = 0;
-		domain = 0;
+		CollapsedTile = other.CollapsedTile;
+		domain = other.domain;
 	}
 
 	//~WFCCell();
 	//WFCCellDomain Domain;
 	unsigned long CollapsedTile;
-	// event Action<WFCCellUpdate> OnCellUpdate;
 
 	// Methods
-	//void SetDomain(const std::vector<unsigned long> newDomain);
 	//void RuleSetup() const;
+	void SetDomain(const unsigned long newDomain);
 	float CalculateEntropy() const;
 	WFCCellUpdate& Collapse();
 	WFCCellUpdate& Collapse(unsigned long toCollapseTo);
 	WFCPosition& GetPosition();
 	std::optional<WFCCellUpdate> DomainCheck(WFCCellUpdate& update);
-	// WFCCellUpdate? DomainCheck(WFCCellUpdate update);
-	//WFCPosition GetPosition() const;
 
 	bool operator<(const WFCCell& other) const
 	{
