@@ -53,7 +53,7 @@ void IWFCManager::Initialize()
 
 void IWFCManager::Generate()
 {
-	std::cout << "In Generate";
+	std::cout << "In Generate" << std::endl;
 	while (_grid->RemainingCellsToCollapse() > 0) {
 		Collapse();
 	}

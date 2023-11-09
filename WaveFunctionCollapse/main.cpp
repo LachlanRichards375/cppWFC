@@ -7,6 +7,8 @@ int main(int argc, char* argv[]) {
 	IWFCManager* manager = IWFCManager_Create(collapse, grid);
 
 	IWFCManager_Run(manager);
+	
+	system("pause");
 
 	return 0;
 }
