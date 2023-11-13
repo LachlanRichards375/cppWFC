@@ -19,6 +19,7 @@ protected:
 public:
     Grid2D(WFCPosition& newSize);
 
+    virtual void RuleSetup() override;
     virtual int RemainingCellsToCollapse() override;
     virtual std::shared_ptr<WFCPosition> PopNextCellToCollapse() override;
     virtual std::shared_ptr<WFCCell> GetCell(std::shared_ptr <WFCPosition> position) override;

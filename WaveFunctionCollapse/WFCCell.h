@@ -27,7 +27,7 @@ public:
 	unsigned long CollapsedTile;
 
 	// Methods
-	//void RuleSetup() const;
+	void RuleSetup() const;
 	void SetDomain(const unsigned long newDomain);
 	float CalculateEntropy() const;
 	WFCCellUpdate& Collapse();

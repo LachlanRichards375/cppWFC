@@ -10,7 +10,8 @@ protected:
 	WFCPosition& size;
 public:
 	IWFCGrid(WFCPosition& newSize);
-	virtual WFCPosition& GetSize();
+	virtual WFCPosition& GetSize(); 
+	virtual void RuleSetup() = 0;
 	virtual int RemainingCellsToCollapse() = 0;
 	virtual std::shared_ptr<WFCPosition> PopNextCellToCollapse() = 0;
 	virtual std::shared_ptr<WFCCell> GetCell(std::shared_ptr <WFCPosition> position) = 0;

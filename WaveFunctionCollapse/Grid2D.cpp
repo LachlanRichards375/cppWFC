@@ -6,6 +6,15 @@ Grid2D::Grid2D(WFCPosition& newSize)
 {
 }
 
+void Grid2D::RuleSetup()
+{
+	for (int x = 0; x < size.x; ++x) {
+		for (int y = 0; y < size.y; ++y) {
+			grid[x][y]->RuleSetup();
+		}
+	}
+}
+
 inline int Grid2D::RemainingCellsToCollapse()
 {
 	return entropyQueue.size();

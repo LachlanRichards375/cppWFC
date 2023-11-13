@@ -1,6 +1,10 @@
 #pragma once
 #include "WFCCell.h"
 
+void WFCCell::RuleSetup() const
+{
+}
+
 void WFCCell::SetDomain(const unsigned long newDomain)
 {
     domain = newDomain;

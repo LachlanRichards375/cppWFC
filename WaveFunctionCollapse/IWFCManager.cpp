@@ -49,12 +49,17 @@ std::vector<std::shared_ptr<WFCCell>> IWFCManager::GetAlertees(WFCPosition& posi
 void IWFCManager::Initialize()
 {
 	_collapseMethod->SetManager(this);
+	//Set max thread count
+
+	//Grid Initalize?
+	//Grid Rule Setup
+	_grid->RuleSetup();
 }
 
 void IWFCManager::Generate()
 {
 	std::cout << "In Generate" << std::endl;
 	while (_grid->RemainingCellsToCollapse() > 0) {
-		Collapse();
+		GenerateOnce();
 	}
 }
