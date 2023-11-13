@@ -145,6 +145,7 @@
     <ClInclude Include="IWFCCollapseMethod.h" />
     <ClInclude Include="IWFCGrid.h" />
     <ClInclude Include="IWFCManager.h" />
+    <ClInclude Include="IWFCRuleMultiCellTarget.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ThreadSafeQueue.h" />
@@ -152,6 +153,9 @@
     <ClInclude Include="WFCCellUpdate.h" />
     <ClInclude Include="WFCExternRunner.h" />
     <ClInclude Include="WFCPosition.h" />
+    <ClInclude Include="IWFCRule.h" />
+    <ClInclude Include="WFCRuleCellIsNot.h" />
+    <ClInclude Include="WFCRuleManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
@@ -159,6 +163,7 @@
     <ClCompile Include="IWFCCollapseMethod.cpp" />
     <ClCompile Include="IWFCGrid.cpp" />
     <ClCompile Include="IWFCManager.cpp" />
+    <ClCompile Include="IWFCRuleMultiCellTarget.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -169,6 +174,8 @@
     <ClCompile Include="WFCCell.cpp" />
     <ClCompile Include="WFCCellUpdate.cpp" />
     <ClCompile Include="WFCExternRunner.cpp" />
+    <ClCompile Include="WFCRule.cpp" />
+    <ClCompile Include="WFCRuleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WaveFunctionCollapse.rc" />

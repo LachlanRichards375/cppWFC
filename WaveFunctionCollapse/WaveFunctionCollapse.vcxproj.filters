@@ -13,6 +13,13 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\WFCRules">
+      <UniqueIdentifier>{ccc9d9a1-e98a-445b-a864-45a68d974932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\WFCRules">
+      <UniqueIdentifier>{8ce3061c-9c6c-4317-af30-6b848189fe01}</UniqueIdentifier>
+      <Extensions>WFCRule</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -51,6 +58,18 @@
     <ClInclude Include="WFCExternRunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WFCRuleCellIsNot.h">
+      <Filter>Header Files\WFCRules</Filter>
+    </ClInclude>
+    <ClInclude Include="IWFCRule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WFCRuleManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IWFCRuleMultiCellTarget.h">
+      <Filter>Header Files\WFCRules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -82,6 +101,15 @@
     </ClCompile>
     <ClCompile Include="WFCExternRunner.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WFCRule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WFCRuleManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IWFCRuleMultiCellTarget.cpp">
+      <Filter>Source Files\WFCRules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
