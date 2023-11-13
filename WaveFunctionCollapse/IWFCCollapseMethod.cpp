@@ -5,6 +5,7 @@
 #include "WFCCell.h"
 
 IWFCCollapseMethod::IWFCCollapseMethod(){
+	manager = nullptr;
 }
 
 IWFCCollapseMethod::~IWFCCollapseMethod()
