@@ -16,6 +16,14 @@ public:
 		WFCPosition::w = other.w;
 	}
 
+	WFCPosition(WFCPosition* other)
+	{
+		WFCPosition::x = other->x;
+		WFCPosition::y = other->y;
+		WFCPosition::z = other->z;
+		WFCPosition::w = other->w;
+	}
+
 	WFCPosition(int x, int y)
 	{
 		WFCPosition::x = x;
