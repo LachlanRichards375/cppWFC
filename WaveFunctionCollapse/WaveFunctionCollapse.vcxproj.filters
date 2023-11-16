@@ -61,13 +61,10 @@
     <ClInclude Include="WFCRuleCellIsNot.h">
       <Filter>Header Files\WFCRules</Filter>
     </ClInclude>
-    <ClInclude Include="IWFCRule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WFCRuleManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IWFCRuleMultiCellTarget.h">
+    <ClInclude Include="IWFCRule.h">
       <Filter>Header Files\WFCRules</Filter>
     </ClInclude>
   </ItemGroup>
@@ -102,13 +99,16 @@
     <ClCompile Include="WFCExternRunner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WFCRule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WFCRuleManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IWFCRuleMultiCellTarget.cpp">
+    <ClCompile Include="IWFCRule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WFCRuleCellIsNot.cpp">
+      <Filter>Source Files\WFCRules</Filter>
+    </ClCompile>
+    <ClCompile Include="WFCRule.cpp">
       <Filter>Source Files\WFCRules</Filter>
     </ClCompile>
   </ItemGroup>
