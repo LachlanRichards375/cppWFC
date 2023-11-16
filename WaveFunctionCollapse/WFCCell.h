@@ -8,10 +8,10 @@ class WFCCell
 {
 protected:
 	IWFCManager& manager;
-	const WFCPosition& position;
+	const WFCPosition* position;
 	unsigned long domain;
 public:
-	WFCCell(IWFCManager& m, const WFCPosition& p, unsigned long domain);
+	WFCCell(IWFCManager& m, const WFCPosition* p, unsigned long domain);
 	WFCCell(WFCCell* other);
 	
 
@@ -25,7 +25,7 @@ public:
 	float CalculateEntropy() const;
 	WFCCellUpdate& Collapse();
 	WFCCellUpdate& Collapse(unsigned long toCollapseTo);
-	const WFCPosition& GetPosition();
+	const WFCPosition* GetPosition();
 	std::optional<WFCCellUpdate> DomainCheck(WFCCellUpdate& update);
 
 	bool operator<(const WFCCell& other) const

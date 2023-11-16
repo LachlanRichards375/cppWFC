@@ -2,7 +2,7 @@
 #include "WFCCell.h"
 #include"WFCRuleManager.h"
 
-WFCCell::WFCCell(IWFCManager& m, const WFCPosition& p, unsigned long domain) : manager(m), position(p)
+WFCCell::WFCCell(IWFCManager& m, const WFCPosition* p, unsigned long domain) : manager(m), position(p)
 {
     CollapsedTile = 0;
     WFCCell::domain = domain;
@@ -36,25 +36,25 @@ float WFCCell::CalculateEntropy() const
 
 WFCCellUpdate& WFCCell::Collapse()
 {
-    return *new WFCCellUpdate(0,0,0,position);
+    return *new WFCCellUpdate(0,0,0,*position);
 }
 
 WFCCellUpdate& WFCCell::Collapse(unsigned long toCollapseTo)
 {
-    return *new WFCCellUpdate(0,0,0,position);
+    return *new WFCCellUpdate(0,0,0,*position);
 }
 
-const WFCPosition& WFCCell::GetPosition()
+const WFCPosition* WFCCell::GetPosition()
 {
     return position;
 }
 
 std::optional<WFCCellUpdate> WFCCell::DomainCheck(WFCCellUpdate& update)
 {
-    WFCCellUpdate updateToReturn = WFCCellUpdate(0, 0, 0, position);
+    WFCCellUpdate updateToReturn = WFCCellUpdate(0, 0, 0, *position);
     std::vector<std::shared_ptr<IWFCRule>> rulesList = WFCRuleManager::GetRulesForTile(domain);
     for (std::shared_ptr<IWFCRule> rule : rulesList) {
-        if (!rule->Test(update, position)) {
+        if (!rule->Test(update, *position)) {
             //Remove this tile from the domain
             updateToReturn.removedFromDomain = updateToReturn.removedFromDomain|rule->GetGoal();
         }

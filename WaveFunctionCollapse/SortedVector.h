@@ -11,15 +11,3 @@ public:
     void sort();
     size_t size();
 };
-
-//class SortedWFCCellList {
-//    private:
-//    std::vector<T> data;
-//
-//public:
-//    void insert(const T& value);
-//    T pop();
-//    void sort();
-//    size_t size();
-//};
-//};
