@@ -1,15 +1,17 @@
 #include "Grid2D.h"
 #include "WFCCell.h"
+#include <iostream>
 
 Grid2D::Grid2D(WFCPosition& newSize)
 	:IWFCGrid(newSize)
 {
 	grid.resize(size.x, std::vector<std::shared_ptr<WFCCell>>(size.y));
-
+	std::cout << "Creating grid of size: " << size.x << "," << size.y << std::endl;
 	for (int x = 0; x < size.x; ++x) {
 		for (int y = 0; y < size.y; ++y) {
 			grid[x][y] = std::make_shared<WFCCell>(*manager, WFCPosition(x, y), (unsigned long)0);
 			grid[x][y]->RuleSetup();
+			entropyQueue.insert(grid[x][y]);
 		}
 	}
 }
