@@ -29,7 +29,7 @@ std::shared_ptr<WFCCell> IWFCGrid::PopNextCellToCollapse() {
     return entropyQueue.extract(entropyQueue.begin()).value();
 }
 
-inline int IWFCGrid::RemainingCellsToCollapse()
+int IWFCGrid::RemainingCellsToCollapse()
 {
     return entropyQueue.size();
 }

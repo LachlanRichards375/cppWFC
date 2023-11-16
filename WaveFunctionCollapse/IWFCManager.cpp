@@ -56,7 +56,7 @@ void IWFCManager::RegisterForAlert(std::shared_ptr<WFCPosition> registerFor, std
 
 void IWFCManager::Generate()
 {
-	std::cout << "In Generate" << std::endl;
+	std::cout << "In Generate, cells to collapse:" << _grid->RemainingCellsToCollapse() << std::endl;
 	while (_grid->RemainingCellsToCollapse() > 0) {
 		GenerateOnce();
 	}
