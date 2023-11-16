@@ -16,14 +16,14 @@ protected:
 	SafeQueue<WFCCellUpdate> updateQueue;
 	std::vector<WFCPosition> dirtyPositions;
 
-	void Enqueue(std::shared_ptr<WFCPosition> position, std::optional<unsigned long> toCollapseTo);
+	void Enqueue(std::shared_ptr<WFCCell> position, std::optional<unsigned long> toCollapseTo);
 	void CollapseThreadWork();
 
 public:
 	IWFCCollapseMethod();
 	~IWFCCollapseMethod();
 	void SetManager(IWFCManager* manager);
-	std::vector<WFCPosition> Collapse(std::shared_ptr<WFCPosition> position);
-	std::vector<WFCPosition> CollapseSpecificCell(std::shared_ptr<WFCPosition> position, unsigned long collapseTo);
+	std::vector<WFCPosition> Collapse(std::shared_ptr<WFCCell> position);
+	std::vector<WFCPosition> CollapseSpecificCell(std::shared_ptr<WFCCell> position, unsigned long collapseTo);
 	void Reset();
 };

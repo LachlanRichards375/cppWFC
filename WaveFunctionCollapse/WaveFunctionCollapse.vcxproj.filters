@@ -67,6 +67,9 @@
     <ClInclude Include="IWFCRule.h">
       <Filter>Header Files\WFCRules</Filter>
     </ClInclude>
+    <ClInclude Include="SelfBalancingTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -110,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="WFCRule.cpp">
       <Filter>Source Files\WFCRules</Filter>
+    </ClCompile>
+    <ClCompile Include="SelfBalancingTree.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

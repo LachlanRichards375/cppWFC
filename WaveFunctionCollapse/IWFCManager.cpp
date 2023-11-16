@@ -24,8 +24,9 @@ IWFCManager::~IWFCManager()
 
 void IWFCManager::GenerateOnce()
 {
-	//Grid.SortQueue
-	//Collapse
+	std::cout << "Generating Once" << std::endl;
+	_grid->SortQueue();
+	Collapse();
 }
 
 void IWFCManager::Collapse()
