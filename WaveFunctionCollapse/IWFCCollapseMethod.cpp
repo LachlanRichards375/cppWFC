@@ -34,7 +34,7 @@ void IWFCCollapseMethod::CollapseThreadWork()
 
 		const WFCPosition& cellUpdatePosition{ cellUpdate.updatedCell };
 
-		std::vector<std::shared_ptr<WFCCell>> toAlert = manager->GetAlertees(cellUpdatePosition); //cellsToUpdate[cellUpdatePosition.x][cellUpdatePosition.y];
+		std::vector<std::shared_ptr<WFCCell>> toAlert = manager->GetAlertees(cellUpdatePosition);
 		for (auto& cell : toAlert)
 		{
 			std::optional<WFCCellUpdate> updateMessage = cell->DomainCheck(cellUpdate);

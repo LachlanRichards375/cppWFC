@@ -5,7 +5,11 @@
 Grid2D::Grid2D(WFCPosition& newSize)
 	:IWFCGrid(newSize)
 {
+	//Set grid size
 	grid.resize(size.x, std::vector<std::shared_ptr<WFCCell>>(size.y));
+	//Initialize cells to update list
+	cellsToUpdate.resize(size.x, std::vector<std::vector<std::shared_ptr<WFCCell>>>(size.y));
+
 	std::cout << "Creating grid of size: " << size.x << "," << size.y << std::endl;
 	for (int x = 0; x < size.x; ++x) {
 		for (int y = 0; y < size.y; ++y) {
