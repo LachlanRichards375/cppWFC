@@ -2,6 +2,7 @@
 #include "WFCCell.h"
 #include <iostream>
 #include "WFCRuleManager.h"
+#include "SortedVector.h"
 
 Grid2D::Grid2D(WFCPosition& newSize)
 	:IWFCGrid(newSize)

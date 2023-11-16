@@ -1,5 +1,6 @@
 #pragma once
 #include "IWFCGrid.h"
+#include "SortedVector.h"
 #include <memory>
 
 class Grid2D :
@@ -17,4 +18,5 @@ public:
     virtual void RegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toRegister) override;
     virtual void DeRegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toDeregister) override;
 };
+
 

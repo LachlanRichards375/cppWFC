@@ -4,16 +4,16 @@
 #include "WFCPosition.h"
 #include <queue>
 #include <set>
+#include "SortedVector.h"
 class WFCCell;
 class IWFCManager;
-
 class IWFCGrid
 {
 protected:
 	WFCPosition& size;
 	IWFCManager* manager;
 
-	std::set<WFCCell*, std::greater<WFCCell>> entropyQueue;
+	SortedVector<WFCCell*> entropyQueue;
 
 public:
 	//Constructors
@@ -23,7 +23,7 @@ public:
 	//Concrete Methods
 	void SortQueue();
 	WFCCell* PopNextCellToCollapse();
-	int RemainingCellsToCollapse();
+	size_t RemainingCellsToCollapse();
 
 	//Abstract methods
 	virtual WFCPosition& GetSize() const; 

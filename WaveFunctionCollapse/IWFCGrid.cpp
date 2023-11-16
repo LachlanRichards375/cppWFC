@@ -14,9 +14,7 @@ void IWFCGrid::SetManager(IWFCManager* manager)
 void IWFCGrid::SortQueue()
 {
     //push sorts queue when executed
-    WFCCell* item = entropyQueue.extract(entropyQueue.begin()).value();
-    entropyQueue.erase(item);
-    entropyQueue.insert(item);
+    entropyQueue.sort();
 }
 
 WFCPosition& IWFCGrid::GetSize() const
@@ -25,10 +23,11 @@ WFCPosition& IWFCGrid::GetSize() const
 }
 
 WFCCell* IWFCGrid::PopNextCellToCollapse() {
-    return entropyQueue.extract(entropyQueue.begin()).value();
+    return entropyQueue.pop();
 }
 
-int IWFCGrid::RemainingCellsToCollapse()
+size_t IWFCGrid::RemainingCellsToCollapse()
 {
     return entropyQueue.size();
 }
+
