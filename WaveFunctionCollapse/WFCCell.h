@@ -11,16 +11,9 @@ protected:
 	const WFCPosition& position;
 	unsigned long domain;
 public:
-	WFCCell(IWFCManager &m, const WFCPosition &p, unsigned long domain) : manager(m), position(p)
-	{
-		CollapsedTile = 0;
-		WFCCell::domain = domain;
-	}
-	WFCCell(WFCCell& other) : manager(other.manager), position(other.position)
-	{
-		CollapsedTile = other.CollapsedTile;
-		domain = other.domain;
-	}
+	WFCCell(IWFCManager& m, const WFCPosition& p, unsigned long domain);
+	WFCCell(WFCCell* other);
+	
 
 	//~WFCCell();
 	//WFCCellDomain Domain;

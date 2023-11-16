@@ -2,8 +2,26 @@
 #include "WFCCell.h"
 #include"WFCRuleManager.h"
 
+WFCCell::WFCCell(IWFCManager& m, const WFCPosition& p, unsigned long domain) : manager(m), position(p)
+{
+    CollapsedTile = 0;
+    WFCCell::domain = domain;
+}
+
+WFCCell::WFCCell(WFCCell* other) : manager(other->manager), position(other->position)
+{
+    CollapsedTile = other->CollapsedTile;
+    domain = other->domain;
+}
+
 void WFCCell::RuleSetup() const
 {
+    auto rules = WFCRuleManager::GetRulesForTile(domain);
+    for (auto& rule : rules) {
+        for (auto& position : rule.get()->GetPositions()) {
+            manager.RegisterForAlert(position, std::make_shared<WFCCell>(*this));
+        }
+    }
 }
 
 void WFCCell::SetDomain(const unsigned long newDomain)

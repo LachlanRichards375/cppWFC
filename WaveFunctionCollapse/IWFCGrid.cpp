@@ -3,6 +3,7 @@
 
 IWFCGrid::IWFCGrid(WFCPosition& newSize) : size(newSize)
 {
+    manager = nullptr;
 }
 
 void IWFCGrid::SetManager(IWFCManager* manager)
@@ -26,4 +27,9 @@ WFCPosition& IWFCGrid::GetSize() const
 
 std::shared_ptr<WFCCell> IWFCGrid::PopNextCellToCollapse() {
     return entropyQueue.extract(entropyQueue.begin()).value();
+}
+
+inline int IWFCGrid::RemainingCellsToCollapse()
+{
+    return entropyQueue.size();
 }

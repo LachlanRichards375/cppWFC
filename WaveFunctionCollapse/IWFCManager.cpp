@@ -12,10 +12,6 @@ IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid) : _collap
 	_collapseMethod->SetManager(this);
 	_grid->SetManager(this);
 	//Set max thread count
-
-	//Grid Initalize?
-	//Grid Rule Setup
-	_grid->RuleSetup();
 }
 
 IWFCManager::~IWFCManager()
@@ -52,6 +48,10 @@ WFCPosition& IWFCManager::GetGridSize()
 std::vector<std::shared_ptr<WFCCell>> IWFCManager::GetAlertees(const WFCPosition& position)
 {
 	return _grid->GetAlertees(position);
+}
+
+void IWFCManager::RegisterForAlert(std::shared_ptr<WFCPosition> registerFor, std::shared_ptr <WFCCell> alertee) {
+	_grid->RegisterForCellUpdates(registerFor, alertee);
 }
 
 void IWFCManager::Generate()

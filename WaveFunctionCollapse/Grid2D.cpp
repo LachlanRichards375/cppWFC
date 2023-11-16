@@ -4,23 +4,14 @@
 Grid2D::Grid2D(WFCPosition& newSize)
 	:IWFCGrid(newSize)
 {
-}
-
-void Grid2D::RuleSetup()
-{
 	grid.resize(size.x, std::vector<std::shared_ptr<WFCCell>>(size.y));
 
 	for (int x = 0; x < size.x; ++x) {
-		for (int y = 0; y < size.y; ++y){
+		for (int y = 0; y < size.y; ++y) {
 			grid[x][y] = std::make_shared<WFCCell>(*manager, WFCPosition(x, y), (unsigned long)0);
 			grid[x][y]->RuleSetup();
 		}
 	}
-}
-
-inline int Grid2D::RemainingCellsToCollapse()
-{
-	return entropyQueue.size();
 }
 
 inline std::shared_ptr<WFCCell> Grid2D::GetCell(std::shared_ptr <WFCPosition> position) {
