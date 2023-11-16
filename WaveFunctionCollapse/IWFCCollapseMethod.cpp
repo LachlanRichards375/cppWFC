@@ -17,7 +17,7 @@ void IWFCCollapseMethod::SetManager(IWFCManager* manager)
 	IWFCCollapseMethod::manager = manager;
 }
 
-void IWFCCollapseMethod::Enqueue(std::shared_ptr<WFCCell> position, std::optional<unsigned long> toCollapseTo)
+void IWFCCollapseMethod::Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo)
 {
 	if (toCollapseTo.has_value()) {
 		updateQueue.enqueue(position->Collapse(toCollapseTo.value()));
@@ -34,7 +34,7 @@ void IWFCCollapseMethod::CollapseThreadWork()
 
 		const WFCPosition& cellUpdatePosition{ cellUpdate.updatedCell };
 
-		std::vector<std::shared_ptr<WFCCell>> toAlert = manager->GetAlertees(cellUpdatePosition);
+		std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
 		for (auto& cell : toAlert)
 		{
 			std::optional<WFCCellUpdate> updateMessage = cell->DomainCheck(cellUpdate);
@@ -45,7 +45,7 @@ void IWFCCollapseMethod::CollapseThreadWork()
 	}
 }
 
-std::vector<WFCPosition> IWFCCollapseMethod::Collapse(std::shared_ptr<WFCCell> position)
+std::vector<WFCPosition> IWFCCollapseMethod::Collapse(WFCCell* position)
 {
 	Enqueue(position, std::optional<unsigned long>());
 
@@ -59,7 +59,7 @@ std::vector<WFCPosition> IWFCCollapseMethod::Collapse(std::shared_ptr<WFCCell> p
 	return temp;
 }
 
-std::vector<WFCPosition> IWFCCollapseMethod::CollapseSpecificCell(std::shared_ptr<WFCCell> position, unsigned long collapseTo)
+std::vector<WFCPosition> IWFCCollapseMethod::CollapseSpecificCell(WFCCell* position, unsigned long collapseTo)
 {
 	Enqueue(position, std::optional<unsigned long>(collapseTo));
 

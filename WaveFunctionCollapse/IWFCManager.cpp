@@ -35,7 +35,7 @@ void IWFCManager::CollapseSpecificCell(std::shared_ptr <WFCPosition> position, u
 	//CollapseMethod.CollapseSpecificCell(position, toCollapseTo);
 }
 
-std::shared_ptr<WFCCell> IWFCManager::GetCell(std::shared_ptr <WFCPosition> position)
+WFCCell* IWFCManager::GetCell(std::shared_ptr <WFCPosition> position)
 {
 	return _grid->GetCell(position);
 }
@@ -45,12 +45,12 @@ WFCPosition& IWFCManager::GetGridSize()
 	return _grid->GetSize();
 }
 
-std::vector<std::shared_ptr<WFCCell>> IWFCManager::GetAlertees(const WFCPosition& position)
+std::vector<WFCCell*> IWFCManager::GetAlertees(const WFCPosition& position)
 {
 	return _grid->GetAlertees(position);
 }
 
-void IWFCManager::RegisterForAlert(std::shared_ptr<WFCPosition> registerFor, std::shared_ptr <WFCCell> alertee) {
+void IWFCManager::RegisterForAlert(std::shared_ptr<WFCPosition> registerFor, WFCCell* alertee) {
 	_grid->RegisterForCellUpdates(registerFor, alertee);
 }
 

@@ -13,13 +13,7 @@ protected:
 	WFCPosition& size;
 	IWFCManager* manager;
 
-	//std::priority_queue<
-	//	std::shared_ptr<WFCCell>, //Type
-	//	std::vector<std::shared_ptr<WFCCell>>, //Container
-	//	std::greater<WFCCell> //Makes it sort min priority
-	//> entropyQueue;
-
-	std::set<std::shared_ptr<WFCCell>, std::greater<std::shared_ptr<WFCCell>>> entropyQueue;
+	std::set<WFCCell*, std::greater<WFCCell>> entropyQueue;
 
 public:
 	//Constructors
@@ -28,13 +22,13 @@ public:
 
 	//Concrete Methods
 	void SortQueue();
-	std::shared_ptr<WFCCell> PopNextCellToCollapse();
+	WFCCell* PopNextCellToCollapse();
 	int RemainingCellsToCollapse();
 
 	//Abstract methods
 	virtual WFCPosition& GetSize() const; 
-	virtual std::shared_ptr<WFCCell> GetCell(std::shared_ptr <WFCPosition> position) = 0;
-	virtual std::vector<std::shared_ptr<WFCCell>> GetAlertees(const WFCPosition& positionOfInterest) = 0;
-	virtual void RegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, std::shared_ptr <WFCCell> toRegister) = 0;
-	virtual void DeRegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, std::shared_ptr <WFCCell> toDeregister) = 0;
+	virtual WFCCell* GetCell(std::shared_ptr <WFCPosition> position) = 0;
+	virtual std::vector<WFCCell*> GetAlertees(const WFCPosition& positionOfInterest) = 0;
+	virtual void RegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toRegister) = 0;
+	virtual void DeRegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toDeregister) = 0;
 };

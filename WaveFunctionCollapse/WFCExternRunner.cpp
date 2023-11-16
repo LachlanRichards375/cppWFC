@@ -20,6 +20,11 @@ extern "C" {
 		return new IWFCManager(collapseMethod, grid);
 	}
 
+	void AddTileToDomain(unsigned long tilesToAdd)
+	{
+		WFCRuleManager::AddToInitialDomain(tilesToAdd);
+	}
+
 	void IWFCManager_Run(IWFCManager * manager) {
 		manager->Generate();
 	}
@@ -27,7 +32,7 @@ extern "C" {
 	void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, WFCPosition * localTargets[])
 	{
 		std::vector<std::shared_ptr<WFCPosition>>localTargetsVec {};
-		int len = sizeof localTargets / sizeof localTargets[0];
+		int len = sizeof localTargets / sizeof *localTargets[0];
 		for (int i = 0; i < len; ++i) {
 			localTargetsVec.push_back(std::make_shared<WFCPosition>(localTargets[i]));
 		}

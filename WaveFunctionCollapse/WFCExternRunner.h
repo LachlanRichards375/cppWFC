@@ -17,6 +17,8 @@ extern "C" {
 
 	IWFCManager * IWFCManager_Create(IWFCCollapseMethod * collapseMethod, IWFCGrid * grid);
 
+	void AddTileToDomain(unsigned long tilesToAdd);
+
 	void IWFCManager_Run(IWFCManager * manager);
 
 	void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, WFCPosition * localTargets[]);

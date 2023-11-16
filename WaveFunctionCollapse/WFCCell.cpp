@@ -19,7 +19,7 @@ void WFCCell::RuleSetup() const
     auto rules = WFCRuleManager::GetRulesForTile(domain);
     for (auto& rule : rules) {
         for (auto& position : rule.get()->GetPositions()) {
-            manager.RegisterForAlert(position, std::make_shared<WFCCell>(*this));
+            manager.RegisterForAlert(position, const_cast<WFCCell*>(this));
         }
     }
 }

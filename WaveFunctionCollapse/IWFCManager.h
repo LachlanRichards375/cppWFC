@@ -21,9 +21,9 @@ public:
 	IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid);
 	~IWFCManager();
 
-	std::shared_ptr<WFCCell> GetCell(std::shared_ptr<WFCPosition> position);
+	WFCCell* GetCell(std::shared_ptr<WFCPosition> position);
 	WFCPosition& GetGridSize();
-	void RegisterForAlert(std::shared_ptr <WFCPosition> position, std::shared_ptr <WFCCell> alertee);
-	std::vector<std::shared_ptr<WFCCell>> GetAlertees(const WFCPosition& position);
+	void RegisterForAlert(std::shared_ptr <WFCPosition> position, WFCCell* alertee);
+	std::vector<WFCCell*> GetAlertees(const WFCPosition& position);
 	void Generate();
 };

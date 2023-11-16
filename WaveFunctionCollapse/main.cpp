@@ -27,11 +27,14 @@ void createRules() {
 }
 
 int main(int argc, char* argv[]) {
+	
+	AddTileToDomain((1 + 2 + 4));
+	createRules();
+
 	IWFCCollapseMethod* collapse = Threaded2DCollapse_Create();
 	IWFCGrid* grid = Grid2D_Create(new WFCPosition(5, 5));
 	IWFCManager* manager = IWFCManager_Create(collapse, grid);
 
-	createRules();
 
 	IWFCManager_Run(manager);
 
