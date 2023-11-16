@@ -11,4 +11,5 @@ private:
 public:
 	//static std::vector<WFCPosition&> GetRulesAffectingDomain(unsigned long domain);
 	static void AddRuleToTile(unsigned long ruleAppliesTo, std::shared_ptr<IWFCRule> rule);
+	static std::vector<std::shared_ptr<IWFCRule>> GetRulesForTile(unsigned long tiles);
 };

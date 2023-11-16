@@ -4,7 +4,31 @@
 #include "IWFCManager.h"
 
 class IWFCRule {
+protected:
+	std::vector<WFCPosition*> localPositionsWeCareAbout;
+	unsigned long goal;
 public:
-	virtual bool Test(unsigned long ownerTile, WFCPosition& localTargetOffset, WFCCellUpdate update) = 0;
-	virtual void Initialize(IWFCManager& manager, WFCPosition& cellPosition) = 0;
+	IWFCRule(unsigned long goal, std::vector<WFCPosition*> localPositionsWeCareAbout);
+	virtual bool Test(WFCCellUpdate update, const WFCPosition& currentCellPosition) = 0;
+	unsigned long const GetGoal();
 };
+
+/*
+
+Each Cell has a list of Tiles (Ulong)
+Each tile has a list of rules,
+Each rule has a list of local positions it affects
+
+When we test, we need to see if we affect the position that was updated
+We pass in the position of the cell
+and see if the updated cell exists within our positions we care about
+
+
+MANAGER INITALIZED:
+MANAGER.Generate_Once()
+	Grid.Sort()
+	CollapseMethod.Collapse()
+		Manager.GetAlertees() << vector of pointers
+	foreach in alertees,
+		test(updateThatOccured, currentCellPos)
+*/

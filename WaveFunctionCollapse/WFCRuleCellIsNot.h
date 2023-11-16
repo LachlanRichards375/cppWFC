@@ -1,9 +1,9 @@
 #pragma once
 #include "IWFCRule.h"
-#include "IWFCRuleMultiCellTarget.h"
 class WFCRuleCellIsNot :
-    public IWFCRule,
-    public IWFCRuleMultiCellTarget
+    public IWFCRule
 {
+public:
+    virtual bool Test(WFCCellUpdate update, const WFCPosition& currentCellPosition) override;
 };
 
