@@ -1,5 +1,6 @@
 #include "IWFCGrid.h"
 #include "WFCCell.h"
+#include "SortedVector.h"
 
 IWFCGrid::IWFCGrid(WFCPosition& newSize) : size(newSize)
 {

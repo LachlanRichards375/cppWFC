@@ -13,7 +13,7 @@ protected:
 	WFCPosition& size;
 	IWFCManager* manager;
 
-	SortedVector<WFCCell*> entropyQueue;
+	SortedVector entropyQueue{};
 
 public:
 	//Constructors

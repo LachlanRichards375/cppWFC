@@ -1,33 +1,29 @@
+#pragma once
 #include "SortedVector.h"
 
-/*template<typename T>
-void SortedVector<T>::insert(const T& value) {
-}*/
 
-template<typename T>
-void SortedVector<T>::insert(const T& value)
+void SortedVector::insert(WFCCell*& value)
 {
     auto it = std::lower_bound(data.begin(), data.end(), value);
     data.insert(it, value);
 }
 
-template<typename T>
-T SortedVector<T>::pop() {
-    T item{ data[0] };
-    data.erase(data.front());
+WFCCell* SortedVector::pop() {
+    WFCCell* item{ data[0] };
+    data.erase(data.begin());
     return item;
 }
 
-template<typename T>
-void SortedVector<T>::sort() {
-    std::vector<T> other{data};
+void SortedVector::sort() {
+    std::vector<WFCCell*> other{data};
     data.clear();
-    while (other.size > 0) {
-        insert(other.front());
+    std::vector<WFCCell*>::iterator it{other.begin()};
+    for (size_t i = other.size(); i > 0; --i) {
+        insert(*it);
+        it += 1;
     }
 }
 
-template<typename T>
-size_t SortedVector<T>::size() {
+size_t SortedVector::size() {
     return data.size();
 }

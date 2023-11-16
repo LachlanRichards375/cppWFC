@@ -1,6 +1,5 @@
 #pragma once
 #include "IWFCGrid.h"
-#include "SortedVector.h"
 #include <memory>
 
 class Grid2D :
