@@ -23,7 +23,7 @@ public:
     virtual int RemainingCellsToCollapse() override;
     virtual std::shared_ptr<WFCPosition> PopNextCellToCollapse() override;
     virtual std::shared_ptr<WFCCell> GetCell(std::shared_ptr <WFCPosition> position) override;
-    virtual std::vector<std::shared_ptr<WFCCell>> GetAlertees(WFCPosition& positionOfInterest) override;
+    virtual std::vector<std::shared_ptr<WFCCell>> GetAlertees(const WFCPosition& positionOfInterest) override;
     virtual void RegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, std::shared_ptr<WFCCell> toRegister) override;
     virtual void DeRegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, std::shared_ptr <WFCCell> toDeregister) override;
 };

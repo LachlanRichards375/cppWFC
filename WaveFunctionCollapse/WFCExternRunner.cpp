@@ -13,6 +13,5 @@ extern "C" IWFCManager* IWFCManager_Create(IWFCCollapseMethod* collapseMethod, I
 }
 
 extern "C" void IWFCManager_Run(IWFCManager * manager) {
-	manager->Initialize();
 	manager->Generate();
 }

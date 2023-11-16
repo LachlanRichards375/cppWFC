@@ -1,5 +1,6 @@
 #pragma once
 #include "WFCCell.h"
+#include"WFCRuleManager.h"
 
 void WFCCell::RuleSetup() const
 {
@@ -17,21 +18,29 @@ float WFCCell::CalculateEntropy() const
 
 WFCCellUpdate& WFCCell::Collapse()
 {
-    return *new WFCCellUpdate(0,0,this);
+    return *new WFCCellUpdate(0,0,0,position);
 }
 
 WFCCellUpdate& WFCCell::Collapse(unsigned long toCollapseTo)
 {
-    return *new WFCCellUpdate(0,0,this);
+    return *new WFCCellUpdate(0,0,0,position);
 }
 
-WFCPosition& WFCCell::GetPosition()
+const WFCPosition& WFCCell::GetPosition()
 {
     return position;
 }
 
 std::optional<WFCCellUpdate> WFCCell::DomainCheck(WFCCellUpdate& update)
 {
-    std::optional<WFCCellUpdate> returner = std::optional<WFCCellUpdate>();
+    WFCCellUpdate updateToReturn = WFCCellUpdate(0, 0, 0, position);
+    std::vector<std::shared_ptr<IWFCRule>> rulesList = WFCRuleManager::GetRulesForTile(domain);
+    for (std::shared_ptr<IWFCRule> rule : rulesList) {
+        if (!rule->Test(update, position)) {
+            //Remove this tile from the domain
+            updateToReturn.removedFromDomain = updateToReturn.removedFromDomain|rule->GetGoal();
+        }
+    }
+    std::optional<WFCCellUpdate> returner (update);
     return returner;
 }

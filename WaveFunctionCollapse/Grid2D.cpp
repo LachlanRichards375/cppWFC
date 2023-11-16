@@ -8,8 +8,11 @@ Grid2D::Grid2D(WFCPosition& newSize)
 
 void Grid2D::RuleSetup()
 {
+	grid.resize(size.x, std::vector<std::shared_ptr<WFCCell>>(size.y));
+
 	for (int x = 0; x < size.x; ++x) {
-		for (int y = 0; y < size.y; ++y) {
+		for (int y = 0; y < size.y; ++y){
+			grid[x][y] = std::make_shared<WFCCell>(*manager, WFCPosition(x, y), (unsigned long)0);
 			grid[x][y]->RuleSetup();
 		}
 	}
@@ -28,7 +31,7 @@ inline std::shared_ptr<WFCCell> Grid2D::GetCell(std::shared_ptr <WFCPosition> po
 	return grid[position->x][position->y];
 }
 
-inline std::vector<std::shared_ptr<WFCCell>> Grid2D::GetAlertees(WFCPosition& positionOfInterest) {
+inline std::vector<std::shared_ptr<WFCCell>> Grid2D::GetAlertees(const WFCPosition& positionOfInterest) {
 	return cellsToUpdate[positionOfInterest.x][positionOfInterest.y];
 }
 

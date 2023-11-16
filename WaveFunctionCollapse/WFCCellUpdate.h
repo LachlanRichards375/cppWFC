@@ -1,12 +1,13 @@
 #pragma once
-class WFCCell;
+#include "WFCPosition.h"
 
 struct WFCCellUpdate
 {
 public:
-	WFCCellUpdate(unsigned long removedFromDomain, unsigned long addedToDomain, WFCCell* updatedCell);
+	WFCCellUpdate(unsigned long removed, unsigned long added, unsigned long collapsed, const WFCPosition& position);
 	unsigned long removedFromDomain;
 	unsigned long addedToDomain;
-	WFCCell& updatedCell;
+	unsigned long collapsedTo;
+	const WFCPosition& updatedCell;
 };
 
