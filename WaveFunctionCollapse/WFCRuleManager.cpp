@@ -13,6 +13,22 @@ unsigned long WFCRuleManager::GetInitialDomain() {
 	return activeDomain;
 }
 
+int WFCRuleManager::GetBitsInDomain(unsigned long domain)
+{
+	int numBits{ 0 };
+	int index = getLeastSignifigantBit(domain);
+
+	while (domain > 0 ) {
+		//Bitshift 1 left index bits, compare against domain
+		if ((1 & domain) > 0) {
+			numBits++;
+		}
+		domain >>= 1;
+	}
+
+	return numBits;
+}
+
 void WFCRuleManager::AddRuleToTile(unsigned long ruleAppliesTo, std::shared_ptr<IWFCRule> rule)
 {
 	if (rulesOnTiles.size() == 0) {

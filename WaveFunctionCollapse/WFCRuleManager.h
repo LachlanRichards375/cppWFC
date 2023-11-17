@@ -16,4 +16,5 @@ public:
 	static std::vector<std::shared_ptr<IWFCRule>> GetRulesForTile(unsigned long tiles);
 	static unsigned long GetInitialDomain();
 	static void AddToInitialDomain(unsigned long domain);
+	static int GetBitsInDomain(unsigned long domain);
 };
