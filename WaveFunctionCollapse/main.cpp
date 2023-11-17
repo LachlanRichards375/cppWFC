@@ -1,5 +1,6 @@
 #pragma once
 #include "WFCExternRunner.h"
+#include <iostream>
 
 
 void createRules() {
@@ -27,16 +28,25 @@ void createRules() {
 }
 
 int main(int argc, char* argv[]) {
+
+	
+	auto t1 = std::chrono::high_resolution_clock::now();
 	
 	AddTileToDomain((1 + 2 + 4));
 	createRules();
 
 	IWFCCollapseMethod* collapse = Threaded2DCollapse_Create();
-	IWFCGrid* grid = Grid2D_Create(new WFCPosition(5, 5));
+	IWFCGrid* grid = Grid2D_Create(new WFCPosition(10, 10));
 	IWFCManager* manager = IWFCManager_Create(collapse, grid);
 
-
 	IWFCManager_Run(manager);
+
+	auto t2 = std::chrono::high_resolution_clock::now();
+
+	/* Getting number of milliseconds as a double. */
+	std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+
+	std::cout << ms_double.count() << "ms" << std::endl;
 
 	system("pause");
 
