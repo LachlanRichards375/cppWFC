@@ -22,7 +22,7 @@ public:
 	// Methods
 	void RuleSetup() const;
 	void SetDomain(const unsigned long newDomain);
-	float CalculateEntropy() const;
+	unsigned long CalculateEntropy() const;
 	WFCCellUpdate& Collapse();
 	WFCCellUpdate& Collapse(unsigned long toCollapseTo);
 	const WFCPosition* GetPosition();
