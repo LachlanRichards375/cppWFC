@@ -49,3 +49,28 @@ void Grid2D::DeRegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInt
 	}
 	removeFrom.erase(it + index);
 }
+
+void Grid2D::PrintGrid()
+{
+	std::cout << "Printing 2D grid: " << std::endl;
+	std::string divider = "";
+	for (int x = 0; x < size.x; ++x) {
+		std::cout << divider << std::endl;
+		for (int y = 0; y < size.y; ++y) {
+			std::cout << "|";
+			unsigned long collapsedTile = grid[x][y]->CollapsedTile;
+
+			if (collapsedTile < 100) {
+				std::cout << " ";
+			}
+
+			std::cout << collapsedTile;
+
+			if (collapsedTile < 10) {
+				std::cout << " ";
+			}
+			std::cout << "|";
+		}
+		std::cout << std::endl;
+	}
+}

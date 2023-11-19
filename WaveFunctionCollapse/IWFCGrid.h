@@ -31,4 +31,5 @@ public:
 	virtual std::vector<WFCCell*> GetAlertees(const WFCPosition& positionOfInterest) = 0;
 	virtual void RegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toRegister) = 0;
 	virtual void DeRegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toDeregister) = 0;
+	virtual void PrintGrid() = 0;
 };

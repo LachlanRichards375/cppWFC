@@ -44,7 +44,7 @@ WFCCellUpdate& WFCCell::Collapse()
 
 WFCCellUpdate& WFCCell::Collapse(unsigned long toCollapseTo)
 {
-    //std::cout << "Collapsing cell (" << position->x << "," << position->y << ") to " << toCollapseTo << std::endl;
+    std::cout << "Collapsing cell (" << position->x << "," << position->y << ") to " << toCollapseTo << std::endl;
     return *new WFCCellUpdate(0,0,0,*position);
 }
 
