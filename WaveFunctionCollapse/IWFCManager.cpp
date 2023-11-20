@@ -52,7 +52,7 @@ std::vector<WFCCell*> IWFCManager::GetAlertees(const WFCPosition* position)
 	return _grid->GetAlertees(position);
 }
 
-void IWFCManager::RegisterForAlert(std::shared_ptr<WFCPosition> registerFor, WFCCell* alertee) {
+void IWFCManager::RegisterForAlert(WFCPosition* registerFor, WFCCell* alertee) {
 	_grid->RegisterForCellUpdates(registerFor, alertee);
 }
 

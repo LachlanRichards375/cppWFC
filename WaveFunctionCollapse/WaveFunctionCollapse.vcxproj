@@ -250,7 +250,6 @@
     <ClCompile Include="WFCCell.cpp" />
     <ClCompile Include="WFCCellUpdate.cpp" />
     <ClCompile Include="WFCExternRunner.cpp" />
-    <ClCompile Include="WFCRule.cpp" />
     <ClCompile Include="WFCRuleCellIsNot.cpp" />
     <ClCompile Include="WFCRuleManager.cpp" />
   </ItemGroup>

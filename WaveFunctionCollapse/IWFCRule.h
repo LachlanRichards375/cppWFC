@@ -5,13 +5,13 @@
 
 class IWFCRule {
 protected:
-	std::vector< std::shared_ptr<WFCPosition>> localPositionsWeCareAbout;
+	std::vector<WFCPosition*> localPositionsWeCareAbout;
 	unsigned long goal;
 public:
-	IWFCRule(unsigned long goal, std::vector< std::shared_ptr<WFCPosition>> localPositionsWeCareAbout);
-	virtual bool Test(WFCCellUpdate update, const WFCPosition& currentCellPosition) = 0;
+	IWFCRule(unsigned long goal, std::vector<WFCPosition*> localPositionsWeCareAbout);
+	virtual bool Test(WFCCellUpdate update, const WFCPosition* currentCellPosition) = 0;
 	unsigned long const GetGoal();
-	std::vector< std::shared_ptr<WFCPosition>> GetPositions();
+	std::vector< WFCPosition*> GetPositions();
 };
 
 /*

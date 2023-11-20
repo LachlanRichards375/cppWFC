@@ -13,7 +13,7 @@ class IWFCCollapseMethod
 protected:
 	IWFCManager* manager;
 
-	SafeQueue<WFCCellUpdate> updateQueue;
+	SafeQueue<WFCCellUpdate*> updateQueue;
 	std::vector<WFCPosition> dirtyPositions;
 
 	void Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo);

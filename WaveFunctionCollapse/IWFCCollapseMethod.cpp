@@ -30,16 +30,16 @@ void IWFCCollapseMethod::Enqueue(WFCCell* position, std::optional<unsigned long>
 void IWFCCollapseMethod::CollapseThreadWork()
 {
 	while (updateQueue.getCount() > 0) {
-		WFCCellUpdate& cellUpdate{ updateQueue.dequeue() };
+		WFCCellUpdate* cellUpdate{ updateQueue.dequeue() };
 
-		const WFCPosition* cellUpdatePosition{ cellUpdate.updatedCell };
+		const WFCPosition* cellUpdatePosition{ (*cellUpdate).updatedCell };
 
 		std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
 		for (auto& cell : toAlert)
 		{
 			std::optional<WFCCellUpdate> updateMessage = cell->DomainCheck(cellUpdate);
 			if (updateMessage.has_value()) {
-				updateQueue.enqueue(updateMessage.value());
+				updateQueue.enqueue(&updateMessage.value());
 			}
 		}
 	}

@@ -19,8 +19,9 @@ void WFCCell::RuleSetup() const
 {
     auto rules = WFCRuleManager::GetRulesForTile(domain);
     for (auto& rule : rules) {
-        for (auto& position : rule.get()->GetPositions()) {
-            manager->RegisterForAlert(position, const_cast<WFCCell*>(this));
+        for (auto& position : rule->GetPositions()) {
+            WFCPosition* globalPos = new WFCPosition{ *position - WFCCell::position };
+            manager->RegisterForAlert(globalPos, const_cast<WFCCell*>(this));
         }
     }
 }
@@ -35,18 +36,18 @@ unsigned long WFCCell::CalculateEntropy() const
     return domain;
 }
 
-WFCCellUpdate& WFCCell::Collapse()
+WFCCellUpdate* WFCCell::Collapse()
 {
     //std::cout << "(Collapse() does not do tile weighting) ";
     int index{ rand() % (WFCRuleManager::GetBitsInDomain(domain)) };
     return Collapse((unsigned long)1 << index);
 }
 
-WFCCellUpdate& WFCCell::Collapse(unsigned long toCollapseTo)
+WFCCellUpdate* WFCCell::Collapse(unsigned long toCollapseTo)
 {
     CollapsedTile = toCollapseTo;
     std::cout << "Collapsing cell (" << position->x << "," << position->y << ") to " << CollapsedTile << std::endl;
-    return *new WFCCellUpdate(0,0,0,position);
+    return new WFCCellUpdate(domain & ~toCollapseTo,0,0,position);
 }
 
 const WFCPosition* WFCCell::GetPosition()
@@ -54,18 +55,18 @@ const WFCPosition* WFCCell::GetPosition()
     return position;
 }
 
-std::optional<WFCCellUpdate> WFCCell::DomainCheck(WFCCellUpdate& update)
+std::optional<WFCCellUpdate> WFCCell::DomainCheck(WFCCellUpdate* update)
 {
     WFCCellUpdate updateToReturn = WFCCellUpdate(0, 0, 0, position);
-    std::vector<std::shared_ptr<IWFCRule>> rulesList = WFCRuleManager::GetRulesForTile(domain);
-    for (std::shared_ptr<IWFCRule> rule : rulesList) {
-        if (!rule->Test(update, *position)) {
+    std::vector<IWFCRule*> rulesList = WFCRuleManager::GetRulesForTile(domain);
+    for (auto& rule : rulesList) {
+        if (!rule->Test(*update, position)) {
             //Remove this tile from the domain
             updateToReturn.removedFromDomain |= rule->GetGoal();
         }
     }
     //only include bits not flipped in removed from domain
     domain &= ~updateToReturn.removedFromDomain;
-    std::optional<WFCCellUpdate> returner (update);
+    std::optional<WFCCellUpdate> returner (*update);
     return returner;
 }

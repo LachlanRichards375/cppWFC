@@ -29,14 +29,13 @@ extern "C" {
 		manager->Generate();
 	}
 
-	void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, WFCPosition * localTargets[])
+	void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[])
 	{
-		std::vector<std::shared_ptr<WFCPosition>>localTargetsVec {};
-		int len = sizeof localTargets / sizeof *localTargets[0];
-		for (int i = 0; i < len; ++i) {
-			localTargetsVec.push_back(std::make_shared<WFCPosition>(localTargets[i]));
+		std::vector<WFCPosition*>localTargetsVec {};
+		for (unsigned int i = 0; i < localTargetCount; ++i) {
+			localTargetsVec.push_back(new WFCPosition { localTargets[i] });
 		}
-		WFCRuleManager::AddRuleToTile(tile, std::make_shared<WFCRuleCellIsNot>(goal, localTargetsVec));
+		WFCRuleManager::AddRuleToTile(tile, new WFCRuleCellIsNot(goal, localTargetsVec));
 	}
 
 }

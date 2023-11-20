@@ -25,7 +25,7 @@ public:
 
 	WFCCell* GetCell(std::shared_ptr<WFCPosition> position);
 	WFCPosition& GetGridSize();
-	void RegisterForAlert(std::shared_ptr <WFCPosition> position, WFCCell* alertee);
+	void RegisterForAlert(WFCPosition* position, WFCCell* alertee);
 	std::vector<WFCCell*> GetAlertees(const WFCPosition* position);
 	void Generate();
 };

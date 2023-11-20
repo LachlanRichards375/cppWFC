@@ -38,24 +38,30 @@ inline std::vector<WFCCell*> Grid2D::GetAlertees(const WFCPosition* positionOfIn
 	return cellsToUpdate[positionOfInterest->x][positionOfInterest->y];
 }
 
-void Grid2D::RegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toRegister)
+void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister)
 {
-	std::vector<WFCCell*> insertInto{cellsToUpdate[positionOfInterest->x][positionOfInterest->y]};
-	std::vector<WFCCell*>::iterator it = insertInto.begin();
-	insertInto.insert(it, toRegister);
-}
-
-void Grid2D::DeRegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toDeregister)
-{
-	std::vector<WFCCell*> removeFrom{cellsToUpdate[positionOfInterest->x][positionOfInterest->y]};
-	std::vector<WFCCell*>::iterator it = removeFrom.begin();
-	int index = 0;
-	while (index < removeFrom.size()) {
-		if (removeFrom[index] == toDeregister) {
-			break;
+	if (positionOfInterest->x >= 0 && positionOfInterest->x < size.x) {
+		if (positionOfInterest->y >= 0 && positionOfInterest->y < size.y) {
+			cellsToUpdate[positionOfInterest->x][positionOfInterest->y].push_back(toRegister);
 		}
 	}
-	removeFrom.erase(it + index);
+}
+
+void Grid2D::DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister)
+{
+	if (positionOfInterest->x > 0 && positionOfInterest->x <= size.x) {
+		if (positionOfInterest->y > 0 && positionOfInterest->y <= size.y) {
+			std::vector<WFCCell*> removeFrom{ cellsToUpdate[positionOfInterest->x][positionOfInterest->y] };
+			std::vector<WFCCell*>::iterator it = removeFrom.begin();
+			int index = 0;
+			while (index < removeFrom.size()) {
+				if (removeFrom[index] == toDeregister) {
+					break;
+				}
+			}
+			removeFrom.erase(it + index);
+		}
+	}
 }
 
 void Grid2D::PrintGrid()

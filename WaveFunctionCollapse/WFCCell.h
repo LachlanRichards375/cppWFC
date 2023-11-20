@@ -22,10 +22,10 @@ public:
 	void RuleSetup() const;
 	void SetDomain(const unsigned long newDomain);
 	unsigned long CalculateEntropy() const;
-	WFCCellUpdate& Collapse();
-	WFCCellUpdate& Collapse(unsigned long toCollapseTo);
+	WFCCellUpdate* Collapse();
+	WFCCellUpdate* Collapse(unsigned long toCollapseTo);
 	const WFCPosition* GetPosition();
-	std::optional<WFCCellUpdate> DomainCheck(WFCCellUpdate& update);
+	std::optional<WFCCellUpdate> DomainCheck(WFCCellUpdate* update);
 
 	bool operator<(const WFCCell& other) const
 	{

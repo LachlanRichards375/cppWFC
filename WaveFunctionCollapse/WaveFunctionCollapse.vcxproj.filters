@@ -105,17 +105,14 @@
     <ClCompile Include="WFCRuleManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IWFCRule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WFCRuleCellIsNot.cpp">
-      <Filter>Source Files\WFCRules</Filter>
-    </ClCompile>
-    <ClCompile Include="WFCRule.cpp">
       <Filter>Source Files\WFCRules</Filter>
     </ClCompile>
     <ClCompile Include="SortedVector.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IWFCRule.cpp">
+      <Filter>Source Files\WFCRules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 #include <math.h>
 //PreAllocate the rulesOnTiles
 //std::vector<std::shared_ptr<IWFCRule>> WFCRuleManager::rulesOnTiles[sizeof(unsigned long)];
-std::vector<std::vector<std::shared_ptr<IWFCRule>>> WFCRuleManager::rulesOnTiles;
+std::vector<std::vector<IWFCRule*>> WFCRuleManager::rulesOnTiles;
 unsigned long WFCRuleManager::activeDomain{0};
 
 void WFCRuleManager::AddToInitialDomain(unsigned long domain) {
@@ -29,7 +29,7 @@ int WFCRuleManager::GetBitsInDomain(unsigned long domain)
 	return numBits;
 }
 
-void WFCRuleManager::AddRuleToTile(unsigned long ruleAppliesTo, std::shared_ptr<IWFCRule> rule)
+void WFCRuleManager::AddRuleToTile(unsigned long ruleAppliesTo, IWFCRule* rule)
 {
 	if (rulesOnTiles.size() == 0) {
 		rulesOnTiles.resize(sizeof(unsigned long));
@@ -52,7 +52,7 @@ int WFCRuleManager::getLeastSignifigantBit(unsigned long ulong) {
 	return index;
 }
 
-std::vector<std::shared_ptr<IWFCRule>> WFCRuleManager::GetRulesForTile(unsigned long tile)
+std::vector<IWFCRule*> WFCRuleManager::GetRulesForTile(unsigned long tile)
 {
 	if (tile == 0) {
 		return rulesOnTiles.at(0);

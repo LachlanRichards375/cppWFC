@@ -21,5 +21,5 @@ extern "C" {
 
 	void IWFCManager_Run(IWFCManager * manager);
 
-	void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, WFCPosition * localTargets[]);
+	void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[]);
 }
