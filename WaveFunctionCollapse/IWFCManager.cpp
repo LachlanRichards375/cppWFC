@@ -28,7 +28,7 @@ void IWFCManager::GenerateOnce()
 void IWFCManager::Collapse()
 {
 	WFCCell* cellToCollapse{ _grid->PopNextCellToCollapse() };
-	std::cout << cellToCollapse->GetPosition()->x << "," << cellToCollapse->GetPosition()->y << std::endl;
+	//std::cout << cellToCollapse->GetPosition()->x << "," << cellToCollapse->GetPosition()->y << std::endl;
 	_collapseMethod->Collapse(cellToCollapse);
 }
 
@@ -62,4 +62,8 @@ void IWFCManager::Generate()
 	while (_grid->RemainingCellsToCollapse() > 0) {
 		GenerateOnce();
 	}
+}
+
+void IWFCManager::PrintGrid() {
+	_grid->PrintGrid();
 }

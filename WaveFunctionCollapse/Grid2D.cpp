@@ -77,8 +77,7 @@ void Grid2D::PrintGrid()
 			if (collapsedTile < 10) {
 				std::cout << " ";
 			}
-			std::cout << "|";
 		}
-		std::cout << std::endl;
+		std::cout << "|" << std::endl;
 	}
 }

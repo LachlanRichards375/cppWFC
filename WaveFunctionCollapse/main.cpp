@@ -48,6 +48,8 @@ int main(int argc, char* argv[]) {
 
 	std::cout << ms_double.count() << "ms" << std::endl;
 
+	manager->PrintGrid();
+
 	system("pause");
 
 	return 0;
