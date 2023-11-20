@@ -7,13 +7,12 @@ struct WFCPosition;
 class WFCCell
 {
 protected:
-	IWFCManager& manager;
-	const WFCPosition* position;
+	IWFCManager* manager;
+	WFCPosition* position;
 	unsigned long domain;
 public:
-	WFCCell(IWFCManager& m, const WFCPosition* p, unsigned long domain);
+	WFCCell(IWFCManager* m, WFCPosition* position, unsigned long domain);
 	WFCCell(WFCCell* other);
-	
 
 	//~WFCCell();
 	//WFCCellDomain Domain;

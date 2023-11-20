@@ -18,7 +18,7 @@ protected:
 public:
 	//Constructors
 	IWFCGrid(WFCPosition& newSize);
-	void SetManager(IWFCManager* manager);
+	virtual void Initialize(IWFCManager* manager) = 0;
 
 	//Concrete Methods
 	void SortQueue();

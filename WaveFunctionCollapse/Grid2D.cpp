@@ -7,6 +7,13 @@
 Grid2D::Grid2D(WFCPosition& newSize)
 	:IWFCGrid(newSize)
 {
+	
+}
+
+void Grid2D::Initialize(IWFCManager* newManager) {
+	//Set manager
+	IWFCGrid::manager = newManager;
+
 	//Set grid size
 	grid.resize(size.x, std::vector<WFCCell*>(size.y));
 	//Initialize cells to update list
@@ -15,9 +22,10 @@ Grid2D::Grid2D(WFCPosition& newSize)
 	std::cout << "Creating grid of size: " << size.x << "," << size.y << std::endl;
 	for (int x = 0; x < size.x; ++x) {
 		for (int y = 0; y < size.y; ++y) {
-			grid[x][y] = new WFCCell(*manager, new WFCPosition(x, y), WFCRuleManager::GetInitialDomain());
-			grid[x][y]->RuleSetup();
-			entropyQueue.insert(grid[x][y]);
+			WFCCell* cell = new WFCCell(manager, new WFCPosition{ x, y }, WFCRuleManager::GetInitialDomain());
+			grid[x][y] = cell;
+			cell->RuleSetup();
+			entropyQueue.insert(cell);
 		}
 	}
 }

@@ -10,7 +10,7 @@ IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid) : _collap
 {
 
 	_collapseMethod->SetManager(this);
-	_grid->SetManager(this);
+	_grid->Initialize(this);
 	//Set max thread count
 }
 

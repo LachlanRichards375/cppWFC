@@ -3,7 +3,7 @@
 #include"WFCRuleManager.h"
 #include <iostream>
 
-WFCCell::WFCCell(IWFCManager& m, const WFCPosition* p, unsigned long domain) : manager(m), position(p)
+WFCCell::WFCCell(IWFCManager* m, WFCPosition* position, unsigned long domain) : manager(m), position(position)
 {
     CollapsedTile = 0;
     WFCCell::domain = domain;
@@ -20,7 +20,7 @@ void WFCCell::RuleSetup() const
     auto rules = WFCRuleManager::GetRulesForTile(domain);
     for (auto& rule : rules) {
         for (auto& position : rule.get()->GetPositions()) {
-            manager.RegisterForAlert(position, const_cast<WFCCell*>(this));
+            manager->RegisterForAlert(position, const_cast<WFCCell*>(this));
         }
     }
 }
@@ -45,7 +45,7 @@ WFCCellUpdate& WFCCell::Collapse()
 WFCCellUpdate& WFCCell::Collapse(unsigned long toCollapseTo)
 {
     std::cout << "Collapsing cell (" << position->x << "," << position->y << ") to " << toCollapseTo << std::endl;
-    return *new WFCCellUpdate(0,0,0,*position);
+    return *new WFCCellUpdate(0,0,0,position);
 }
 
 const WFCPosition* WFCCell::GetPosition()
@@ -63,6 +63,8 @@ std::optional<WFCCellUpdate> WFCCell::DomainCheck(WFCCellUpdate& update)
             updateToReturn.removedFromDomain = updateToReturn.removedFromDomain|rule->GetGoal();
         }
     }
+    //only include bits not flipped in removed from domain
+    //domain &= ~updateToReturn.removedFromDomain;
     std::optional<WFCCellUpdate> returner (update);
     return returner;
 }

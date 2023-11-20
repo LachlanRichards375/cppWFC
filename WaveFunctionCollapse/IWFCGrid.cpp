@@ -7,11 +7,6 @@ IWFCGrid::IWFCGrid(WFCPosition& newSize) : size(newSize)
     manager = nullptr;
 }
 
-void IWFCGrid::SetManager(IWFCManager* manager)
-{
-    IWFCGrid::manager = manager;
-}
-
 void IWFCGrid::SortQueue()
 {
     //push sorts queue when executed

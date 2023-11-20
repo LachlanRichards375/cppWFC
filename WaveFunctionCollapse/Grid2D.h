@@ -11,6 +11,7 @@ protected:
     std::vector<std::vector<std::vector<WFCCell*>>> cellsToUpdate;
 public:
     Grid2D(WFCPosition& newSize);
+    virtual void Initialize(IWFCManager* manager) override;
 
     virtual WFCCell* GetCell(std::shared_ptr <WFCPosition> position) override;
     virtual std::vector<WFCCell*> GetAlertees(const WFCPosition& positionOfInterest) override;
