@@ -14,7 +14,7 @@ public:
     virtual void Initialize(IWFCManager* manager) override;
 
     virtual WFCCell* GetCell(std::shared_ptr <WFCPosition> position) override;
-    virtual std::vector<WFCCell*> GetAlertees(const WFCPosition& positionOfInterest) override;
+    virtual std::vector<WFCCell*> GetAlertees(const WFCPosition* positionOfInterest) override;
     virtual void RegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toRegister) override;
     virtual void DeRegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toDeregister) override;
     virtual void PrintGrid() override;

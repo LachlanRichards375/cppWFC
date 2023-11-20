@@ -32,7 +32,7 @@ void IWFCCollapseMethod::CollapseThreadWork()
 	while (updateQueue.getCount() > 0) {
 		WFCCellUpdate& cellUpdate{ updateQueue.dequeue() };
 
-		const WFCPosition& cellUpdatePosition{ cellUpdate.updatedCell };
+		const WFCPosition* cellUpdatePosition{ cellUpdate.updatedCell };
 
 		std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
 		for (auto& cell : toAlert)

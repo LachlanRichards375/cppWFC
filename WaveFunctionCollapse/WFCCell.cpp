@@ -55,7 +55,7 @@ const WFCPosition* WFCCell::GetPosition()
 
 std::optional<WFCCellUpdate> WFCCell::DomainCheck(WFCCellUpdate& update)
 {
-    WFCCellUpdate updateToReturn = WFCCellUpdate(0, 0, 0, *position);
+    WFCCellUpdate updateToReturn = WFCCellUpdate(0, 0, 0, position);
     std::vector<std::shared_ptr<IWFCRule>> rulesList = WFCRuleManager::GetRulesForTile(domain);
     for (std::shared_ptr<IWFCRule> rule : rulesList) {
         if (!rule->Test(update, *position)) {

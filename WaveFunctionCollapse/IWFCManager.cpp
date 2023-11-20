@@ -47,7 +47,7 @@ WFCPosition& IWFCManager::GetGridSize()
 	return _grid->GetSize();
 }
 
-std::vector<WFCCell*> IWFCManager::GetAlertees(const WFCPosition& position)
+std::vector<WFCCell*> IWFCManager::GetAlertees(const WFCPosition* position)
 {
 	return _grid->GetAlertees(position);
 }

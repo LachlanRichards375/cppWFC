@@ -34,8 +34,8 @@ inline WFCCell* Grid2D::GetCell(std::shared_ptr <WFCPosition> position) {
 	return grid[position->x][position->y];
 }
 
-inline std::vector<WFCCell*> Grid2D::GetAlertees(const WFCPosition& positionOfInterest) {
-	return cellsToUpdate[positionOfInterest.x][positionOfInterest.y];
+inline std::vector<WFCCell*> Grid2D::GetAlertees(const WFCPosition* positionOfInterest) {
+	return cellsToUpdate[positionOfInterest->x][positionOfInterest->y];
 }
 
 void Grid2D::RegisterForCellUpdates(std::shared_ptr<WFCPosition> positionOfInterest, WFCCell* toRegister)
