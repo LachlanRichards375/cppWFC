@@ -27,7 +27,9 @@ void IWFCManager::GenerateOnce()
 
 void IWFCManager::Collapse()
 {
-	_collapseMethod->Collapse(_grid->PopNextCellToCollapse());
+	WFCCell* cellToCollapse{ _grid->PopNextCellToCollapse() };
+	std::cout << cellToCollapse->GetPosition()->x << "," << cellToCollapse->GetPosition()->y << std::endl;
+	_collapseMethod->Collapse(cellToCollapse);
 }
 
 void IWFCManager::CollapseSpecificCell(std::shared_ptr <WFCPosition> position, unsigned long toCollapseTo)
