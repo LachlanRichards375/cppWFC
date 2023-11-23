@@ -59,14 +59,21 @@ std::optional<WFCCellUpdate> WFCCell::DomainCheck(WFCCellUpdate* update)
 {
     WFCCellUpdate updateToReturn = WFCCellUpdate(0, 0, 0, position);
     std::vector<IWFCRule*> rulesList = WFCRuleManager::GetRulesForTile(domain);
+    bool returnUpdate = false;
     for (auto& rule : rulesList) {
         if (!rule->Test(*update, position)) {
             //Remove this tile from the domain
             updateToReturn.removedFromDomain |= rule->GetGoal();
+            returnUpdate = true;
         }
     }
     //only include bits not flipped in removed from domain
     domain &= ~updateToReturn.removedFromDomain;
-    std::optional<WFCCellUpdate> returner (*update);
-    return returner;
+    if (returnUpdate) {
+        std::optional<WFCCellUpdate> returner(*update);
+        return returner;
+    }
+    else {
+        return std::optional<WFCCellUpdate>();
+    }
 }
