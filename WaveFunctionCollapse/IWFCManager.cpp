@@ -32,12 +32,12 @@ void IWFCManager::Collapse()
 	_collapseMethod->Collapse(cellToCollapse);
 }
 
-void IWFCManager::CollapseSpecificCell(std::shared_ptr <WFCPosition> position, unsigned long toCollapseTo)
+void IWFCManager::CollapseSpecificCell(WFCPosition* position, unsigned long toCollapseTo)
 {
-	//CollapseMethod.CollapseSpecificCell(position, toCollapseTo);
+	_collapseMethod->CollapseSpecificCell(_grid->GetCell(position), toCollapseTo);
 }
 
-WFCCell* IWFCManager::GetCell(std::shared_ptr <WFCPosition> position)
+WFCCell* IWFCManager::GetCell(WFCPosition* position)
 {
 	return _grid->GetCell(position);
 }

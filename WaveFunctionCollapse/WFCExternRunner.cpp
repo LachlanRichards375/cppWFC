@@ -15,7 +15,12 @@ extern "C" {
 	Grid2D* Grid2D_Create(WFCPosition* position) {
 		return new Grid2D(*position);
 	}
-	
+
+	IWFCManager* IWFCManager_Collapse(IWFCManager* manager, unsigned long toCollapseTo, WFCPosition* position) {
+		manager->CollapseSpecificCell(position, toCollapseTo);
+		return manager;
+	}
+
 	IWFCManager* IWFCManager_Create(IWFCCollapseMethod* collapseMethod, IWFCGrid* grid) {
 		return new IWFCManager(collapseMethod, grid);
 	}

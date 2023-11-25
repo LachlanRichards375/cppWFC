@@ -30,7 +30,7 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 	}
 }
 
-inline WFCCell* Grid2D::GetCell(std::shared_ptr <WFCPosition> position) {
+inline WFCCell* Grid2D::GetCell(WFCPosition* position) {
 	return grid[position->x][position->y];
 }
 

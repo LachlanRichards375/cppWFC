@@ -13,7 +13,7 @@ public:
     Grid2D(WFCPosition& newSize);
     virtual void Initialize(IWFCManager* manager) override;
 
-    virtual WFCCell* GetCell(std::shared_ptr <WFCPosition> position) override;
+    virtual WFCCell* GetCell(WFCPosition* position) override;
     virtual std::vector<WFCCell*> GetAlertees(const WFCPosition* positionOfInterest) override;
     virtual void RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister) override;
     virtual void DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister) override;

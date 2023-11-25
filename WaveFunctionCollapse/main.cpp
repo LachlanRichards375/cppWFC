@@ -43,6 +43,8 @@ int main(int argc, char* argv[]) {
 	IWFCGrid* grid = Grid2D_Create(new WFCPosition(10, 10));
 	IWFCManager* manager = IWFCManager_Create(collapse, grid);
 
+	IWFCManager_Collapse(manager, SAND, new WFCPosition(5,5));
+
 	IWFCManager_Run(manager);
 
 	auto t2 = std::chrono::high_resolution_clock::now();

@@ -27,7 +27,7 @@ public:
 
 	//Abstract methods
 	virtual WFCPosition& GetSize() const; 
-	virtual WFCCell* GetCell(std::shared_ptr <WFCPosition> position) = 0;
+	virtual WFCCell* GetCell(WFCPosition* position) = 0;
 	virtual std::vector<WFCCell*> GetAlertees(const WFCPosition* positionOfInterest) = 0;
 	virtual void RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister) = 0;
 	virtual void DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister) = 0;
