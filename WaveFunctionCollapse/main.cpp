@@ -2,6 +2,10 @@
 #include "WFCExternRunner.h"
 #include <iostream>
 
+const unsigned long GRASS = 1<<1;
+const unsigned long SAND  = 1<<2;
+const unsigned long WATER = 1<<3;
+
 
 void createRules() {
 	//1 Grass
@@ -12,19 +16,19 @@ void createRules() {
 	WFCPosition IgnoreAllAround[]{ new WFCPosition(1,0), new WFCPosition(1,1), new WFCPosition(1,-1), new WFCPosition(-1,0), new WFCPosition(-1,1), new WFCPosition(-1,-1), new WFCPosition(0,1), new WFCPosition(0,-1) };
 
 	//Grass cant have Sand West
-	WFCRule_Add_CellIsNot((unsigned long)1, (unsigned long)2, 3, IgnoreWest);
+	WFCRule_Add_CellIsNot(GRASS, SAND, 3, IgnoreWest);
 	//Grass can't have Water anywhere
-	WFCRule_Add_CellIsNot((unsigned long)1, (unsigned long)4, 8, IgnoreAllAround);
+	WFCRule_Add_CellIsNot(GRASS, WATER, 8, IgnoreAllAround);
 
 	//Sand can't have Water West
-	WFCRule_Add_CellIsNot((unsigned long)2, (unsigned long)4, 3, IgnoreWest);
+	WFCRule_Add_CellIsNot(SAND, WATER, 3, IgnoreWest);
 	//Sand can't have Grass East
-	WFCRule_Add_CellIsNot((unsigned long)2, (unsigned long)1, 3, IgnoreEast);
+	WFCRule_Add_CellIsNot(SAND, GRASS, 3, IgnoreEast);
 
 	//Water cant have Sand East
-	WFCRule_Add_CellIsNot((unsigned long)4, (unsigned long)2, 3, IgnoreEast);
+	WFCRule_Add_CellIsNot(WATER, SAND, 3, IgnoreEast);
 	//Water can't have Grass anywhere
-	WFCRule_Add_CellIsNot((unsigned long)4, (unsigned long)1, 8, IgnoreAllAround);
+	WFCRule_Add_CellIsNot(WATER, GRASS, 8, IgnoreAllAround);
 }
 
 int main(int argc, char* argv[]) {
