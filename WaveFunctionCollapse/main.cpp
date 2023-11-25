@@ -2,9 +2,9 @@
 #include "WFCExternRunner.h"
 #include <iostream>
 
-const unsigned long GRASS = 1<<1;
-const unsigned long SAND  = 1<<2;
-const unsigned long WATER = 1<<3;
+const unsigned long GRASS = 1<<0;
+const unsigned long SAND  = 1<<1;
+const unsigned long WATER = 1<<2;
 
 
 void createRules() {
