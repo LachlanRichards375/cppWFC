@@ -14,6 +14,7 @@ public:
 	//static std::vector<WFCPosition&> GetRulesAffectingDomain(unsigned long domain);
 	static void AddRuleToTile(unsigned long ruleAppliesTo, IWFCRule* rule);
 	static std::vector<IWFCRule*> GetRulesForTile(unsigned long tiles);
+	static std::vector<IWFCRule*> GetRulesForDomain(unsigned long domain);
 	static unsigned long GetInitialDomain();
 	static void AddToInitialDomain(unsigned long domain);
 	static int GetBitsInDomain(unsigned long domain);

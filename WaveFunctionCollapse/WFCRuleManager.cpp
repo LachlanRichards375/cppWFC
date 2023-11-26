@@ -32,10 +32,10 @@ int WFCRuleManager::GetBitsInDomain(unsigned long domain)
 void WFCRuleManager::AddRuleToTile(unsigned long ruleAppliesTo, IWFCRule* rule)
 {
 	if (rulesOnTiles.size() == 0) {
-		rulesOnTiles.resize(sizeof(unsigned long));
+		rulesOnTiles.resize(sizeof(unsigned long) * 8); //sizeof returns bytes
 	}
 
-	auto& lookup {rulesOnTiles[getLeastSignifigantBit(ruleAppliesTo) + 1]};
+	auto& lookup {rulesOnTiles[getLeastSignifigantBit(ruleAppliesTo)]};
 
 	if (std::find(lookup.begin(), lookup.end(), rule) != lookup.end()) {
 		return;
@@ -58,6 +58,20 @@ std::vector<IWFCRule*> WFCRuleManager::GetRulesForTile(unsigned long tile)
 		return rulesOnTiles.at(0);
 	}
 
-	 // Add 1 to get the 1-based index
-	return rulesOnTiles[getLeastSignifigantBit(tile)+1];
+	// Add 1 to get the 1-based index
+	return rulesOnTiles[getLeastSignifigantBit(tile)];
+}
+
+std::vector<IWFCRule*> WFCRuleManager::GetRulesForDomain(unsigned long domain)
+{
+	std::vector<IWFCRule*> rulesToReturn{};
+	for (int i = 0; i < rulesOnTiles.size(); ++i) {
+		if ((1 << i & domain) > 0) {
+			for (IWFCRule* ruleToApply : rulesOnTiles[i]) {
+				rulesToReturn.push_back(ruleToApply);
+			}
+		}
+	}
+	// Add 1 to get the 1-based index
+	return rulesToReturn;
 }

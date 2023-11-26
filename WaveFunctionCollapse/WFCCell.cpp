@@ -47,7 +47,7 @@ WFCCellUpdate* WFCCell::Collapse(unsigned long toCollapseTo)
 {
     CollapsedTile = toCollapseTo;
     std::cout << "Collapsing cell (" << position->x << "," << position->y << ") to " << CollapsedTile << std::endl;
-    return new WFCCellUpdate(domain & ~toCollapseTo,0,0,position);
+    return new WFCCellUpdate(domain & ~toCollapseTo,0,toCollapseTo,position);
 }
 
 const WFCPosition* WFCCell::GetPosition()
@@ -58,12 +58,13 @@ const WFCPosition* WFCCell::GetPosition()
 std::optional<WFCCellUpdate> WFCCell::DomainCheck(WFCCellUpdate* update)
 {
     WFCCellUpdate updateToReturn = WFCCellUpdate(0, 0, 0, position);
-    std::vector<IWFCRule*> rulesList = WFCRuleManager::GetRulesForTile(domain);
+    std::vector<IWFCRule*> rulesList = WFCRuleManager::GetRulesForDomain(domain);
     bool returnUpdate = false;
     for (auto& rule : rulesList) {
         if (!rule->Test(*update, position)) {
             //Remove this tile from the domain
-            updateToReturn.removedFromDomain |= rule->GetGoal();
+            updateToReturn.removedFromDomain |= rule->GetTile();
+            domain &= ~rule->GetTile();
             returnUpdate = true;
         }
     }

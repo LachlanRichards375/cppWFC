@@ -29,6 +29,16 @@ void createRules() {
 	WFCRule_Add_CellIsNot(WATER, SAND, 3, IgnoreEast);
 	//Water can't have Grass anywhere
 	WFCRule_Add_CellIsNot(WATER, GRASS, 8, IgnoreAllAround);
+
+	std::cout << "Cells: ";
+	std::cout << "\n\t|- GRASS ->" << GRASS;
+	std::cout << "\n\t|- SAND  ->" << SAND;
+	std::cout << "\n\t|- WATER ->" << WATER;
+	std::cout << std::endl;
+	std::cout << "RULES: " << std::endl;
+	std::cout << "GRASS can't have sand west (x-1), GRASS can't have water anywhere." << std::endl;
+	std::cout << "SAND can't have water west (x-1), SAND can't have grass east (x+1)." << std::endl;
+	std::cout << "WATER can't have sand east (x+1), WATER can't have grass anywhere." << std::endl;
 }
 
 int main(int argc, char* argv[]) {

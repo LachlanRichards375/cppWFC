@@ -1,18 +1,18 @@
 #include "WFCRuleCellIsNot.h"
 #include "WFCCell.h"
 
-WFCRuleCellIsNot::WFCRuleCellIsNot(unsigned long goal, std::vector<WFCPosition*> localPositionsWeCareAbout)
-    :IWFCRule(goal, localPositionsWeCareAbout)
+WFCRuleCellIsNot::WFCRuleCellIsNot(unsigned long goal, unsigned long tile, std::vector<WFCPosition*> localPositionsWeCareAbout)
+    :IWFCRule(goal, tile, localPositionsWeCareAbout)
 {
 }
 
 bool WFCRuleCellIsNot::Test(WFCCellUpdate update, const WFCPosition* currentCellPosition)
 {
-    if (update.collapsedTo > 0) {
+    if (update.collapsedTo > 0 && (update.collapsedTo & goal) > 0) {
         WFCPosition localDirection = (*update.updatedCell) - (currentCellPosition);
         for (auto const& it : localPositionsWeCareAbout) {
             if (*it == localDirection) {
-                return !((update.collapsedTo & goal) > 0);
+                return (update.collapsedTo & goal) == 0;
             }
         }
     }

@@ -40,7 +40,7 @@ extern "C" {
 		for (unsigned int i = 0; i < localTargetCount; ++i) {
 			localTargetsVec.push_back(new WFCPosition { localTargets[i] });
 		}
-		WFCRuleManager::AddRuleToTile(tile, new WFCRuleCellIsNot(goal, localTargetsVec));
+		WFCRuleManager::AddRuleToTile(tile, new WFCRuleCellIsNot(goal, tile, localTargetsVec));
 	}
 
 }

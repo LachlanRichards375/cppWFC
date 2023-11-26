@@ -7,10 +7,12 @@ class IWFCRule {
 protected:
 	std::vector<WFCPosition*> localPositionsWeCareAbout;
 	unsigned long goal;
+	unsigned long tile;
 public:
-	IWFCRule(unsigned long goal, std::vector<WFCPosition*> localPositionsWeCareAbout);
+	IWFCRule(unsigned long goal, unsigned long tile, std::vector<WFCPosition*> localPositionsWeCareAbout);
 	virtual bool Test(WFCCellUpdate update, const WFCPosition* currentCellPosition) = 0;
 	unsigned long const GetGoal();
+	unsigned long const GetTile();
 	std::vector< WFCPosition*> GetPositions();
 };
 
