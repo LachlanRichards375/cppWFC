@@ -39,8 +39,16 @@ unsigned long WFCCell::CalculateEntropy() const
 WFCCellUpdate* WFCCell::Collapse()
 {
     //std::cout << "(Collapse() does not do tile weighting) ";
-    int index{ rand() % (WFCRuleManager::GetBitsInDomain(domain)) };
-    return Collapse((unsigned long)1 << index);
+    int bitNumToUse{ rand() % (WFCRuleManager::GetBitsInDomain(domain)) };
+    int index = 0;
+    int flippedBitsFound = 0;
+    while(flippedBitsFound <= bitNumToUse){
+        if ((1 << index & domain) != 0) {
+            ++flippedBitsFound;
+        }
+        ++index;
+    }
+    return Collapse(1 << index - 1);
 }
 
 WFCCellUpdate* WFCCell::Collapse(unsigned long toCollapseTo)
