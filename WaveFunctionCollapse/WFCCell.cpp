@@ -55,26 +55,30 @@ const WFCPosition* WFCCell::GetPosition()
     return position;
 }
 
-std::optional<WFCCellUpdate> WFCCell::DomainCheck(WFCCellUpdate* update)
+WFCCellUpdate* WFCCell::DomainCheck(WFCCellUpdate* update)
 {
-    WFCCellUpdate updateToReturn = WFCCellUpdate(0, 0, 0, position);
+    if (CollapsedTile > 0) {
+        return nullptr;
+    }
+
+    WFCCellUpdate* updateToReturn = new WFCCellUpdate(0, 0, 0, position);
     std::vector<IWFCRule*> rulesList = WFCRuleManager::GetRulesForDomain(domain);
     bool returnUpdate = false;
     for (auto& rule : rulesList) {
         if (!rule->Test(*update, position)) {
             //Remove this tile from the domain
-            updateToReturn.removedFromDomain |= rule->GetTile();
-            domain &= ~rule->GetTile();
+            updateToReturn->removedFromDomain |= rule->GetTile();
             returnUpdate = true;
         }
     }
     //only include bits not flipped in removed from domain
-    domain &= ~updateToReturn.removedFromDomain;
+    domain &= ~updateToReturn->removedFromDomain;
+    std::cout << "(" << position->x << "," << position->y << ") has domain " << domain << " after domain check " << std::endl;
+
     if (returnUpdate) {
-        std::optional<WFCCellUpdate> returner(*update);
-        return returner;
+        return updateToReturn;
     }
     else {
-        return std::optional<WFCCellUpdate>();
+        return nullptr;
     }
 }

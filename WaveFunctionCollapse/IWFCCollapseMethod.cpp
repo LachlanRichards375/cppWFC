@@ -37,9 +37,9 @@ void IWFCCollapseMethod::CollapseThreadWork()
 		std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
 		for (auto& cell : toAlert)
 		{
-			std::optional<WFCCellUpdate> updateMessage = cell->DomainCheck(cellUpdate);
-			if (updateMessage.has_value()) {
-				updateQueue.enqueue(&updateMessage.value());
+			WFCCellUpdate* updateMessage = cell->DomainCheck(cellUpdate);
+			if (updateMessage != nullptr) {
+				updateQueue.enqueue(updateMessage);
 			}
 		}
 	}

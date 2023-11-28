@@ -25,7 +25,7 @@ public:
 	WFCCellUpdate* Collapse();
 	WFCCellUpdate* Collapse(unsigned long toCollapseTo);
 	const WFCPosition* GetPosition();
-	std::optional<WFCCellUpdate> DomainCheck(WFCCellUpdate* update);
+	WFCCellUpdate* DomainCheck(WFCCellUpdate* update);
 
 	bool operator<(const WFCCell& other) const
 	{
