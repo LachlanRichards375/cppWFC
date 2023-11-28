@@ -16,11 +16,6 @@ extern "C" {
 		return new Grid2D(*position);
 	}
 
-	IWFCManager* IWFCManager_Collapse(IWFCManager* manager, unsigned long toCollapseTo, WFCPosition* position) {
-		manager->CollapseSpecificCell(position, toCollapseTo);
-		return manager;
-	}
-
 	IWFCManager* IWFCManager_Create(IWFCCollapseMethod* collapseMethod, IWFCGrid* grid) {
 		return new IWFCManager(collapseMethod, grid);
 	}
@@ -30,8 +25,24 @@ extern "C" {
 		WFCRuleManager::AddToInitialDomain(tilesToAdd);
 	}
 
-	void IWFCManager_Run(IWFCManager * manager) {
-		manager->Generate();
+	int IWFCManager_Collapse(IWFCManager* manager, unsigned long toCollapseTo, WFCPosition* position) {
+		try {
+			manager->CollapseSpecificCell(position, toCollapseTo);
+		}
+		catch (int number) {
+			return number;
+		}
+		return 0;
+	}
+
+	int IWFCManager_Run(IWFCManager* manager) {
+		//try {
+			manager->Generate();
+		/*}
+		catch (int number) {
+			return number;
+		}*/
+		return 0;
 	}
 
 	void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[])

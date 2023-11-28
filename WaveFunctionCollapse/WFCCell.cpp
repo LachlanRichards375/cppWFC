@@ -74,6 +74,11 @@ WFCCellUpdate* WFCCell::DomainCheck(WFCCellUpdate* update)
     //only include bits not flipped in removed from domain
     domain &= ~updateToReturn->removedFromDomain;
     std::cout << "(" << position->x << "," << position->y << ") has domain " << domain << " after domain check " << std::endl;
+    if (domain == 0 && CollapsedTile == 0) {
+        std::cout << "\n\nERROR: Domain = 0 on cell " << position->x << "," << position->y << std::endl;
+        throw -2;
+        return nullptr;
+    }
 
     if (returnUpdate) {
         return updateToReturn;

@@ -46,16 +46,23 @@ int main(int argc, char* argv[]) {
 	
 	auto t1 = std::chrono::high_resolution_clock::now();
 	
-	AddTileToDomain((1 + 2 + 4));
+	AddTileToDomain(SAND + WATER + GRASS);
 	createRules();
 
 	IWFCCollapseMethod* collapse = Threaded2DCollapse_Create();
-	IWFCGrid* grid = Grid2D_Create(new WFCPosition(10, 10));
+	IWFCGrid* grid = Grid2D_Create(new WFCPosition(3, 3));
 	IWFCManager* manager = IWFCManager_Create(collapse, grid);
 
-	IWFCManager_Collapse(manager, SAND, new WFCPosition(5,5));
-
-	IWFCManager_Run(manager);
+	int messageNo = IWFCManager_Collapse(manager, SAND, new WFCPosition(1,1));
+	if (messageNo != 0) {
+		std::cout << "Error (" << messageNo <<") collapsing first cell to Sand. Program Aborting." << std::endl;
+		return 0;
+	}
+	
+	messageNo = IWFCManager_Run(manager);
+	if (messageNo != 0) {
+		std::cout << "Error Generating: (" << messageNo << ") program aborting." << std::endl;
+	}
 
 	auto t2 = std::chrono::high_resolution_clock::now();
 
