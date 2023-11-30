@@ -8,6 +8,7 @@ private:
 public:
     void insert(WFCCell*& value);
     WFCCell* pop();
+    WFCCell* popSpecific(WFCPosition* position);
     void sort();
     size_t size();
 };

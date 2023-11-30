@@ -23,6 +23,7 @@ public:
 	//Concrete Methods
 	void SortQueue();
 	WFCCell* PopNextCellToCollapse();
+	WFCCell* PopSpecificCell(WFCPosition* position);
 	size_t RemainingCellsToCollapse();
 
 	//Abstract methods

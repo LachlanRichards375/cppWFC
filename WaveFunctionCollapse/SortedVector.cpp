@@ -14,6 +14,18 @@ WFCCell* SortedVector::pop() {
     return item;
 }
 
+WFCCell* SortedVector::popSpecific(WFCPosition* position)
+{
+    for (auto it = data.begin(); it != data.end(); ++it) {
+        if (*(*it)->GetPosition() == *position) {
+            WFCCell* ptr = (*it);
+            data.erase(it);
+            return ptr;
+        }
+    }
+    return nullptr;
+}
+
 void SortedVector::sort() {
     std::vector<WFCCell*> other{data};
     data.clear();
