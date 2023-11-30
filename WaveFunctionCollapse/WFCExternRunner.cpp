@@ -36,12 +36,12 @@ extern "C" {
 	}
 
 	int IWFCManager_Run(IWFCManager* manager) {
-		//try {
+		try {
 			manager->Generate();
-		/*}
+		}
 		catch (int number) {
 			return number;
-		}*/
+		}
 		return 0;
 	}
 
