@@ -54,7 +54,9 @@ WFCCellUpdate* WFCCell::Collapse()
 WFCCellUpdate* WFCCell::Collapse(unsigned long toCollapseTo)
 {
     CollapsedTile = toCollapseTo;
-    std::cout << "Collapsing cell (" << position->x << "," << position->y << ") to " << CollapsedTile << std::endl;
+    #ifdef _DEBUG
+        std::cout << "Collapsing cell (" << position->x << "," << position->y << ") to " << CollapsedTile << std::endl;
+    #endif
     return new WFCCellUpdate(domain & ~toCollapseTo,0,toCollapseTo,position);
 }
 
@@ -79,19 +81,22 @@ WFCCellUpdate* WFCCell::DomainCheck(WFCCellUpdate* update)
             returnUpdate = true;
         }
     }
-    //only include bits not flipped in removed from domain
-    domain &= ~updateToReturn->removedFromDomain;
-    std::cout << "(" << position->x << "," << position->y << ") has domain " << domain << " after domain check " << std::endl;
-    if (domain == 0 && CollapsedTile == 0) {
-        std::cout << "\n\nERROR: Domain = 0 on cell " << position->x << "," << position->y << std::endl;
-        throw -2;
+   
+    if (!returnUpdate) {
         return nullptr;
     }
 
-    if (returnUpdate) {
-        return updateToReturn;
+    domain &= ~updateToReturn->removedFromDomain;
+    
+    #ifdef _DEBUG
+        std::cout << "(" << position->x << "," << position->y << ") has domain " << domain << " after domain check " << std::endl;
+    #endif // DEBUG
+
+    //only include bits not flipped in removed from domain
+    if (domain == 0 && CollapsedTile == 0) {
+        std::cout << "\n\nERROR: Domain = 0 on cell " << position->x << "," << position->y << std::endl;
+       throw - 2;
+       return nullptr;
     }
-    else {
-        return nullptr;
-    }
+    return updateToReturn;
 }

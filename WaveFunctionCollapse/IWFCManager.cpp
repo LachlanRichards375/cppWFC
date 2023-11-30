@@ -58,14 +58,20 @@ void IWFCManager::RegisterForAlert(WFCPosition* registerFor, WFCCell* alertee) {
 void IWFCManager::Generate()
 {
 	std::cout << "In Generate, cells to collapse:" << _grid->RemainingCellsToCollapse() << std::endl;
-	std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
-	PrintGrid();
-	while (_grid->RemainingCellsToCollapse() > 0) {
-		std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
-		GenerateOnce();
+	#ifdef _DEBUG
 		std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
 		PrintGrid();
-	}
+		while (_grid->RemainingCellsToCollapse() > 0) {
+			std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
+			GenerateOnce();
+			std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
+			PrintGrid();
+		}
+	#else
+		while (_grid->RemainingCellsToCollapse() > 0) {
+			GenerateOnce();
+		}
+	#endif
 }
 
 void IWFCManager::PrintGrid() {
