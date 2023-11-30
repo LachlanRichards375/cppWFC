@@ -17,10 +17,10 @@ WFCCell::WFCCell(WFCCell* other) : manager(other->manager), position(other->posi
 
 void WFCCell::RuleSetup() const
 {
-    auto rules = WFCRuleManager::GetRulesForTile(domain);
+    auto rules = WFCRuleManager::GetRulesForDomain(domain);
     for (auto& rule : rules) {
         for (auto& position : rule->GetPositions()) {
-            WFCPosition* globalPos = new WFCPosition{ *position - WFCCell::position };
+            WFCPosition* globalPos = (*WFCCell::position + *position);
             manager->RegisterForAlert(globalPos, const_cast<WFCCell*>(this));
         }
     }

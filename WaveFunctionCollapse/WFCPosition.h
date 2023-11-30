@@ -63,9 +63,9 @@ public:
 			this->w == other.w);
 	}
 
-	WFCPosition operator-(const WFCPosition& other) const {
+	WFCPosition* operator-(const WFCPosition& other) const {
 		if (other.w.has_value()) {
-			return WFCPosition(
+			return new WFCPosition(
 				this->x - other.x,
 				this->y - other.y,
 				this->z.value() - other.z.value(),
@@ -74,22 +74,22 @@ public:
 		}
 
 		if (other.z.has_value()) {
-			return WFCPosition(
+			return new WFCPosition(
 				this->x - other.x,
 				this->y - other.y,
 				this->z.value() - other.z.value()
 			);
 		}
 
-		return WFCPosition(
+		return new WFCPosition(
 			this->x - other.x,
 			this->y - other.y
 		);
 	}
 
-	WFCPosition operator-(const WFCPosition* other) const {
+	WFCPosition* operator-(const WFCPosition* other) const {
 		if (other->w.has_value()) {
-			return WFCPosition(
+			return new WFCPosition(
 				this->x - other->x,
 				this->y - other->y,
 				this->z.value() - other->z.value(),
@@ -98,16 +98,65 @@ public:
 		}
 
 		if (other->z.has_value()) {
-			return WFCPosition(
+			return new WFCPosition(
 				this->x - other->x,
 				this->y - other->y,
 				this->z.value() - other->z.value()
 			);
 		}
 
-		return WFCPosition(
+		return new WFCPosition(
 			this->x - other->x,
 			this->y - other->y
+		);
+	}
+
+
+	WFCPosition* operator+(const WFCPosition& other) const {
+		if (other.w.has_value()) {
+			return new WFCPosition(
+				this->x + other.x,
+				this->y + other.y,
+				this->z.value() + other.z.value(),
+				this->w.value() + other.w.value()
+			);
+		}
+
+		if (other.z.has_value()) {
+			return new WFCPosition(
+				this->x + other.x,
+				this->y + other.y,
+				this->z.value() + other.z.value()
+			);
+		}
+
+		return new WFCPosition(
+			this->x + other.x,
+			this->y + other.y
+		);
+	}
+
+	WFCPosition* operator+(const WFCPosition* other) const {
+		if (other->w.has_value()) {
+			return new WFCPosition(
+				this->x + other->x,
+				this->y + other->y,
+				this->z.value() + other->z.value(),
+				this->w.value() + other->w.value()
+			);
+		}
+
+		if (other->z.has_value()) {
+			return new WFCPosition(
+				this->x + other->x,
+				this->y + other->y,
+				this->z.value() + other->z.value()
+			);
+		}
+
+		return new WFCPosition(
+			this->x + other->x,
+			this->y + other->y
 		);
 	}
 };
