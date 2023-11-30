@@ -42,6 +42,15 @@ void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* to
 {
 	if (positionOfInterest->x >= 0 && positionOfInterest->x < size.x) {
 		if (positionOfInterest->y >= 0 && positionOfInterest->y < size.y) {
+			std::vector<WFCCell*>::iterator it = cellsToUpdate[positionOfInterest->x][positionOfInterest->y].begin();
+			std::vector<WFCCell*>::iterator endIt = cellsToUpdate[positionOfInterest->x][positionOfInterest->y].end();
+			while (it != endIt) {
+				if ((*it) == toRegister) {
+					//If we already have registered an interest in this cell
+					return;
+				}
+				++it;
+			}
 			cellsToUpdate[positionOfInterest->x][positionOfInterest->y].push_back(toRegister);
 		}
 	}
