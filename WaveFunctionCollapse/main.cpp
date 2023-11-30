@@ -13,7 +13,9 @@ void createRules() {
 	//4 Water
 	WFCPosition IgnoreWest[]{ new WFCPosition(-1,0), new WFCPosition(-1,1), new WFCPosition(-1,-1) };
 	WFCPosition IgnoreEast[]{ new WFCPosition(1,0), new WFCPosition(1,1), new WFCPosition(1,-1) };
-	WFCPosition IgnoreAllAround[]{ new WFCPosition(1,0), new WFCPosition(1,1), new WFCPosition(1,-1), new WFCPosition(-1,0), new WFCPosition(-1,1), new WFCPosition(-1,-1), new WFCPosition(0,1), new WFCPosition(0,-1) };
+	WFCPosition IgnoreAllAround[]{  new WFCPosition(-1,1), new WFCPosition(0,1), new WFCPosition(1,1), 
+									new WFCPosition(-1,0),	/*	   TILE		*/	 new WFCPosition(1,0),
+									new WFCPosition(-1,-1),new WFCPosition(0,-1),new WFCPosition(1,-1), };
 
 	//Grass cant have Sand West
 	WFCRule_Add_CellIsNot(GRASS, SAND, 3, IgnoreWest);

@@ -27,14 +27,13 @@ void IWFCManager::GenerateOnce()
 
 void IWFCManager::Collapse()
 {
-	WFCCell* cellToCollapse{ _grid->PopNextCellToCollapse() };
 	//std::cout << cellToCollapse->GetPosition()->x << "," << cellToCollapse->GetPosition()->y << std::endl;
-	_collapseMethod->Collapse(cellToCollapse);
+	_collapseMethod->Collapse(_grid->PopNextCellToCollapse());
 }
 
 void IWFCManager::CollapseSpecificCell(WFCPosition* position, unsigned long toCollapseTo)
 {
-	_collapseMethod->CollapseSpecificCell(_grid->GetCell(position), toCollapseTo);
+	_collapseMethod->CollapseSpecificCell(_grid->PopSpecificCell(position), toCollapseTo);
 }
 
 WFCCell* IWFCManager::GetCell(WFCPosition* position)
