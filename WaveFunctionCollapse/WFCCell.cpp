@@ -33,7 +33,8 @@ void WFCCell::SetDomain(const unsigned long newDomain)
 
 unsigned long WFCCell::CalculateEntropy() const
 {
-    return domain;
+    //We want to return the number of bits in domain otherwise it will favour smaller ids
+    return WFCRuleManager::GetBitsInDomain(domain);
 }
 
 WFCCellUpdate* WFCCell::Collapse()

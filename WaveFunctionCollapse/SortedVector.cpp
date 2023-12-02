@@ -26,14 +26,10 @@ WFCCell* SortedVector::popSpecific(WFCPosition* position)
     return nullptr;
 }
 
+static bool sortPointers(WFCCell* a, WFCCell* b) { return *a < *b; };
+
 void SortedVector::sort() {
-    std::vector<WFCCell*> other{data};
-    data.clear();
-    std::vector<WFCCell*>::iterator it{other.begin()};
-    for (size_t i = other.size(); i > 0; --i) {
-        insert(*it);
-        it += 1;
-    }
+    std::sort(data.begin(), data.end(), sortPointers);
 }
 
 size_t SortedVector::size() {

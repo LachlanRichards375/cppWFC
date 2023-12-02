@@ -1,5 +1,6 @@
 #pragma once
-#include <vector>
+#include <vector>   //std::vector
+#include <algorithm> //std::sort
 #include "WFCCell.h"
 class SortedVector {
 private:
