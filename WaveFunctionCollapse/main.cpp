@@ -2,6 +2,7 @@
 #include "WFCExternRunner.h"
 #include <iostream>
 
+
 const unsigned long GRASS = 1<<0;
 const unsigned long SAND  = 1<<1;
 const unsigned long WATER = 1<<2;
@@ -48,14 +49,16 @@ int main(int argc, char* argv[]) {
 	
 	auto t1 = std::chrono::high_resolution_clock::now();
 	
+	WFCPosition* size = new WFCPosition(5, 5);
+
 	AddTileToDomain(SAND + WATER + GRASS);
 	createRules();
 
 	IWFCCollapseMethod* collapse = Threaded2DCollapse_Create();
-	IWFCGrid* grid = Grid2D_Create(new WFCPosition(3, 3));
-	IWFCManager* manager = IWFCManager_Create(collapse, grid);
+	IWFCGrid* grid = Grid2D_Create(size);
+	IWFCManager* manager = IWFCManager_Create(collapse, grid, 12);
 
-	int messageNo = IWFCManager_Collapse(manager, SAND, new WFCPosition(1,1));
+	int messageNo = IWFCManager_Collapse(manager, SAND, new WFCPosition(size->x / 2, size->y/2));
 	if (messageNo != 0) {
 		std::cout << "Error (" << messageNo <<") collapsing first cell to Sand. Program Aborting." << std::endl;
 		return 0;
@@ -73,7 +76,9 @@ int main(int argc, char* argv[]) {
 
 	std::cout << ms_double.count() << "ms" << std::endl;
 
-	manager->PrintGrid();
+	if (messageNo == 0) {
+		manager->PrintGrid();
+	}
 
 	system("pause");
 

@@ -16,8 +16,8 @@ extern "C" {
 		return new Grid2D(*position);
 	}
 
-	IWFCManager* IWFCManager_Create(IWFCCollapseMethod* collapseMethod, IWFCGrid* grid) {
-		return new IWFCManager(collapseMethod, grid);
+	IWFCManager* IWFCManager_Create(IWFCCollapseMethod* collapseMethod, IWFCGrid* grid, short threadCount) {
+		return new IWFCManager(collapseMethod, grid, threadCount);
 	}
 
 	void AddTileToDomain(unsigned long tilesToAdd)

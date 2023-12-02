@@ -17,7 +17,7 @@ protected:
 	IWFCCollapseMethod* _collapseMethod;
 
 public:
-	IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid);
+	IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount);
 	~IWFCManager();
 
 	void PrintGrid();

@@ -15,7 +15,7 @@ extern "C" {
 	WFCPosition * WFCPosition_Create3D(unsigned int x, unsigned int y, unsigned int z);
 	WFCPosition * WFCPosition_Create4D(unsigned int x, unsigned int y, unsigned int z, unsigned int w);
 
-	IWFCManager * IWFCManager_Create(IWFCCollapseMethod * collapseMethod, IWFCGrid * grid);
+	IWFCManager * IWFCManager_Create(IWFCCollapseMethod * collapseMethod, IWFCGrid * grid, short threadCount);
 
 	void AddTileToDomain(unsigned long tilesToAdd);
 
