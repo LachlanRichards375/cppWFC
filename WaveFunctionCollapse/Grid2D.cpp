@@ -77,12 +77,12 @@ void Grid2D::PrintGrid()
 {
 	std::cout << "Printing 2D grid: " << std::endl;
 	std::string divider = "";
-	for(int x = size.x-1; x>=0;--x){ //0 bottom left
+	for(int row = size.x-1; row>=0;--row){ //0 bottom left
 	//for (int x = 0; x < size.x; ++x) { //0 top left
 		std::cout << divider << std::endl;
-		for (int y = 0; y < size.y; ++y) {
+		for (int col = 0; col < size.y; ++col) {
 			std::cout << "|";
-			unsigned long collapsedTile = grid[x][y]->CollapsedTile;
+			unsigned long collapsedTile = grid[col][row]->CollapsedTile;
 
 			if (collapsedTile < 100) {
 				std::cout << " ";
