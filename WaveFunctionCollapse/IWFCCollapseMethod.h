@@ -24,7 +24,7 @@ protected:
 public:
 	IWFCCollapseMethod();
 	~IWFCCollapseMethod();
-	void Initialize(IWFCManager* manager, short threadCount);
+	void Initialize(IWFCManager* manager);
 	std::vector<WFCPosition> Collapse(WFCCell* position);
 	std::vector<WFCPosition> CollapseSpecificCell(WFCCell* position, unsigned long collapseTo);
 	void Reset();

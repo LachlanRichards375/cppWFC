@@ -15,7 +15,7 @@ IWFCCollapseMethod::~IWFCCollapseMethod()
 	continueThreadWork = false;
 }
 
-void IWFCCollapseMethod::Initialize(IWFCManager* manager, short threadCount)
+void IWFCCollapseMethod::Initialize(IWFCManager* manager)
 {
 	IWFCCollapseMethod::manager = manager;
 }
@@ -38,8 +38,10 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 	std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
 	for (auto& cell : toAlert)
 	{
+		ZoneScopedN("Alerting Cell");
 		WFCCellUpdate* updateMessage = cell->DomainCheck(cellUpdate);
 		if (updateMessage != nullptr) {
+			ZoneScopedN("Requeing Update");
 			manager->QueueJobToThreadPool([this, updateMessage]{ ThreadWork(updateMessage); });
 		}
 	}
