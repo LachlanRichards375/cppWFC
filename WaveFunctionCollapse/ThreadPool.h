@@ -7,7 +7,7 @@
 //https://stackoverflow.com/questions/15752659/thread-pooling-in-c11
 class ThreadPool {
 public:
-    void Start(uint32_t MaxThreadCount = 0);
+    void Start(uint32_t MaxThreadCount = std::thread::hardware_concurrency());
     void QueueJob(const std::function<void()>& job);
     void Stop();
     bool busy();

@@ -1,10 +1,7 @@
 #include "ThreadPool.h"
 
 //https://stackoverflow.com/questions/15752659/thread-pooling-in-c11
-void ThreadPool::Start(uint32_t MaxThreadCount = 0) {
-    if (MaxThreadCount == 0) {
-        MaxThreadCount = std::thread::hardware_concurrency();
-    }
+void ThreadPool::Start(uint32_t MaxThreadCount) {
     const uint32_t num_threads = MaxThreadCount; // Max # of threads the system supports
     for (uint32_t ii = 0; ii < num_threads; ++ii) {
         threads.emplace_back(std::thread(&ThreadPool::ThreadLoop, this));
