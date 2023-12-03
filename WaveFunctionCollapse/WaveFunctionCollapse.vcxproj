@@ -156,7 +156,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;WAVEFUNCTIONCOLLAPSE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WAVEFUNCTIONCOLLAPSE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);TRACY_ENABLE;TRACY_NO_EXIT;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -194,7 +194,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;WAVEFUNCTIONCOLLAPSE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WAVEFUNCTIONCOLLAPSE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);TRACY_ENABLE;TRACY_NO_EXIT;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -231,6 +231,7 @@
     <ClInclude Include="WFCRuleManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\tracy\public\TracyClient.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Grid2D.cpp" />
     <ClCompile Include="IWFCCollapseMethod.cpp" />
@@ -252,9 +253,6 @@
     <ClCompile Include="WFCExternRunner.cpp" />
     <ClCompile Include="WFCRuleCellIsNot.cpp" />
     <ClCompile Include="WFCRuleManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="WaveFunctionCollapse.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

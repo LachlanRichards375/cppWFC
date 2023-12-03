@@ -114,10 +114,8 @@
     <ClCompile Include="IWFCRule.cpp">
       <Filter>Source Files\WFCRules</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="WaveFunctionCollapse.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <ClCompile Include="..\tracy\public\TracyClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
