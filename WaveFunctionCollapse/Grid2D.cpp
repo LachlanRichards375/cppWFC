@@ -36,9 +36,16 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 		ZoneScopedN("Filling the cells");
 		for (int x = 0; x < size.x; ++x) {
 			for (int y = 0; y < size.y; ++y) {
-				WFCCell* cell = new WFCCell(manager, new WFCPosition{ x, y }, WFCRuleManager::GetInitialDomain());
+				WFCCell* cell;
+				{
+					ZoneScopedN("Create New Cell");
+					cell = new WFCCell(manager, new WFCPosition{ x, y }, WFCRuleManager::GetInitialDomain());
+				}
 				grid[x][y] = cell;
-				cell->RuleSetup();
+				{
+					ZoneScopedN("Rule Setup");
+					cell->RuleSetup();
+				}
 				entropyQueue.insert(cell);
 			}
 		}
