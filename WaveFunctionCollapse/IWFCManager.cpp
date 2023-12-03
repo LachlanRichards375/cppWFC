@@ -9,10 +9,13 @@
 
 IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount) : _collapseMethod(collapse), _grid(grid), _threadPool(ThreadPool())
 {
-	_collapseMethod->Initialize(this, 12);
+	{
+		ZoneScopedN("Starting Thread pool");
+		_threadPool.Start(threadCount);
+	}
+	_collapseMethod->Initialize(this);
 	_grid->Initialize(this);
-	//Set max thread count
-	_threadPool.Start();
+	
 }
 
 IWFCManager::~IWFCManager()
