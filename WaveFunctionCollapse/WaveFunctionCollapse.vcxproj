@@ -227,6 +227,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SortedVector.h" />
+    <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="ThreadSafeQueue.h" />
     <ClInclude Include="WFCCell.h" />
     <ClInclude Include="WFCCellUpdate.h" />
@@ -254,6 +255,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseEXE|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SortedVector.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="WFCCell.cpp" />
     <ClCompile Include="WFCCellUpdate.cpp" />
     <ClCompile Include="WFCExternRunner.cpp" />

@@ -19,8 +19,7 @@ protected:
 	bool continueThreadWork;
 
 	void Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo);
-	void CollapseThreadWork();
-	void StartThreads(short numThredsToStart);
+	void ThreadWork(WFCCellUpdate* cellUpdate);
 
 public:
 	IWFCCollapseMethod();
