@@ -3,6 +3,7 @@
 #include "IWFCCollapseMethod.h"
 #include "IWFCManager.h"
 #include "WFCCell.h"
+#include "../tracy/public/tracy/Tracy.hpp"
 
 IWFCCollapseMethod::IWFCCollapseMethod(){
 	manager = nullptr;
@@ -16,6 +17,8 @@ IWFCCollapseMethod::~IWFCCollapseMethod()
 
 void IWFCCollapseMethod::Initialize(IWFCManager* manager, short threadCount)
 {
+
+	ZoneScopedN("CollapseMethod Initialize");
 	IWFCCollapseMethod::manager = manager;
 	StartThreads(threadCount);
 }
@@ -32,18 +35,22 @@ void IWFCCollapseMethod::Enqueue(WFCCell* position, std::optional<unsigned long>
 
 void IWFCCollapseMethod::CollapseThreadWork()
 {
+	ZoneScopedN("Thread Life");
 	while (continueThreadWork) {
 		//while (updateQueue.getCount() > 0) {
 			WFCCellUpdate* cellUpdate{ updateQueue.dequeue() };
-
-			const WFCPosition* cellUpdatePosition{ (*cellUpdate).updatedCell };
-
-			std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
-			for (auto& cell : toAlert)
 			{
-				WFCCellUpdate* updateMessage = cell->DomainCheck(cellUpdate);
-				if (updateMessage != nullptr) {
-					updateQueue.enqueue(updateMessage);
+				ZoneScopedN("Completing Thread Work");
+
+				const WFCPosition* cellUpdatePosition{ (*cellUpdate).updatedCell };
+
+				std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
+				for (auto& cell : toAlert)
+				{
+					WFCCellUpdate* updateMessage = cell->DomainCheck(cellUpdate);
+					if (updateMessage != nullptr) {
+						updateQueue.enqueue(updateMessage);
+					}
 				}
 			}
 		//}
@@ -52,11 +59,13 @@ void IWFCCollapseMethod::CollapseThreadWork()
 
 void IWFCCollapseMethod::StartThreads(short numThredsToStart)
 {
+	ZoneScopedN("Starting Threads");
 	if (numThredsToStart < 1) {
 		numThredsToStart = 1;
 	}
 	threads.resize(numThredsToStart);
 	for (int i = 0; i < numThredsToStart; ++i) {
+		ZoneScopedN("Initialize Thread");
 		threads[i] = std::thread::thread(&IWFCCollapseMethod::CollapseThreadWork, this);
 	}
 }

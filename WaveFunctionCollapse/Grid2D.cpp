@@ -3,6 +3,8 @@
 #include <iostream>
 #include "WFCRuleManager.h"
 #include "SortedVector.h"
+#include <string>
+#include "../tracy/public/tracy/Tracy.hpp"
 
 Grid2D::Grid2D(WFCPosition& newSize)
 	:IWFCGrid(newSize)
@@ -11,21 +13,34 @@ Grid2D::Grid2D(WFCPosition& newSize)
 }
 
 void Grid2D::Initialize(IWFCManager* newManager) {
+	ZoneScopedN("Grid2D Initialize");
 	//Set manager
 	IWFCGrid::manager = newManager;
 
-	//Set grid size
-	grid.resize(size.x, std::vector<WFCCell*>(size.y));
-	//Initialize cells to update list
-	cellsToUpdate.resize(size.x, std::vector<std::vector<WFCCell*>>(size.y));
+	{
+		ZoneScopedN("Resizing grid and cells to update");
+		//Set grid size
+		grid.resize(size.x, std::vector<WFCCell*>(size.y));
+		//Initialize cells to update list
+		cellsToUpdate.resize(size.x, std::vector<std::vector<WFCCell*>>(size.y));
+	}
 
-	std::cout << "Creating grid of size: " << size.x << "," << size.y << std::endl;
-	for (int x = 0; x < size.x; ++x) {
-		for (int y = 0; y < size.y; ++y) {
-			WFCCell* cell = new WFCCell(manager, new WFCPosition{ x, y }, WFCRuleManager::GetInitialDomain());
-			grid[x][y] = cell;
-			cell->RuleSetup();
-			entropyQueue.insert(cell);
+	{
+		ZoneScopedN("Print size of grid");
+		std::string output = "Creating grid of size: ";
+		output.append(std::to_string(size.x).append(",").append(std::to_string(size.y)));
+		std::cout << output << std::endl;
+	}
+
+	{
+		ZoneScopedN("Filling the cells");
+		for (int x = 0; x < size.x; ++x) {
+			for (int y = 0; y < size.y; ++y) {
+				WFCCell* cell = new WFCCell(manager, new WFCPosition{ x, y }, WFCRuleManager::GetInitialDomain());
+				grid[x][y] = cell;
+				cell->RuleSetup();
+				entropyQueue.insert(cell);
+			}
 		}
 	}
 }
@@ -76,24 +91,23 @@ void Grid2D::DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* 
 void Grid2D::PrintGrid()
 {
 	std::cout << "Printing 2D grid: " << std::endl;
-	std::string divider = "";
 	for(int row = size.x-1; row>=0;--row){ //0 bottom left
 	//for (int x = 0; x < size.x; ++x) { //0 top left
-		std::cout << divider << std::endl;
+		std::string output = "|";
 		for (int col = 0; col < size.y; ++col) {
-			std::cout << "|";
 			unsigned long collapsedTile = grid[col][row]->CollapsedTile;
 
 			if (collapsedTile < 100) {
-				std::cout << " ";
+				output.append(" ");
 			}
 
-			std::cout << collapsedTile;
+			output.append(std::to_string(collapsedTile));
 
 			if (collapsedTile < 10) {
-				std::cout << " ";
+				output.append(" ");
 			}
 		}
-		std::cout << "|" << std::endl;
+		output.append("|");
+		std::cout << output << std::endl;
 	}
 }

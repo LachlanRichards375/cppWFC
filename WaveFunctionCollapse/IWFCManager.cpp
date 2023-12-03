@@ -4,11 +4,11 @@
 #include "IWFCGrid.h"
 #include "WFCCell.h"
 #include <iostream>
+#include "../tracy/public/tracy/Tracy.hpp"
 
 
 IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount) : _collapseMethod(collapse), _grid(grid)
 {
-
 	_collapseMethod->Initialize(this, 12);
 	_grid->Initialize(this);
 	//Set max thread count
@@ -20,6 +20,7 @@ IWFCManager::~IWFCManager()
 
 void IWFCManager::GenerateOnce()
 {
+	ZoneScopedN("GenerateOnce");
 	//std::cout << "Generating Once" << std::endl;
 	_grid->SortQueue();
 	Collapse();

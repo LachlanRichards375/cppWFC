@@ -1,6 +1,7 @@
 #include "IWFCGrid.h"
 #include "WFCCell.h"
 #include "SortedVector.h"
+#include "../tracy/public/tracy/Tracy.hpp"
 
 IWFCGrid::IWFCGrid(WFCPosition& newSize) : size(newSize)
 {
@@ -10,6 +11,7 @@ IWFCGrid::IWFCGrid(WFCPosition& newSize) : size(newSize)
 void IWFCGrid::SortQueue()
 {
     //push sorts queue when executed
+    ZoneScopedN("Sorting EntropyQueue");
     entropyQueue.sort();
 }
 
