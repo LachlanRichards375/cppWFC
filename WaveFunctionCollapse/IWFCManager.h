@@ -2,6 +2,7 @@
 #include <memory>
 #include "WFCposition.h"
 #include <vector>
+#include "ThreadPool.h"
 struct WFCCellUpdate;
 class IWFCGrid;
 class IWFCCollapseMethod;
@@ -15,6 +16,7 @@ protected:
 
 	IWFCGrid* _grid;
 	IWFCCollapseMethod* _collapseMethod;
+	ThreadPool _threadPool;
 
 public:
 	IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount);
@@ -25,6 +27,8 @@ public:
 	void CollapseSpecificCell(WFCPosition* position, unsigned long toCollapseTo);
 	WFCCell* GetCell(WFCPosition* position);
 	WFCPosition& GetGridSize();
+	void QueueJobToThreadPool(const std::function<void()>& job);
+	bool IsThreadPoolBusy();
 	void RegisterForAlert(WFCPosition* position, WFCCell* alertee);
 	std::vector<WFCCell*> GetAlertees(const WFCPosition* position);
 	void Generate();

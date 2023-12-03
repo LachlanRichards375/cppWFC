@@ -7,15 +7,17 @@
 #include "../tracy/public/tracy/Tracy.hpp"
 
 
-IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount) : _collapseMethod(collapse), _grid(grid)
+IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount) : _collapseMethod(collapse), _grid(grid), _threadPool(ThreadPool())
 {
 	_collapseMethod->Initialize(this, 12);
 	_grid->Initialize(this);
 	//Set max thread count
+	_threadPool.Start();
 }
 
 IWFCManager::~IWFCManager()
 {
+	_threadPool.Stop();
 }
 
 void IWFCManager::GenerateOnce()
@@ -45,6 +47,16 @@ WFCCell* IWFCManager::GetCell(WFCPosition* position)
 WFCPosition& IWFCManager::GetGridSize()
 {
 	return _grid->GetSize();
+}
+
+void IWFCManager::QueueJobToThreadPool(const std::function<void()>& job)
+{
+	_threadPool.QueueJob(job);
+}
+
+bool IWFCManager::IsThreadPoolBusy()
+{
+	return _threadPool.busy();
 }
 
 std::vector<WFCCell*> IWFCManager::GetAlertees(const WFCPosition* position)
