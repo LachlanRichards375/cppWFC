@@ -24,9 +24,9 @@ WFCCell* IWFCGrid::PopNextCellToCollapse() {
     return entropyQueue.pop();
 }
 
-WFCCell* IWFCGrid::PopSpecificCell(WFCPosition* position)
+WFCCell* IWFCGrid::PopSpecificCell(WFCPosition* position, int bitsInDomain)
 {
-    return entropyQueue.popSpecific(position);
+    return entropyQueue.popSpecific(position, bitsInDomain);
 }
 
 size_t IWFCGrid::RemainingCellsToCollapse()

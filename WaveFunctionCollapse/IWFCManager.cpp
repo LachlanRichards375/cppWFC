@@ -23,23 +23,32 @@ IWFCManager::~IWFCManager()
 	_threadPool.Stop();
 }
 
-void IWFCManager::GenerateOnce()
-{
-	ZoneScopedN("GenerateOnce");
-	//std::cout << "Generating Once" << std::endl;
-	_grid->SortQueue();
-	Collapse();
-}
-
 void IWFCManager::Collapse()
 {
-	//std::cout << cellToCollapse->GetPosition()->x << "," << cellToCollapse->GetPosition()->y << std::endl;
-	_collapseMethod->Collapse(_grid->PopNextCellToCollapse());
+	ZoneScopedN("Collapse()");
+	{
+		ZoneScopedN("Collapse");
+		_collapseMethod->Collapse(_grid->PopNextCellToCollapse());
+	}
+	{
+		ZoneScopedN("Sorting Queue");
+		//std::cout << "Generating Once" << std::endl;
+		_grid->SortQueue();
+	}
 }
 
 void IWFCManager::CollapseSpecificCell(WFCPosition* position, unsigned long toCollapseTo)
 {
-	_collapseMethod->CollapseSpecificCell(_grid->PopSpecificCell(position), toCollapseTo);
+	ZoneScopedN("Collapse(specific)");
+	{
+		ZoneScopedN("Collapse");
+		_collapseMethod->CollapseSpecificCell(_grid->PopSpecificCell(position, GetCell(position)->CalculateEntropy()), toCollapseTo);
+	}
+	{
+		ZoneScopedN("Sorting Queue");
+		//std::cout << "Generating Once" << std::endl;
+		_grid->SortQueue();
+	}
 }
 
 WFCCell* IWFCManager::GetCell(WFCPosition* position)
@@ -79,13 +88,13 @@ void IWFCManager::Generate()
 		PrintGrid();
 		while (_grid->RemainingCellsToCollapse() > 0) {
 			std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
-			GenerateOnce();
+			Collapse();
 			std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
 			PrintGrid();
 		}
 	#else
 		while (_grid->RemainingCellsToCollapse() > 0) {
-			GenerateOnce();
+			Collapse();
 		}
 	#endif
 }

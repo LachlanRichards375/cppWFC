@@ -5,11 +5,13 @@
 class SortedVector {
 private:
     std::vector<WFCCell*> data;
-
+    std::vector<std::vector<WFCCell*>> sortedData;
+    size_t vectorSize;
 public:
+    SortedVector();
     void insert(WFCCell*& value);
     WFCCell* pop();
-    WFCCell* popSpecific(WFCPosition* position);
+    WFCCell* popSpecific(WFCPosition* position, int numBits);
     void sort();
     size_t size();
 };
