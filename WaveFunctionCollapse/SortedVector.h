@@ -12,10 +12,10 @@ private:
 
 public:
     SortedVector();
-    void insert(WFCCell*& value);
+    void insert(WFCCell* value);
     WFCCell* pop();
     WFCCell* popSpecific(WFCPosition* position, int numBits);
     void sort();
-    void SetDirty(WFCCell* toSetDirty);
+    void SetDirty(unsigned long oldDomainCount, int index);
     size_t size();
 };

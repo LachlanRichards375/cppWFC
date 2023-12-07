@@ -33,5 +33,5 @@ public:
 	virtual void RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister) = 0;
 	virtual void DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister) = 0;
 	virtual void PrintGrid() = 0;
-	void MarkDirty(WFCCell* toMarkDirty);
+	void MarkDirty(unsigned long oldDomainCount, int index);
 };

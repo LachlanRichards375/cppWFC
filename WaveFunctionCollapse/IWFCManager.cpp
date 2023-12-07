@@ -90,6 +90,7 @@ void IWFCManager::Generate()
 			std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
 			Collapse();
 			std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
+			std::cout << "Cells remaining: " << _grid->RemainingCellsToCollapse() << std::endl;
 			PrintGrid();
 		}
 	#else
@@ -99,9 +100,9 @@ void IWFCManager::Generate()
 	#endif
 }
 
-void IWFCManager::MarkDirty(WFCCell* toMarkDirty)
+void IWFCManager::MarkDirty(unsigned long oldDomainCount, int index)
 {
-	_grid->MarkDirty(toMarkDirty);
+	_grid->MarkDirty(oldDomainCount, index);
 }
 
 void IWFCManager::PrintGrid() {

@@ -4,6 +4,7 @@
 #include "IWFCManager.h"
 #include "WFCCell.h"
 #include "../tracy/public/tracy/Tracy.hpp"
+#include <iostream>
 
 IWFCCollapseMethod::IWFCCollapseMethod(){
 	manager = nullptr;
@@ -38,16 +39,32 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 	const WFCPosition* cellUpdatePosition{ (*cellUpdate).updatedCell };
 
 	std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
+	std::vector<int> dirtyIndex{};
+	std::vector<unsigned long> dirtyDomain{};
+	std::vector<WFCCell*> dirty{};
 	for (auto& cell : toAlert)
 	{
 		ZoneScopedN("Alerting Cell");
+		unsigned long domain = cell->CalculateEntropy();
 		WFCCellUpdate* updateMessage = cell->DomainCheck(cellUpdate);
 		if (updateMessage != nullptr) {
 			ZoneScopedN("Requeing Update");
 			++JobsInQueue;
 			manager->QueueJobToThreadPool([this, updateMessage]{ ThreadWork(updateMessage); });
+			dirtyDomain.push_back(domain);
+			dirtyIndex.push_back(cell->GetEntropyID());
+			dirty.push_back(cell);
 		}
 	}
+
+	for (int i = 0; i < dirtyIndex.size(); ++i) {
+		std::cout << "cell at " << dirty[i]->GetPosition()->to_string() << "is dirty, old values: " << dirtyDomain[i] << "," << dirtyIndex[i] << std::endl;
+		manager->MarkDirty(dirtyDomain[i], dirtyIndex[i]);
+	}
+
+	dirtyIndex.clear();
+	dirtyDomain.clear();
+	dirty.clear();
 
 	--JobsInQueue;
 }

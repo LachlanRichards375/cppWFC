@@ -1,3 +1,4 @@
+#pragma once
 #include "WFCRuleManager.h"
 #include <math.h>
 //PreAllocate the rulesOnTiles

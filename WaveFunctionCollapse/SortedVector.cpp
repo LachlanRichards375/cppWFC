@@ -1,6 +1,6 @@
 #pragma once
 #include "SortedVector.h"
-#include "../tracy/public/tracy/Tracy.hpp"
+//#include "../tracy/public/tracy/Tracy.hpp"
 #include <iostream>
 
 
@@ -12,9 +12,9 @@ SortedVector::SortedVector()
     vectorSize = 0;
 }
 
-void SortedVector::insert(WFCCell*& value)
+void SortedVector::insert(WFCCell* value)
 {
-    ZoneScopedN("insert");
+    //ZoneScopedN("insert");
     int bitsInDomain = value->CalculateEntropy();
     sortedData[bitsInDomain].push_back(value);
     std::cout << "Setting entropyID of " << value->GetPosition()->to_string() << " to ["<< bitsInDomain << "][" << std::to_string(sortedData[bitsInDomain].size() - 1) << "]" << std::endl;
@@ -23,7 +23,7 @@ void SortedVector::insert(WFCCell*& value)
 }
 
 WFCCell* SortedVector::pop() {
-    ZoneScopedN("SortedQueue pop");
+   // ZoneScopedN("SortedQueue pop");
     //Get first list with some elements in it
     int listIndex = 0;
     std::vector<WFCCell*>* listWorkingOn = &sortedData[0];
@@ -34,14 +34,14 @@ WFCCell* SortedVector::pop() {
     int randomIndex = rand() % (*listWorkingOn).size();
     WFCCell* item{ (*listWorkingOn)[randomIndex] };
     (*listWorkingOn).erase((*listWorkingOn).begin() + randomIndex);
-    ResetEntropyID(listIndex, randomIndex-1);
+    ResetEntropyID(listIndex, randomIndex);
     --vectorSize;
     return item;
 }
 
 WFCCell* SortedVector::popSpecific(WFCPosition* position, int numBits)
 {
-    ZoneScopedN("SortedQueue popSpecific");
+    //ZoneScopedN("SortedQueue popSpecific");
     int index = 0;
     for (auto it = sortedData[numBits].begin(); it != sortedData[numBits].end(); ++it) {
         if (*(*it)->GetPosition() == *position) {
@@ -58,7 +58,7 @@ WFCCell* SortedVector::popSpecific(WFCPosition* position, int numBits)
 }
 
 void SortedVector::sort() {
-    ZoneScopedN("sort");
+    //ZoneScopedN("sort");
     //For each bit
         //See if it has anything in dirty data
             //if 0 skip
@@ -69,12 +69,14 @@ void SortedVector::sort() {
             //remove the old copy
 
         //Update all the old EntropyID within the vector we just updated
-    std::vector<WFCCell*> toReinsert{};
     for (int NumOfBits = 1; NumOfBits < sortedData.size(); ++NumOfBits) {
+        std::vector<WFCCell*> toReinsert{};
         //If there are dirty cells to clean
         if (dirtyData[NumOfBits].size() == 0) {
             continue;
         }
+
+        std::sort(dirtyData[NumOfBits].begin(), dirtyData[NumOfBits].end());
 
         //debug statements
         std::cout << "\nDirtyData within the " << NumOfBits << " index. Indexes: ";
@@ -83,13 +85,14 @@ void SortedVector::sort() {
         }
         std::cout << " need to be moved" << std::endl;
 
+
         //remove all the dirty values
         for (int numberRemovedFromSorted = 0; numberRemovedFromSorted < dirtyData[NumOfBits].size(); ++numberRemovedFromSorted) {
             int indexToRemove = dirtyData[NumOfBits][numberRemovedFromSorted] - numberRemovedFromSorted;
             auto sortedIt = sortedData[NumOfBits].begin();
 
             std::cout << "Size of sortedData[" << NumOfBits << "] is currently " << sortedData[NumOfBits].size() << std::endl;
-            std::cout << "Moving iterator: (" << dirtyData[NumOfBits][numberRemovedFromSorted] << "-" << numberRemovedFromSorted << ") " << indexToRemove << " places." << std::endl;
+            std::cout << "Moving iterator: (" << dirtyData[NumOfBits][numberRemovedFromSorted] << "-" << numberRemovedFromSorted << ") " << indexToRemove << " places, points to: " << sortedData[NumOfBits][indexToRemove]->GetEntropyID() << std::endl;
             std::advance(sortedIt, indexToRemove);
 
             toReinsert.push_back(*sortedIt);
@@ -120,9 +123,13 @@ void SortedVector::ResetEntropyID(int bitNumToReset, int numToStartAt = 0) {
     }
 }
 
-void SortedVector::SetDirty(WFCCell* toSetDirty) {
-    dirtyData[toSetDirty->CalculateEntropy()].emplace_back(toSetDirty->GetEntropyID());
-    std::cout << "Set cell " << toSetDirty->GetPosition()->to_string() << " [" << toSetDirty->CalculateEntropy() << "][" << toSetDirty->GetEntropyID() << "] as dirty, " << std::endl;
+void SortedVector::SetDirty(unsigned long oldDomainCount, int index) {
+    for (int check : dirtyData[oldDomainCount]) {
+        if (check == index) {
+            return;
+        }
+    }
+    dirtyData[oldDomainCount].emplace_back(index);
 }
 
 size_t SortedVector::size() {
