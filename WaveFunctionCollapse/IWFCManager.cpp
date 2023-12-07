@@ -99,6 +99,11 @@ void IWFCManager::Generate()
 	#endif
 }
 
+void IWFCManager::MarkDirty(WFCCell* toMarkDirty)
+{
+	_grid->MarkDirty(toMarkDirty);
+}
+
 void IWFCManager::PrintGrid() {
 	_grid->PrintGrid();
 }

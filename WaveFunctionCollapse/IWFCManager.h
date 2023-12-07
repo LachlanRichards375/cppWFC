@@ -32,4 +32,5 @@ public:
 	void RegisterForAlert(WFCPosition* position, WFCCell* alertee);
 	std::vector<WFCCell*> GetAlertees(const WFCPosition* position);
 	void Generate();
+	void MarkDirty(WFCCell* toMarkDirty);
 };

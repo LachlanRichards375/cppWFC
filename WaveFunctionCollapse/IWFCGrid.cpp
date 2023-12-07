@@ -34,3 +34,6 @@ size_t IWFCGrid::RemainingCellsToCollapse()
     return entropyQueue.size();
 }
 
+void IWFCGrid::MarkDirty(WFCCell* toMarkDirty) {
+    entropyQueue.SetDirty(toMarkDirty);
+}
