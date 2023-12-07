@@ -25,13 +25,16 @@ void SortedVector::insert(WFCCell*& value)
 WFCCell* SortedVector::pop() {
     ZoneScopedN("SortedQueue pop");
     //Get first list with some elements in it
+    int listIndex = 0;
     std::vector<WFCCell*>* listWorkingOn = &sortedData[0];
     while ((*listWorkingOn).size() <= 0) {
         ++listWorkingOn;
+        ++listIndex;
     }
     int randomIndex = rand() % (*listWorkingOn).size();
     WFCCell* item{ (*listWorkingOn)[randomIndex] };
     (*listWorkingOn).erase((*listWorkingOn).begin() + randomIndex);
+    ResetEntropyID(listIndex, randomIndex-1);
     --vectorSize;
     return item;
 }
@@ -39,18 +42,20 @@ WFCCell* SortedVector::pop() {
 WFCCell* SortedVector::popSpecific(WFCPosition* position, int numBits)
 {
     ZoneScopedN("SortedQueue popSpecific");
+    int index = 0;
     for (auto it = sortedData[numBits].begin(); it != sortedData[numBits].end(); ++it) {
         if (*(*it)->GetPosition() == *position) {
             WFCCell* ptr = (*it);
             sortedData[numBits].erase(it);
+            //Reset the entropy id in the current bitMask
+            ResetEntropyID(numBits, index);
             --vectorSize;
             return ptr;
         }
+        ++index;
     }
     return nullptr;
 }
-
-static bool sortPointers(WFCCell* a, WFCCell* b) { return *a < *b; };
 
 void SortedVector::sort() {
     ZoneScopedN("sort");
@@ -92,10 +97,7 @@ void SortedVector::sort() {
         }
 
         //Reset the entropy id in the current bitMask
-        for (int i = dirtyData[NumOfBits][0]; i < sortedData[NumOfBits].size(); i++) {
-            //reset all entropy id's that we just moved
-            sortedData[NumOfBits][i]->SetEntropyID(i);
-        }
+        ResetEntropyID(NumOfBits, dirtyData[NumOfBits][0]);
 
         //Add 'dirty' values back into the queue to clean them
         for (auto toAdd : toReinsert) {
@@ -109,6 +111,13 @@ void SortedVector::sort() {
     }
 
     std::cout << "Finished sorting queue. " << std::endl << std::endl;
+}
+
+void SortedVector::ResetEntropyID(int bitNumToReset, int numToStartAt = 0) {
+    for (int i = numToStartAt; i < sortedData[bitNumToReset].size(); i++) {
+        //reset all entropy id's after this position
+        sortedData[bitNumToReset][i]->SetEntropyID(i);
+    }
 }
 
 void SortedVector::SetDirty(WFCCell* toSetDirty) {

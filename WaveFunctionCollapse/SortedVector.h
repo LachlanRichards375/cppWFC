@@ -8,6 +8,8 @@ private:
     //[bitsInDomain][numElements] = indexInSortedData that needs to be moved
     std::vector<std::vector<int>> dirtyData;
     size_t vectorSize;
+    void ResetEntropyID(int bitNumToReset, int numToStartAt);
+
 public:
     SortedVector();
     void insert(WFCCell*& value);

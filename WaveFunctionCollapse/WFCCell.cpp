@@ -7,12 +7,14 @@ WFCCell::WFCCell(IWFCManager* m, WFCPosition* position, unsigned long domain) : 
 {
     CollapsedTile = 0;
     WFCCell::domain = domain;
+    entropyID = 0;
 }
 
 WFCCell::WFCCell(WFCCell* other) : manager(other->manager), position(other->position)
 {
     CollapsedTile = other->CollapsedTile;
     domain = other->domain;
+    entropyID = other->entropyID;
 }
 
 void WFCCell::RuleSetup() const
@@ -88,7 +90,7 @@ WFCCellUpdate* WFCCell::DomainCheck(WFCCellUpdate* update)
     }
 
     //Before we update we need to notify sorted queue we want to mark cell as dirty
-    manager->MarkDirty(this);
+    //manager->MarkDirty(this);
 
     domain &= ~updateToReturn->removedFromDomain;
     
