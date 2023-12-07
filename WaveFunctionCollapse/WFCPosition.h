@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include <string>
 struct WFCPosition
 {
 public:
@@ -111,7 +112,6 @@ public:
 		);
 	}
 
-
 	WFCPosition* operator+(const WFCPosition& other) const {
 		if (other.w.has_value()) {
 			return new WFCPosition(
@@ -158,5 +158,22 @@ public:
 			this->x + other->x,
 			this->y + other->y
 		);
+	}
+
+	std::string to_string() const {
+		std::string output = "(";
+		output.append(std::to_string(x));
+		output.append(",");
+		output.append(std::to_string(y));
+		if (z.has_value()) {
+			output.append(",");
+			output.append(std::to_string(z.value()));
+		}
+		if (w.has_value()) {
+			output.append(",");
+			output.append(std::to_string(w.value()));
+		}
+		output.append(")");
+		return output;
 	}
 };
