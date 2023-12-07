@@ -10,6 +10,7 @@ protected:
 	IWFCManager* manager;
 	WFCPosition* position;
 	unsigned long domain;
+	int entropyID;
 public:
 	WFCCell(IWFCManager* m, WFCPosition* position, unsigned long domain);
 	WFCCell(WFCCell* other);
@@ -26,6 +27,9 @@ public:
 	WFCCellUpdate* Collapse(unsigned long toCollapseTo);
 	const WFCPosition* GetPosition();
 	WFCCellUpdate* DomainCheck(WFCCellUpdate* update);
+
+	int GetEntropyID();
+	void SetEntropyID(int entropyID);
 
 	bool operator<(const WFCCell& other) const
 	{

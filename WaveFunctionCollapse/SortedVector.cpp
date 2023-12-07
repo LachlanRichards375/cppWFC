@@ -1,21 +1,29 @@
 #pragma once
 #include "SortedVector.h"
+#include "../tracy/public/tracy/Tracy.hpp"
+#include <iostream>
 
 
 SortedVector::SortedVector()
 {
     //Set sortedData to contain 4bytes*8 = 32 (bits) array positions
     sortedData.resize(sizeof(unsigned long)*8);
+    dirtyData.resize(sizeof(unsigned long) * 8);
     vectorSize = 0;
 }
 
 void SortedVector::insert(WFCCell*& value)
 {
-    sortedData[value->CalculateEntropy()].push_back(value);
+    ZoneScopedN("insert");
+    int bitsInDomain = value->CalculateEntropy();
+    sortedData[bitsInDomain].push_back(value);
+    std::cout << "Setting entropyID of " << value->GetPosition()->to_string() << " to ["<< bitsInDomain << "][" << std::to_string(sortedData[bitsInDomain].size() - 1) << "]" << std::endl;
+    value->SetEntropyID(sortedData[bitsInDomain].size()-1);
     ++vectorSize;
 }
 
 WFCCell* SortedVector::pop() {
+    ZoneScopedN("SortedQueue pop");
     //Get first list with some elements in it
     std::vector<WFCCell*>* listWorkingOn = &sortedData[0];
     while ((*listWorkingOn).size() <= 0) {
@@ -30,6 +38,7 @@ WFCCell* SortedVector::pop() {
 
 WFCCell* SortedVector::popSpecific(WFCPosition* position, int numBits)
 {
+    ZoneScopedN("SortedQueue popSpecific");
     for (auto it = sortedData[numBits].begin(); it != sortedData[numBits].end(); ++it) {
         if (*(*it)->GetPosition() == *position) {
             WFCCell* ptr = (*it);
@@ -44,27 +53,67 @@ WFCCell* SortedVector::popSpecific(WFCPosition* position, int numBits)
 static bool sortPointers(WFCCell* a, WFCCell* b) { return *a < *b; };
 
 void SortedVector::sort() {
-    int currentIndex = 0;
-    std::vector<int> cellsToRemove;
-    for (std::vector<WFCCell*> currentEntropy : sortedData) {
-        cellsToRemove = {};
-        int cellRemoverCounter = 0;
-        for (auto it = currentEntropy.begin(); it != currentEntropy.end(); ++it) {
-            int numBitsInDomain = (*it)->CalculateEntropy();
-            if (numBitsInDomain!= currentIndex) {
-                sortedData[numBitsInDomain].push_back(*it);
-                cellsToRemove.push_back(cellRemoverCounter);
-            }
-            cellRemoverCounter++;
+    ZoneScopedN("sort");
+    //For each bit
+        //See if it has anything in dirty data
+            //if 0 skip
+        
+        //For each index in dirty data
+            //Go to that index - the number we've removed
+            //re-insert it to correct the position
+            //remove the old copy
+
+        //Update all the old EntropyID within the vector we just updated
+    std::vector<WFCCell*> toReinsert{};
+    for (int NumOfBits = 1; NumOfBits < sortedData.size(); ++NumOfBits) {
+        //If there are dirty cells to clean
+        if (dirtyData[NumOfBits].size() == 0) {
+            continue;
         }
-        //Remove cells AFTER we've finished crawling the array
-        int cellsRemoved = 0;
-        for (int i : cellsToRemove) {
-            currentEntropy.erase(currentEntropy.begin() + (i - cellsRemoved));
-            ++cellsRemoved;
+
+        //debug statements
+        std::cout << "\nDirtyData within the " << NumOfBits << " index. Indexes: ";
+        for (auto i : dirtyData[NumOfBits]) {
+            std::cout << i << ",";
         }
-        ++currentIndex;
+        std::cout << " need to be moved" << std::endl;
+
+        //remove all the dirty values
+        for (int numberRemovedFromSorted = 0; numberRemovedFromSorted < dirtyData[NumOfBits].size(); ++numberRemovedFromSorted) {
+            int indexToRemove = dirtyData[NumOfBits][numberRemovedFromSorted] - numberRemovedFromSorted;
+            auto sortedIt = sortedData[NumOfBits].begin();
+
+            std::cout << "Size of sortedData[" << NumOfBits << "] is currently " << sortedData[NumOfBits].size() << std::endl;
+            std::cout << "Moving iterator: (" << dirtyData[NumOfBits][numberRemovedFromSorted] << "-" << numberRemovedFromSorted << ") " << indexToRemove << " places." << std::endl;
+            std::advance(sortedIt, indexToRemove);
+
+            toReinsert.push_back(*sortedIt);
+            sortedData[NumOfBits].erase(sortedIt);
+        }
+
+        //Reset the entropy id in the current bitMask
+        for (int i = dirtyData[NumOfBits][0]; i < sortedData[NumOfBits].size(); i++) {
+            //reset all entropy id's that we just moved
+            sortedData[NumOfBits][i]->SetEntropyID(i);
+        }
+
+        //Add 'dirty' values back into the queue to clean them
+        for (auto toAdd : toReinsert) {
+            insert(toAdd);
+            //Need to reduce vectorSize as insert will add it
+            --vectorSize;
+        }
+
+        //clear the dirty bitmask
+        dirtyData[NumOfBits].clear();
     }
+
+    std::cout << "Finished sorting queue. " << std::endl << std::endl;
+}
+
+void SortedVector::SetDirty(WFCCell* toSetDirty) {
+    dirtyData[toSetDirty->CalculateEntropy()].emplace_back(toSetDirty->GetEntropyID());
+    std::cout << "Set cell " << toSetDirty->GetPosition()->to_string() << " [" << toSetDirty->CalculateEntropy() << "][" << toSetDirty->GetEntropyID() << "] as dirty, " << std::endl;
 }
 
 size_t SortedVector::size() {

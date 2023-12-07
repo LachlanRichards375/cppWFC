@@ -87,7 +87,11 @@ WFCCellUpdate* WFCCell::DomainCheck(WFCCellUpdate* update)
         return nullptr;
     }
 
+    //Before we update we need to notify sorted queue we want to mark cell as dirty
+    manager->MarkDirty(this);
+
     domain &= ~updateToReturn->removedFromDomain;
+    
     
     #ifdef _DEBUG
         std::cout << "(" << position->x << "," << position->y << ") has domain " << domain << " after domain check " << std::endl;
@@ -100,4 +104,13 @@ WFCCellUpdate* WFCCell::DomainCheck(WFCCellUpdate* update)
        return nullptr;
     }
     return updateToReturn;
+}
+
+int WFCCell::GetEntropyID() {
+    return entropyID;
+}
+
+void WFCCell::SetEntropyID(int entropyID)
+{
+    WFCCell::entropyID = entropyID;
 }
