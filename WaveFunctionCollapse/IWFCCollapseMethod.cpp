@@ -20,8 +20,10 @@ void IWFCCollapseMethod::Initialize(IWFCManager* manager)
 	IWFCCollapseMethod::manager = manager;
 }
 
+int JobsInQueue = 0;
 void IWFCCollapseMethod::Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo)
 {
+	++JobsInQueue;
 	if (toCollapseTo.has_value()) {
 		manager->QueueJobToThreadPool([this, position, toCollapseTo] { ThreadWork(position->Collapse(toCollapseTo.value())); });
 	}
@@ -42,16 +44,19 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 		WFCCellUpdate* updateMessage = cell->DomainCheck(cellUpdate);
 		if (updateMessage != nullptr) {
 			ZoneScopedN("Requeing Update");
+			++JobsInQueue;
 			manager->QueueJobToThreadPool([this, updateMessage]{ ThreadWork(updateMessage); });
 		}
 	}
+
+	--JobsInQueue;
 }
 
 std::vector<WFCPosition> IWFCCollapseMethod::Collapse(WFCCell* position)
 {
 	Enqueue(position, std::optional<unsigned long>());
 
-	while (manager->IsThreadPoolBusy()) {
+	while (JobsInQueue > 0) {
 		//Single thread to get it working
 		//CollapseThreadWork();
 		//This should be threaded now
@@ -66,7 +71,7 @@ std::vector<WFCPosition> IWFCCollapseMethod::CollapseSpecificCell(WFCCell* posit
 {
 	Enqueue(position, std::optional<unsigned long>(collapseTo));
 
-	while (updateQueue.getCount() > 0) {
+	while (JobsInQueue > 0) {
 		//Single thread to get it working
 		//CollapseThreadWork();
 	}
