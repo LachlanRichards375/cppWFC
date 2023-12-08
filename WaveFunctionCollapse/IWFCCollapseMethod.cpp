@@ -9,6 +9,7 @@
 IWFCCollapseMethod::IWFCCollapseMethod(){
 	manager = nullptr;
 	continueThreadWork = true;
+	JobsInQueue = 0;
 }
 
 IWFCCollapseMethod::~IWFCCollapseMethod()
@@ -21,7 +22,6 @@ void IWFCCollapseMethod::Initialize(IWFCManager* manager)
 	IWFCCollapseMethod::manager = manager;
 }
 
-int JobsInQueue = 0;
 void IWFCCollapseMethod::Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo)
 {
 	++JobsInQueue;
@@ -58,7 +58,6 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 	}
 
 	for (int i = 0; i < dirtyIndex.size(); ++i) {
-		std::cout << "cell at " << dirty[i]->GetPosition()->to_string() << "is dirty, old values: " << dirtyDomain[i] << "," << dirtyIndex[i] << std::endl;
 		manager->MarkDirty(dirtyDomain[i], dirtyIndex[i]);
 	}
 
@@ -68,34 +67,27 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 
 	--JobsInQueue;
 }
-
-std::vector<WFCPosition> IWFCCollapseMethod::Collapse(WFCCell* position)
+//THIS FUCKER RIGHT HERE
+//This will get optemized out so we need to move it into a seperate function
+//and tell c++ not to optemize it
+#pragma optimize( "", off )
+void IWFCCollapseMethod::WaitForJobsToFinish()
+{
+	while (JobsInQueue > 0) {}
+}
+#pragma optimize( "", on ) 
+void IWFCCollapseMethod::Collapse(WFCCell* position)
 {
 	Enqueue(position, std::optional<unsigned long>());
 
-	while (JobsInQueue > 0) {
-		//Single thread to get it working
-		//CollapseThreadWork();
-		//This should be threaded now
-	}
-
-	std::vector temp = std::vector<WFCPosition>(dirtyPositions);
-	dirtyPositions = std::vector<WFCPosition>();
-	return temp;
+	WaitForJobsToFinish();
 }
 
-std::vector<WFCPosition> IWFCCollapseMethod::CollapseSpecificCell(WFCCell* position, unsigned long collapseTo)
+void IWFCCollapseMethod::CollapseSpecificCell(WFCCell* position, unsigned long collapseTo)
 {
 	Enqueue(position, std::optional<unsigned long>(collapseTo));
 
-	while (JobsInQueue > 0) {
-		//Single thread to get it working
-		//CollapseThreadWork();
-	}
-
-	std::vector temp = std::vector<WFCPosition>(dirtyPositions);
-	dirtyPositions = std::vector<WFCPosition>();
-	return temp;
+	WaitForJobsToFinish();
 }
 
 
