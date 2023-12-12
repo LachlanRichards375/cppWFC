@@ -13,10 +13,9 @@ class IWFCCollapseMethod
 {
 protected:
 	IWFCManager* manager;
-
-	SafeQueue<WFCCellUpdate*> updateQueue;
 	bool continueThreadWork;
-	int JobsInQueue;
+	volatile int JobsInQueue;
+	SafeQueue<int> errorMessages;
 
 	void Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo);
 	void ThreadWork(WFCCellUpdate* cellUpdate);

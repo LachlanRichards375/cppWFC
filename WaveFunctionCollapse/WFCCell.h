@@ -11,6 +11,7 @@ protected:
 	WFCPosition* position;
 	unsigned long domain;
 	int entropyID;
+	int errorID = 0;
 public:
 	WFCCell(IWFCManager* m, WFCPosition* position, unsigned long domain);
 	WFCCell(WFCCell* other);
@@ -27,6 +28,7 @@ public:
 	WFCCellUpdate* Collapse(unsigned long toCollapseTo);
 	const WFCPosition* GetPosition();
 	WFCCellUpdate* DomainCheck(WFCCellUpdate* update);
+	int GetError();
 
 	int GetEntropyID();
 	void SetEntropyID(int entropyID);

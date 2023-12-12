@@ -45,6 +45,9 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 		ZoneScopedN("Alerting Cell");
 		unsigned long domain = cell->CalculateEntropy();
 		WFCCellUpdate* updateMessage = cell->DomainCheck(cellUpdate);
+		if (cell->GetError() != 0) {
+			errorMessages.enqueue(cell->GetError());
+		}
 		if (updateMessage != nullptr) {
 			ZoneScopedN("Requeing Update");
 			dirtyDomain.push_back(domain);
@@ -53,29 +56,30 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 		}
 	}
 
+
 	for (int i = 0; i < dirtyIndex.size(); ++i) {
 		manager->MarkDirty(dirtyDomain[i], dirtyIndex[i]);
 	}
 
 	--JobsInQueue;
+
 }
 //THIS FUCKER RIGHT HERE
 //This will get optemized out so we need to move it into a seperate function
 //and tell c++ not to optemize it
-#pragma optimize( "", off )
 void IWFCCollapseMethod::WaitForJobsToFinish()
 {
-	std::cout << "Waiting for jobs to finish... ";
-	while (JobsInQueue > 0) { }
-	std::cout << "Jobs finished";
+	while (JobsInQueue > 0) {
+		if (errorMessages.getCount() > 0) {
+			throw errorMessages.dequeue();
+		}
+	}
 }
 void IWFCCollapseMethod::AddJobToQueue(const std::function<void()>& job)
 {
-	std::cout << "\n Adding new job to queue. ";
 	++JobsInQueue;
 	manager->QueueJobToThreadPool(job);
 }
-#pragma optimize( "", on ) 
 void IWFCCollapseMethod::Collapse(WFCCell* position)
 {
 	Enqueue(position, std::optional<unsigned long>());
