@@ -65,7 +65,10 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 #pragma optimize( "", off )
 void IWFCCollapseMethod::WaitForJobsToFinish()
 {
-	while (JobsInQueue > 0) {}
+	std::cout << "Waiting for jobs to finish... ";
+	while (JobsInQueue > 0) { }
+	std::cout << "Jobs finished";
+}
 void IWFCCollapseMethod::AddJobToQueue(const std::function<void()>& job)
 {
 	std::cout << "\n Adding new job to queue. ";
