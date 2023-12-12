@@ -7,6 +7,7 @@ struct WFCCellUpdate;
 #include <tuple>
 #include <optional>
 #include <set>
+#include <functional>
 
 class IWFCCollapseMethod
 {
@@ -21,6 +22,7 @@ protected:
 	void ThreadWork(WFCCellUpdate* cellUpdate);
 
 	void WaitForJobsToFinish();
+	void AddJobToQueue(const std::function<void()>& job);
 
 public:
 	IWFCCollapseMethod();

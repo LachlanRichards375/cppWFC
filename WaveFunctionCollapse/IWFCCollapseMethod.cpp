@@ -24,12 +24,11 @@ void IWFCCollapseMethod::Initialize(IWFCManager* manager)
 
 void IWFCCollapseMethod::Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo)
 {
-	++JobsInQueue;
 	if (toCollapseTo.has_value()) {
-		manager->QueueJobToThreadPool([this, position, toCollapseTo] { ThreadWork(position->Collapse(toCollapseTo.value())); });
+		AddJobToQueue([this, position, toCollapseTo] { ThreadWork(position->Collapse(toCollapseTo.value())); });
 	}
 	else {
-		manager->QueueJobToThreadPool([this, position] { ThreadWork(position->Collapse()); });
+		AddJobToQueue([this, position] { ThreadWork(position->Collapse()); });
 	}
 }
 
@@ -41,7 +40,6 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 	std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
 	std::vector<int> dirtyIndex{};
 	std::vector<unsigned long> dirtyDomain{};
-	std::vector<WFCCell*> dirty{};
 	for (auto& cell : toAlert)
 	{
 		ZoneScopedN("Alerting Cell");
@@ -49,21 +47,15 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 		WFCCellUpdate* updateMessage = cell->DomainCheck(cellUpdate);
 		if (updateMessage != nullptr) {
 			ZoneScopedN("Requeing Update");
-			++JobsInQueue;
-			manager->QueueJobToThreadPool([this, updateMessage]{ ThreadWork(updateMessage); });
 			dirtyDomain.push_back(domain);
 			dirtyIndex.push_back(cell->GetEntropyID());
-			dirty.push_back(cell);
+			AddJobToQueue([this, updateMessage] { ThreadWork(updateMessage); });
 		}
 	}
 
 	for (int i = 0; i < dirtyIndex.size(); ++i) {
 		manager->MarkDirty(dirtyDomain[i], dirtyIndex[i]);
 	}
-
-	dirtyIndex.clear();
-	dirtyDomain.clear();
-	dirty.clear();
 
 	--JobsInQueue;
 }
@@ -74,6 +66,11 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 void IWFCCollapseMethod::WaitForJobsToFinish()
 {
 	while (JobsInQueue > 0) {}
+void IWFCCollapseMethod::AddJobToQueue(const std::function<void()>& job)
+{
+	std::cout << "\n Adding new job to queue. ";
+	++JobsInQueue;
+	manager->QueueJobToThreadPool(job);
 }
 #pragma optimize( "", on ) 
 void IWFCCollapseMethod::Collapse(WFCCell* position)
