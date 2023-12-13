@@ -33,7 +33,7 @@ WFCCell* SortedVector::pop() {
     int randomIndex = rand() % (*listWorkingOn).size();
     WFCCell* item{ (*listWorkingOn)[randomIndex] };
     (*listWorkingOn).erase((*listWorkingOn).begin() + randomIndex);
-    ResetEntropyID(listIndex, randomIndex-1);
+    ResetEntropyID(listIndex, randomIndex);
     --vectorSize;
     return item;
 }
@@ -47,7 +47,7 @@ WFCCell* SortedVector::popSpecific(WFCPosition* position, int numBits)
             WFCCell* ptr = (*it);
             sortedData[numBits].erase(it);
             //Reset the entropy id in the current bitMask
-            ResetEntropyID(numBits, index-1);
+            ResetEntropyID(numBits, index);
             --vectorSize;
             return ptr;
         }
