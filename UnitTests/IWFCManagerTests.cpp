@@ -1,19 +1,43 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "IWFCManager.h"
+#include "IWFCCollapseMethod.h"
+#include "Grid2D.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
 {
+
+	const unsigned long EMPTY = 0;
+	const unsigned long GRASS = 1 << 0;
+	const unsigned long SAND = 1 << 1;
+	const unsigned long WATER = 1 << 2;
+
 	TEST_CLASS(IWFCManagerTests)
 	{
 	public:
 
-		TEST_METHOD(TestMethod1)
+		WFCPosition expectedSize{ 5,5 };
+		Grid2D grid{ expectedSize };
+		IWFCCollapseMethod collapse{ };
+		IWFCManager manager{ &collapse, &grid, 1 };
+		TEST_METHOD_INITIALIZE(initialize) {
+			grid.Initialize(&manager);
+			collapse.Initialize(&manager);
+		}
+		TEST_METHOD(CollapseSpecificCell)
 		{
-			//Do stuff
-			Assert::IsTrue(true);
+			WFCPosition* targetCell = new WFCPosition(2, 2);
+			Assert::IsTrue((manager.GetCell(targetCell)->CollapsedTile == EMPTY), L"targetCell is not EMPTY");
+			//Collapse middle cell to SAND
+			manager.CollapseSpecificCell(targetCell, SAND);
+			std::string message = "cell at ";
+			message.append(targetCell->to_string());
+			message.append(" has collapsed to ");
+			message.append(std::to_string(manager.GetCell(targetCell)->CollapsedTile));
+			Logger::WriteMessage(message.c_str());
+			Assert::IsTrue((manager.GetCell(targetCell)->CollapsedTile == SAND), L"targetCell is not SAND");
 		}
 	};
 }
