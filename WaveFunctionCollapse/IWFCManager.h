@@ -11,18 +11,20 @@ class WFCCell;
 class IWFCManager
 {
 protected:
-	void GenerateOnce();
 	void Collapse();
 
 	IWFCGrid* _grid;
 	IWFCCollapseMethod* _collapseMethod;
 	ThreadPool _threadPool;
+	short threadCount;
 
 public:
 	IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount);
 	~IWFCManager();
 
 	void PrintGrid();
+
+	void Reset();
 
 	void CollapseSpecificCell(WFCPosition* position, unsigned long toCollapseTo);
 	WFCCell* GetCell(WFCPosition* position);

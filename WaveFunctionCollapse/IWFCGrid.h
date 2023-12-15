@@ -26,6 +26,8 @@ public:
 	WFCCell* PopSpecificCell(WFCPosition* position, int bitsInDomain);
 	size_t RemainingCellsToCollapse();
 
+	virtual void Reset() = 0;
+
 	//Abstract methods
 	virtual WFCPosition& GetSize() const; 
 	virtual WFCCell* GetCell(WFCPosition* position) = 0;

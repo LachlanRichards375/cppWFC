@@ -8,13 +8,11 @@
 
 IWFCCollapseMethod::IWFCCollapseMethod(){
 	manager = nullptr;
-	continueThreadWork = true;
 	JobsInQueue = 0;
 }
 
 IWFCCollapseMethod::~IWFCCollapseMethod()
 {
-	continueThreadWork = false;
 }
 
 void IWFCCollapseMethod::Initialize(IWFCManager* manager)
@@ -55,7 +53,6 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 			AddJobToQueue([this, updateMessage] { ThreadWork(updateMessage); });
 		}
 	}
-
 
 	for (int i = 0; i < dirtyIndex.size(); ++i) {
 		manager->MarkDirty(dirtyDomain[i], dirtyIndex[i]);
@@ -110,6 +107,7 @@ void IWFCCollapseMethod::CollapseSpecificCell(WFCCell* position, unsigned long c
 
 void IWFCCollapseMethod::Reset()
 {
+	JobsInQueue = 0;
 }
 
 

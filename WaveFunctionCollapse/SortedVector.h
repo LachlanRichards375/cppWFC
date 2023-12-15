@@ -18,4 +18,5 @@ public:
     void sort();
     void SetDirty(unsigned long oldDomainCount, int index);
     size_t size();
+    void clear();
 };

@@ -118,3 +118,26 @@ void Grid2D::PrintGrid()
 		std::cout << output << std::endl;
 	}
 }
+
+void Grid2D::Reset() {
+	//Set grid size
+	grid.clear();
+	grid.resize(size.x, std::vector<WFCCell*>(size.y));
+	//clear cells to update list
+	cellsToUpdate.clear();
+	cellsToUpdate.resize(size.x, std::vector<std::vector<WFCCell*>>(size.y));
+	
+	entropyQueue.clear();
+
+	std::string output = "Creating grid of size: ";
+	output.append(std::to_string(size.x).append(",").append(std::to_string(size.y)));
+	std::cout << output << std::endl;
+	for (int x = 0; x < size.x; ++x) {
+		for (int y = 0; y < size.y; ++y) {
+			WFCCell* cell = new WFCCell(manager, new WFCPosition{ x, y }, WFCRuleManager::GetInitialDomain());
+			grid[x][y] = cell;
+			cell->RuleSetup();
+			entropyQueue.insert(cell);
+		}
+	}
+}

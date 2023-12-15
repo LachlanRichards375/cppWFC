@@ -11,6 +11,7 @@ IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short thr
 {
 	{
 		ZoneScopedN("Starting Thread pool");
+		IWFCManager::threadCount = threadCount;
 		_threadPool.Start(threadCount);
 	}
 	_collapseMethod->Initialize(this);
@@ -32,7 +33,6 @@ void IWFCManager::Collapse()
 	}
 	{
 		ZoneScopedN("Sorting Queue");
-		//std::cout << "Generating Once" << std::endl;
 		_grid->SortQueue();
 	}
 }
@@ -46,7 +46,6 @@ void IWFCManager::CollapseSpecificCell(WFCPosition* position, unsigned long toCo
 	}
 	{
 		ZoneScopedN("Sorting Queue");
-		//std::cout << "Generating Once" << std::endl;
 		_grid->SortQueue();
 	}
 }
@@ -107,4 +106,13 @@ void IWFCManager::MarkDirty(unsigned long oldDomainCount, int index)
 
 void IWFCManager::PrintGrid() {
 	_grid->PrintGrid();
+}
+
+
+void IWFCManager::Reset() {
+	//clear the thread pool
+	_threadPool.Stop();
+	_threadPool.Start(threadCount);
+	_collapseMethod->Reset();
+	_grid->Reset();
 }

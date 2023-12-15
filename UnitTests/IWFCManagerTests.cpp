@@ -14,6 +14,28 @@ namespace UnitTests
 	const unsigned long SAND = 1 << 1;
 	const unsigned long WATER = 1 << 2;
 
+	void LogGrid(Grid2D grid, WFCPosition expectedSize) {
+		for (int row = expectedSize.x - 1; row >= 0; --row) { //0 bottom left
+			//for (int x = 0; x < size.x; ++x) { //0 top left
+			std::string output = "|";
+			for (int col = 0; col < expectedSize.y; ++col) {
+				unsigned long collapsedTile = grid.GetCell(new WFCPosition(col, row))->CollapsedTile;
+
+				if (collapsedTile < 100) {
+					output.append(" ");
+				}
+
+				output.append(std::to_string(collapsedTile));
+
+				if (collapsedTile < 10) {
+					output.append(" ");
+				}
+			}
+			output.append("|\n");
+			Logger::WriteMessage(output.c_str());
+		}
+	}
+
 	TEST_CLASS(IWFCManagerTests)
 	{
 	public:
@@ -23,9 +45,9 @@ namespace UnitTests
 		IWFCCollapseMethod collapse{ };
 		IWFCManager manager{ &collapse, &grid, 1 };
 		TEST_METHOD_INITIALIZE(initialize) {
-			grid.Initialize(&manager);
-			collapse.Initialize(&manager);
+			manager.Reset();
 		}
+		
 		TEST_METHOD(CollapseSpecificCell)
 		{
 			WFCPosition* targetCell = new WFCPosition(2, 2);
@@ -36,8 +58,11 @@ namespace UnitTests
 			message.append(targetCell->to_string());
 			message.append(" has collapsed to ");
 			message.append(std::to_string(manager.GetCell(targetCell)->CollapsedTile));
+			message.append("\n");
 			Logger::WriteMessage(message.c_str());
+			LogGrid(grid, expectedSize);
 			Assert::IsTrue((manager.GetCell(targetCell)->CollapsedTile == SAND), L"targetCell is not SAND");
+			Logger::WriteMessage("Finished executing");
 		}
 	};
 }

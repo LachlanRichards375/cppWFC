@@ -18,6 +18,7 @@ public:
     virtual void RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister) override;
     virtual void DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister) override;
     virtual void PrintGrid() override;
+    virtual void Reset() override;
 };
 
 

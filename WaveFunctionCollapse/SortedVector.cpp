@@ -7,7 +7,7 @@
 SortedVector::SortedVector()
 {
     //Set sortedData to contain 4bytes*8 = 32 (bits) array positions
-    sortedData.resize(sizeof(unsigned long)*8);
+    sortedData.resize(sizeof(unsigned long) * 8);
     dirtyData.resize(sizeof(unsigned long) * 8);
     vectorSize = 0;
 }
@@ -122,4 +122,11 @@ void SortedVector::SetDirty(unsigned long oldDomainCount, int index) {
 
 size_t SortedVector::size() {
     return vectorSize;
+}
+
+void SortedVector::clear()
+{
+    sortedData.resize(sizeof(unsigned long) * 8);
+    dirtyData.resize(sizeof(unsigned long) * 8);
+    vectorSize = 0;
 }
