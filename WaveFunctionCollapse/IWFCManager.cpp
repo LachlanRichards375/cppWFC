@@ -116,3 +116,8 @@ void IWFCManager::Reset() {
 	_collapseMethod->Reset();
 	_grid->Reset();
 }
+
+void IWFCManager::GenerateOnce()
+{
+	Collapse();
+}

@@ -25,7 +25,7 @@ public:
 	void PrintGrid();
 
 	void Reset();
-
+	void GenerateOnce();
 	void CollapseSpecificCell(WFCPosition* position, unsigned long toCollapseTo);
 	WFCCell* GetCell(WFCPosition* position);
 	WFCPosition& GetGridSize();
