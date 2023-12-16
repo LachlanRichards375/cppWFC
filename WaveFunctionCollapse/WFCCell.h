@@ -23,6 +23,7 @@ public:
 	// Methods
 	void RuleSetup() const;
 	void SetDomain(const unsigned long newDomain);
+	const unsigned long GetDomain();
 	unsigned long CalculateEntropy() const;
 	WFCCellUpdate* Collapse();
 	WFCCellUpdate* Collapse(unsigned long toCollapseTo);

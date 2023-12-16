@@ -28,17 +28,6 @@ void WFCCell::RuleSetup() const
     }
 }
 
-void WFCCell::SetDomain(const unsigned long newDomain)
-{
-    domain = newDomain;
-}
-
-unsigned long WFCCell::CalculateEntropy() const
-{
-    //We want to return the number of bits in domain otherwise it will favour smaller ids
-    return WFCRuleManager::GetBitsInDomain(domain);
-}
-
 WFCCellUpdate* WFCCell::Collapse()
 {
     //std::cout << "(Collapse() does not do tile weighting) ";
@@ -63,10 +52,6 @@ WFCCellUpdate* WFCCell::Collapse(unsigned long toCollapseTo)
     return new WFCCellUpdate(domain & ~toCollapseTo,0,toCollapseTo,position);
 }
 
-const WFCPosition* WFCCell::GetPosition()
-{
-    return position;
-}
 
 WFCCellUpdate* WFCCell::DomainCheck(WFCCellUpdate* update)
 {
@@ -120,4 +105,33 @@ int WFCCell::GetEntropyID() {
 void WFCCell::SetEntropyID(int entropyID)
 {
     WFCCell::entropyID = entropyID;
+}
+
+const WFCPosition* WFCCell::GetPosition()
+{
+    return position;
+}
+
+void WFCCell::SetDomain(const unsigned long newDomain)
+{
+    domain = newDomain;
+}
+
+const unsigned long WFCCell::GetDomain() { 
+    if (CollapsedTile > 0) {
+        return 0;
+    } else {
+        return domain;
+    }
+}
+
+unsigned long WFCCell::CalculateEntropy() const
+{
+
+    if (CollapsedTile > 0) {
+        return 0;
+    } else {
+        //We want to return the number of bits in domain otherwise it will favour smaller ids
+        return WFCRuleManager::GetBitsInDomain(domain);
+    }
 }
