@@ -160,6 +160,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Grid2dTests.cpp" />
+    <ClCompile Include="HelperFunctions.cpp" />
+    <ClCompile Include="IntergrationTests.cpp" />
     <ClCompile Include="IWFCCollapseMethodTests.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -170,6 +172,7 @@
     <ClCompile Include="IWFCManagerTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HelperFunctions.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
