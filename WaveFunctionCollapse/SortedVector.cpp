@@ -79,6 +79,7 @@ void SortedVector::sort() {
 
         auto sortedIt = sortedData[NumOfBits].begin();
         int numToRemoveAtStart = dirtyData[NumOfBits].size();
+        std::sort(dirtyData[NumOfBits].begin(), dirtyData[NumOfBits].end());
         //remove all the dirty values
         for (int numberRemovedFromSorted = 0; numberRemovedFromSorted < numToRemoveAtStart; ++numberRemovedFromSorted) {
             //We need to re-validate the iterator
