@@ -112,6 +112,6 @@ int main(int argc, char* argv[]) {
 			manager->PrintGrid();
 		}*/
 	}
-
+	delete manager;
 	return 0;
 }

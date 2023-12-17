@@ -67,6 +67,7 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 //THIS FUCKER RIGHT HERE
 //This will get optemized out so we need to move it into a seperate function
 //and tell c++ not to optemize it
+#pragma optimize( "", off )
 void IWFCCollapseMethod::WaitForJobsToFinish()
 {
 	while (JobsInQueue > 0) {
@@ -75,6 +76,7 @@ void IWFCCollapseMethod::WaitForJobsToFinish()
 		}
 	}
 }
+#pragma optimize( "", on)
 void IWFCCollapseMethod::AddJobToQueue(const std::function<void()>& job)
 {
 	++JobsInQueue;

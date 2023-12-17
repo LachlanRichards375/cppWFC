@@ -14,7 +14,7 @@ class IWFCCollapseMethod
 protected:
 	IWFCManager* manager;
 	bool continueThreadWork;
-	volatile int JobsInQueue;
+	int JobsInQueue;
 	SafeQueue<int> errorMessages;
 
 	void Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo);

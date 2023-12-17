@@ -200,7 +200,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;WAVEFUNCTIONCOLLAPSE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);TRACY_ENABLE;TRACY_NO_EXIT;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WAVEFUNCTIONCOLLAPSE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);TRACY_ENABLE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
