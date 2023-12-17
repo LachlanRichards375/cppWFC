@@ -29,6 +29,7 @@ public:
 	void CollapseSpecificCell(WFCPosition* position, unsigned long toCollapseTo);
 	WFCCell* GetCell(WFCPosition* position);
 	WFCPosition& GetGridSize();
+	std::vector<const WFCPosition*> GetLowestEntropy();
 	void QueueJobToThreadPool(const std::function<void()>& job);
 	bool IsThreadPoolBusy();
 	void RegisterForAlert(WFCPosition* position, WFCCell* alertee);

@@ -81,13 +81,13 @@ namespace UnitTests
 
 		TEST_METHOD(TestCollapseOrder) {
 
-			WFCPosition expectedSize{ 5,5 };
+			WFCPosition expectedSize{ 3,3 };
 			Grid2D grid{ expectedSize };
 			IWFCCollapseMethod collapse{ };
 			IWFCManager manager{ &collapse, &grid, 1 };
 
 			//Check cell is initially EMPTY
-			WFCPosition* targetCell = new WFCPosition(2, 2);
+			WFCPosition* targetCell = new WFCPosition(1, 1);
 			Assert::IsTrue((manager.GetCell(targetCell)->CollapsedTile == EMPTY), L"targetCell is not EMPTY");
 
 			//Collapse middle cell to SAND
@@ -96,17 +96,22 @@ namespace UnitTests
 			//Check middle cell is SAND
 			Assert::IsTrue((manager.GetCell(targetCell)->CollapsedTile == SAND), L"targetCell is not SAND");
 
-			//Collapse second cell to WATER
-			WFCPosition* secondTargetCell = new WFCPosition(2, 1);
-			manager.CollapseSpecificCell(secondTargetCell, WATER);
-			LogEntropyGrid(grid, expectedSize);
-			//Check second cell is WATER
-			Assert::IsTrue((manager.GetCell(secondTargetCell)->CollapsedTile == WATER), L"Second Collapse is not WATER");
+			std::vector<const WFCPosition*> lowestEntropy;
+			bool foundLowestEntropy;
+			while (grid.RemainingCellsToCollapse() > 0) {
+				foundLowestEntropy = false;
+				lowestEntropy = manager.GetLowestEntropy();
+				manager.GenerateOnce();
 
-			manager.GenerateOnce();
-			LogEntropyGrid(grid, expectedSize);
-			LogCollapsedGrid(grid, expectedSize);
-			Assert::IsTrue(manager.GetCell(new WFCPosition(1, 1))->CalculateEntropy() > 0 || manager.GetCell(new WFCPosition(1, 2))->CalculateEntropy() > 0, L"CollapseMethod did not collapse correct cell");
+				for (auto& it : lowestEntropy) {
+					//If it returns 0 it means it collapsed
+					if (manager.GetCell(const_cast<WFCPosition*>(it))->CalculateEntropy() == 0) {
+						foundLowestEntropy = true;
+					}
+				}
+				Assert::IsTrue(foundLowestEntropy, L"Collapse did not act on a cell in the lowest entropy");
+				LogEntropyGrid(grid, expectedSize);
+			}
 		}
 	};
 }

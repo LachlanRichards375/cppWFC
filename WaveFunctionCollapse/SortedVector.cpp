@@ -130,3 +130,17 @@ void SortedVector::clear()
     dirtyData.resize(sizeof(unsigned long) * 8);
     vectorSize = 0;
 }
+
+std::vector<const WFCPosition*> SortedVector::GetLowestEntropy()
+{
+    std::vector<WFCCell*>* listWorkingOn = &sortedData[0];
+    while ((*listWorkingOn).size() <= 0) {
+        ++listWorkingOn;
+    }
+    std::vector<const WFCPosition*> returner;
+    for (auto& it : (*listWorkingOn)) {
+        returner.push_back(it->GetPosition());
+    }
+
+    return returner;
+}

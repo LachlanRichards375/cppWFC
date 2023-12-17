@@ -60,6 +60,11 @@ WFCPosition& IWFCManager::GetGridSize()
 	return _grid->GetSize();
 }
 
+std::vector<const WFCPosition*> IWFCManager::GetLowestEntropy()
+{
+	return _grid->GetLowestEntropy();
+}
+
 void IWFCManager::QueueJobToThreadPool(const std::function<void()>& job)
 {
 	_threadPool.QueueJob(job);

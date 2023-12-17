@@ -37,3 +37,8 @@ size_t IWFCGrid::RemainingCellsToCollapse()
 void IWFCGrid::MarkDirty(unsigned long oldDomainCount, int index) {
     entropyQueue.SetDirty(oldDomainCount, index);
 }
+
+std::vector<const WFCPosition*> IWFCGrid::GetLowestEntropy()
+{
+    return entropyQueue.GetLowestEntropy();
+}

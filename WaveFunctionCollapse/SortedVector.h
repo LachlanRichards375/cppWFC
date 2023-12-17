@@ -19,4 +19,5 @@ public:
     void SetDirty(unsigned long oldDomainCount, int index);
     size_t size();
     void clear();
+    std::vector<const WFCPosition*> GetLowestEntropy();
 };
