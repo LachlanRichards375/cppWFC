@@ -60,21 +60,15 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 
 	DecrementJobsInQueue();
 }
-//THIS FUCKER RIGHT HERE
-//This will get optemized out so we need to move it into a seperate function
+//THIS RIGHT HERE
+//This will get optimized out so we need to move it into a seperate function
 //and tell c++ not to optemize it
-#pragma optimize( "", off )
+#pragma optimize("", off )
 void IWFCCollapseMethod::IncrementJobsInQueue() {
-	{
-		std::unique_lock<std::mutex> lock(job_count_mutex);
-		++JobsInQueue;
-	}
+	++JobsInQueue;
 }
 void IWFCCollapseMethod::DecrementJobsInQueue() {
-	{
-		std::unique_lock<std::mutex> lock(job_count_mutex);
-		--JobsInQueue;
-	}
+	--JobsInQueue;
 }
 void IWFCCollapseMethod::WaitForJobsToFinish()
 {

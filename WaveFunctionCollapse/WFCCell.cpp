@@ -2,6 +2,7 @@
 #include "WFCCell.h"
 #include"WFCRuleManager.h"
 #include <iostream>
+#include "../tracy/public/tracy/Tracy.hpp"
 
 WFCCell::WFCCell(IWFCManager* m, WFCPosition* position, unsigned long domain) : manager(m), position(position)
 {
@@ -55,6 +56,8 @@ WFCCellUpdate* WFCCell::Collapse(unsigned long toCollapseTo)
 
 WFCCellUpdate* WFCCell::DomainCheck(WFCCellUpdate* update)
 {
+    ZoneScopedN("DomainCheck in Cell");
+
     if (CollapsedTile > 0) {
         return nullptr;
     }
