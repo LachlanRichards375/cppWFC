@@ -19,6 +19,10 @@ protected:
 
 	void Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo);
 	void ThreadWork(WFCCellUpdate* cellUpdate);
+	
+	std::mutex job_count_mutex;
+	void IncrementJobsInQueue();
+	void DecrementJobsInQueue();
 
 	void WaitForJobsToFinish();
 	void AddJobToQueue(const std::function<void()>& job);

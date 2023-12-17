@@ -61,13 +61,24 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 		manager->MarkDirty(dirtyDomain[i], dirtyIndex[i]);
 	}
 
-	--JobsInQueue;
-
+	DecrementJobsInQueue();
 }
 //THIS FUCKER RIGHT HERE
 //This will get optemized out so we need to move it into a seperate function
 //and tell c++ not to optemize it
 #pragma optimize( "", off )
+void IWFCCollapseMethod::IncrementJobsInQueue() {
+	{
+		std::unique_lock<std::mutex> lock(job_count_mutex);
+		++JobsInQueue;
+	}
+}
+void IWFCCollapseMethod::DecrementJobsInQueue() {
+	{
+		std::unique_lock<std::mutex> lock(job_count_mutex);
+		--JobsInQueue;
+	}
+}
 void IWFCCollapseMethod::WaitForJobsToFinish()
 {
 	while (JobsInQueue > 0) {
@@ -79,7 +90,7 @@ void IWFCCollapseMethod::WaitForJobsToFinish()
 #pragma optimize( "", on)
 void IWFCCollapseMethod::AddJobToQueue(const std::function<void()>& job)
 {
-	++JobsInQueue;
+	IncrementJobsInQueue();
 	manager->QueueJobToThreadPool(job);
 }
 void IWFCCollapseMethod::Collapse(WFCCell* position)
