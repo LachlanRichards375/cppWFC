@@ -7,20 +7,20 @@
 
 
 extern "C" {
-	IWFCCollapseMethod* Threaded2DCollapse_Create();
+	_declspec(dllexport) IWFCCollapseMethod* Threaded2DCollapse_Create();
 
-	Grid2D * Grid2D_Create(WFCPosition * position);
+	_declspec(dllexport) Grid2D * Grid2D_Create(WFCPosition * position);
 
-	WFCPosition * WFCPosition_Create2D(unsigned int x, unsigned int y);
-	WFCPosition * WFCPosition_Create3D(unsigned int x, unsigned int y, unsigned int z);
-	WFCPosition * WFCPosition_Create4D(unsigned int x, unsigned int y, unsigned int z, unsigned int w);
+	_declspec(dllexport) WFCPosition * WFCPosition_Create2D(unsigned int x, unsigned int y);
+	_declspec(dllexport) WFCPosition * WFCPosition_Create3D(unsigned int x, unsigned int y, unsigned int z);
+	_declspec(dllexport) WFCPosition * WFCPosition_Create4D(unsigned int x, unsigned int y, unsigned int z, unsigned int w);
 
-	IWFCManager * IWFCManager_Create(IWFCCollapseMethod * collapseMethod, IWFCGrid * grid, short threadCount);
+	_declspec(dllexport) IWFCManager * IWFCManager_Create(IWFCCollapseMethod * collapseMethod, IWFCGrid * grid, short threadCount);
 
-	void AddTileToDomain(unsigned long tilesToAdd);
+	_declspec(dllexport) void AddTileToDomain(unsigned long tilesToAdd);
 
-	int IWFCManager_Collapse(IWFCManager* manager, unsigned long toCollapseTo, WFCPosition* position);
-	int IWFCManager_Run(IWFCManager * manager);
+	_declspec(dllexport) int IWFCManager_Collapse(IWFCManager* manager, unsigned long toCollapseTo, WFCPosition* position);
+	_declspec(dllexport) int IWFCManager_Run(IWFCManager * manager);
 
-	void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[]);
+	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[]);
 }
