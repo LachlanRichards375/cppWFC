@@ -109,6 +109,11 @@ void IWFCManager::MarkDirty(unsigned long oldDomainCount, int index)
 	_grid->MarkDirty(oldDomainCount, index);
 }
 
+int IWFCManager::RemainingCellsToCollapse()
+{
+	return _grid->RemainingCellsToCollapse();
+}
+
 void IWFCManager::PrintGrid() {
 	_grid->PrintGrid();
 }

@@ -36,4 +36,5 @@ public:
 	std::vector<WFCCell*> GetAlertees(const WFCPosition* position);
 	void Generate();
 	void MarkDirty(unsigned long oldDomainCount, int index);
+	int RemainingCellsToCollapse();
 };

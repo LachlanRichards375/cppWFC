@@ -108,9 +108,8 @@ int main(int argc, char* argv[]) {
 		std::chrono::duration<double, std::milli> ms_double = t2 - t1;
 
 		std::cout << ms_double.count() << "ms" << std::endl;
-		/*if (messageNo == 0) {
-			manager->PrintGrid();
-		}*/
+		std::cout << "Remaining cells: " << std::to_string(manager->RemainingCellsToCollapse()) << "\n";
+		manager->PrintGrid();
 	}
 	delete manager;
 	return 0;
