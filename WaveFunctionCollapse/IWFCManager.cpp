@@ -114,6 +114,11 @@ int IWFCManager::RemainingCellsToCollapse()
 	return _grid->RemainingCellsToCollapse();
 }
 
+std::vector<unsigned long>* IWFCManager::Export()
+{
+	return _grid->Export();
+}
+
 void IWFCManager::PrintGrid() {
 	_grid->PrintGrid();
 }

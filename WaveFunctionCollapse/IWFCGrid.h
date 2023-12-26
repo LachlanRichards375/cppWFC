@@ -35,6 +35,8 @@ public:
 	virtual void RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister) = 0;
 	virtual void DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister) = 0;
 	virtual void PrintGrid() = 0;
+	virtual std::vector<unsigned long>* Export() = 0;
+
 	void MarkDirty(unsigned long oldDomainCount, int index);
 	std::vector<const WFCPosition*> GetLowestEntropy();
 };

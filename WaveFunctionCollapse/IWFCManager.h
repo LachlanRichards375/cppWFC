@@ -37,4 +37,5 @@ public:
 	void Generate();
 	void MarkDirty(unsigned long oldDomainCount, int index);
 	int RemainingCellsToCollapse();
+	std::vector<unsigned long>* Export();
 };

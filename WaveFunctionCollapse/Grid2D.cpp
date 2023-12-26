@@ -141,3 +141,15 @@ void Grid2D::Reset() {
 		}
 	}
 }
+
+
+std::vector<unsigned long> exporter;
+std::vector<unsigned long>* Grid2D::Export() {
+	for (auto& row : grid) {
+		for (auto& column : row) {
+			exporter.push_back(column->CollapsedTile);
+		}
+	}
+
+	return &exporter;
+}

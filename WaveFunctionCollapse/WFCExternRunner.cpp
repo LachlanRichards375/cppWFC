@@ -45,6 +45,14 @@ extern "C"  {
 		return 0;
 	}
 
+	_declspec(dllexport) unsigned long * IWFCManager_GetResult(IWFCManager* manager, int* length)
+	{
+		std::vector<unsigned long>* returner{ manager->Export() };
+		*length = returner->size();
+		unsigned long* name = &((*returner)[0]);
+		return name;
+	}
+
 	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[])
 	{
 		std::vector<WFCPosition*>localTargetsVec {};
