@@ -113,5 +113,39 @@ namespace UnitTests
 				LogEntropyGrid(grid, expectedSize);
 			}
 		}
+
+		TEST_METHOD(TestMultipleThreads) {
+			WFCPosition expectedSize{ 3,3 };
+			Grid2D grid{ expectedSize };
+			IWFCCollapseMethod collapse{ };
+			IWFCManager manager{ &collapse, &grid, 12 };
+
+			//Check cell is initially EMPTY
+			WFCPosition* targetCell = new WFCPosition(1, 1);
+			Assert::IsTrue((manager.GetCell(targetCell)->CollapsedTile == EMPTY), L"targetCell is not EMPTY");
+
+			//Collapse middle cell to SAND
+			manager.CollapseSpecificCell(targetCell, SAND);
+			LogEntropyGrid(grid, expectedSize);
+			//Check middle cell is SAND
+			Assert::IsTrue((manager.GetCell(targetCell)->CollapsedTile == SAND), L"targetCell is not SAND");
+
+			std::vector<const WFCPosition*> lowestEntropy;
+			bool foundLowestEntropy;
+			while (grid.RemainingCellsToCollapse() > 0) {
+				foundLowestEntropy = false;
+				lowestEntropy = manager.GetLowestEntropy();
+				manager.GenerateOnce();
+
+				for (auto& it : lowestEntropy) {
+					//If it returns 0 it means it collapsed
+					if (manager.GetCell(const_cast<WFCPosition*>(it))->CalculateEntropy() == 0) {
+						foundLowestEntropy = true;
+					}
+				}
+				Assert::IsTrue(foundLowestEntropy, L"Collapse did not act on a cell in the lowest entropy");
+				LogEntropyGrid(grid, expectedSize);
+			}
+		}
 	};
 }
