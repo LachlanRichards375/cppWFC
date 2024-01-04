@@ -21,7 +21,7 @@ extern "C" {
 
 	_declspec(dllexport) int IWFCManager_Collapse(IWFCManager* manager, unsigned long toCollapseTo, WFCPosition* position);
 	_declspec(dllexport) int IWFCManager_Run(IWFCManager* manager);
-	_declspec(dllexport) unsigned long* IWFCManager_GetResult(IWFCManager* manager, int* length);
+	_declspec(dllexport) bool IWFCManager_GetResult(IWFCManager* manager, unsigned long* arrayToFill, int length);
 
 	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[]);
 }

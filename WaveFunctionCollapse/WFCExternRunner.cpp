@@ -1,6 +1,7 @@
 #include "WFCExternRunner.h"
 #include "WFCRuleManager.h"
 #include "WFCRuleCellIsNot.h"
+#include <iostream>
 
 extern "C"  {
 
@@ -45,12 +46,17 @@ extern "C"  {
 		return 0;
 	}
 
-	_declspec(dllexport) unsigned long * IWFCManager_GetResult(IWFCManager* manager, int* length)
+	_declspec(dllexport) bool IWFCManager_GetResult(IWFCManager* manager, unsigned long* arrayToFill, int length)
 	{
-		std::vector<unsigned long>* returner{ manager->Export() };
-		*length = returner->size();
-		unsigned long* name = &((*returner)[0]);
-		return name;
+		auto vector = manager->Export();
+		if (length != vector->size()) {
+			std::cout << "Vector has differeing size";
+			return false;
+		}
+		for (int i = 0; i < length; i++) {
+			arrayToFill[i] = (*vector)[i];
+		}
+		return true;
 	}
 
 	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[])
