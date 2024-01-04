@@ -84,10 +84,33 @@ void IWFCManager::RegisterForAlert(WFCPosition* registerFor, WFCCell* alertee) {
 	_grid->RegisterForCellUpdates(registerFor, alertee);
 }
 
+void domainGrid(IWFCGrid* grid, WFCPosition expectedSize) {
+	for (int row = expectedSize.x - 1; row >= 0; --row) { //0 bottom left
+		//for (int x = 0; x < size.x; ++x) { //0 top left
+		std::string output = "|";
+		for (int col = 0; col < expectedSize.y; ++col) {
+			unsigned long collapsedTile = (*grid).GetCell(new WFCPosition(col, row))->GetDomain();
+
+			if (collapsedTile < 100) {
+				output.append(" ");
+			}
+
+			output.append(std::to_string(collapsedTile));
+
+			if (collapsedTile < 10) {
+				output.append(" ");
+			}
+		}
+		output.append("|\n");
+		std::cout << output;
+	}
+}
+
 void IWFCManager::Generate()
 {
 	std::cout << "In Generate, cells to collapse:" << _grid->RemainingCellsToCollapse() << std::endl;
 	#ifdef _DEBUG
+		domainGrid(_grid, _grid->GetSize());
 		std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;
 		PrintGrid();
 		while (_grid->RemainingCellsToCollapse() > 0) {
