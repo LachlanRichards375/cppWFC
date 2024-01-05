@@ -17,11 +17,11 @@ extern "C" {
 
 	_declspec(dllexport) IWFCManager * IWFCManager_Create(IWFCCollapseMethod * collapseMethod, IWFCGrid * grid, short threadCount);
 
-	_declspec(dllexport) void AddTileToDomain(unsigned long tilesToAdd);
+	_declspec(dllexport) void AddTileToDomain(unsigned long long tilesToAdd);
 
-	_declspec(dllexport) int IWFCManager_Collapse(IWFCManager* manager, unsigned long toCollapseTo, WFCPosition* position);
+	_declspec(dllexport) int IWFCManager_Collapse(IWFCManager* manager, unsigned long long toCollapseTo, WFCPosition* position);
 	_declspec(dllexport) int IWFCManager_Run(IWFCManager* manager);
-	_declspec(dllexport) bool IWFCManager_GetResult(IWFCManager* manager, unsigned long* arrayToFill, int length);
+	_declspec(dllexport) bool IWFCManager_GetResult(IWFCManager* manager, unsigned long long * arrayToFill, int length);
 
-	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[]);
+	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long long tile, unsigned long long goal, unsigned int localTargetCount, WFCPosition localTargets[]);
 }

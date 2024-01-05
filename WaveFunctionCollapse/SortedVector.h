@@ -16,7 +16,7 @@ public:
     WFCCell* pop();
     WFCCell* popSpecific(WFCPosition* position, int numBits);
     void sort();
-    void SetDirty(unsigned long oldDomainCount, int index);
+    void SetDirty(unsigned long long oldDomainCount, int index);
     size_t size();
     void clear();
     std::vector<const WFCPosition*> GetLowestEntropy();

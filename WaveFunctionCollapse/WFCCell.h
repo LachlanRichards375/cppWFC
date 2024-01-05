@@ -9,24 +9,24 @@ class WFCCell
 protected:
 	IWFCManager* manager;
 	WFCPosition* position;
-	unsigned long domain;
+	unsigned long long domain;
 	int entropyID;
 	int errorID = 0;
 public:
-	WFCCell(IWFCManager* m, WFCPosition* position, unsigned long domain);
+	WFCCell(IWFCManager* m, WFCPosition* position, unsigned long long domain);
 	WFCCell(WFCCell* other);
 
 	//~WFCCell();
 	//WFCCellDomain Domain;
-	unsigned long CollapsedTile;
+	unsigned long long CollapsedTile;
 
 	// Methods
 	void RuleSetup() const;
-	void SetDomain(const unsigned long newDomain);
-	const unsigned long GetDomain();
-	unsigned long CalculateEntropy() const;
+	void SetDomain(const unsigned long long newDomain);
+	const unsigned long long GetDomain();
+	unsigned long long CalculateEntropy() const;
 	WFCCellUpdate* Collapse();
-	WFCCellUpdate* Collapse(unsigned long toCollapseTo);
+	WFCCellUpdate* Collapse(unsigned long long toCollapseTo);
 	const WFCPosition* GetPosition();
 	WFCCellUpdate* DomainCheck(WFCCellUpdate* update);
 	int GetError();

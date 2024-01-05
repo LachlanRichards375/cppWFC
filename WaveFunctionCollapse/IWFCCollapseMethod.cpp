@@ -20,7 +20,7 @@ void IWFCCollapseMethod::Initialize(IWFCManager* manager)
 	IWFCCollapseMethod::manager = manager;
 }
 
-void IWFCCollapseMethod::Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo)
+void IWFCCollapseMethod::Enqueue(WFCCell* position, std::optional<unsigned long long > toCollapseTo)
 {
 	if (toCollapseTo.has_value()) {
 		AddJobToQueue([this, position, toCollapseTo] { ThreadWork(position->Collapse(toCollapseTo.value())); });
@@ -37,11 +37,11 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 
 	std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
 	std::vector<int> dirtyIndex{};
-	std::vector<unsigned long> dirtyDomain{};
+	std::vector<unsigned long long> dirtyDomain{};
 	for (auto& cell : toAlert)
 	{
 		ZoneScopedN("Alerting Cell");
-		unsigned long domain = cell->CalculateEntropy();
+		unsigned long long domain = cell->CalculateEntropy();
 		WFCCellUpdate* updateMessage = cell->DomainCheck(cellUpdate);
 		if (cell->GetError() != 0) {
 			errorMessages.enqueue(cell->GetError());
@@ -92,14 +92,14 @@ void IWFCCollapseMethod::AddJobToQueue(const std::function<void()>& job)
 }
 void IWFCCollapseMethod::Collapse(WFCCell* position)
 {
-	Enqueue(position, std::optional<unsigned long>());
+	Enqueue(position, std::optional<unsigned long long>());
 
 	WaitForJobsToFinish();
 }
 
-void IWFCCollapseMethod::CollapseSpecificCell(WFCCell* position, unsigned long collapseTo)
+void IWFCCollapseMethod::CollapseSpecificCell(WFCCell* position, unsigned long long collapseTo)
 {
-	Enqueue(position, std::optional<unsigned long>(collapseTo));
+	Enqueue(position, std::optional<unsigned long long>(collapseTo));
 
 	WaitForJobsToFinish();
 }

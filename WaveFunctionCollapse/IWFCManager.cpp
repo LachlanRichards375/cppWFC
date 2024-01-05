@@ -37,7 +37,7 @@ void IWFCManager::Collapse()
 	}
 }
 
-void IWFCManager::CollapseSpecificCell(WFCPosition* position, unsigned long toCollapseTo)
+void IWFCManager::CollapseSpecificCell(WFCPosition* position, unsigned long long toCollapseTo)
 {
 	ZoneScopedN("Collapse(specific)");
 	{
@@ -89,7 +89,7 @@ void domainGrid(IWFCGrid* grid, WFCPosition expectedSize) {
 		//for (int x = 0; x < size.x; ++x) { //0 top left
 		std::string output = "|";
 		for (int col = 0; col < expectedSize.y; ++col) {
-			unsigned long collapsedTile = (*grid).GetCell(new WFCPosition(col, row))->GetDomain();
+			unsigned long long collapsedTile = (*grid).GetCell(new WFCPosition(col, row))->GetDomain();
 
 			if (collapsedTile < 100) {
 				output.append(" ");
@@ -127,7 +127,7 @@ void IWFCManager::Generate()
 	#endif
 }
 
-void IWFCManager::MarkDirty(unsigned long oldDomainCount, int index)
+void IWFCManager::MarkDirty(unsigned long long oldDomainCount, int index)
 {
 	_grid->MarkDirty(oldDomainCount, index);
 }
@@ -137,7 +137,7 @@ int IWFCManager::RemainingCellsToCollapse()
 	return _grid->RemainingCellsToCollapse();
 }
 
-std::vector<unsigned long>* IWFCManager::Export()
+std::vector<unsigned long long >* IWFCManager::Export()
 {
 	return _grid->Export();
 }

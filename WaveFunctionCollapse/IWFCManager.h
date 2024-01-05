@@ -26,7 +26,7 @@ public:
 
 	void Reset();
 	void GenerateOnce();
-	void CollapseSpecificCell(WFCPosition* position, unsigned long toCollapseTo);
+	void CollapseSpecificCell(WFCPosition* position, unsigned long long toCollapseTo);
 	WFCCell* GetCell(WFCPosition* position);
 	WFCPosition& GetGridSize();
 	std::vector<const WFCPosition*> GetLowestEntropy();
@@ -35,7 +35,7 @@ public:
 	void RegisterForAlert(WFCPosition* position, WFCCell* alertee);
 	std::vector<WFCCell*> GetAlertees(const WFCPosition* position);
 	void Generate();
-	void MarkDirty(unsigned long oldDomainCount, int index);
+	void MarkDirty(unsigned long long oldDomainCount, int index);
 	int RemainingCellsToCollapse();
-	std::vector<unsigned long>* Export();
+	std::vector<unsigned long long>* Export();
 };

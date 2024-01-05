@@ -21,12 +21,12 @@ extern "C"  {
 		return new IWFCManager(collapseMethod, grid, threadCount);
 	}
 
-	_declspec(dllexport) void AddTileToDomain(unsigned long tilesToAdd)
+	_declspec(dllexport) void AddTileToDomain(unsigned long long tilesToAdd)
 	{
 		WFCRuleManager::AddToInitialDomain(tilesToAdd);
 	}
 
-	_declspec(dllexport) int IWFCManager_Collapse(IWFCManager* manager, unsigned long toCollapseTo, WFCPosition* position) {
+	_declspec(dllexport) int IWFCManager_Collapse(IWFCManager* manager, unsigned long long toCollapseTo, WFCPosition* position) {
 		try {
 			manager->CollapseSpecificCell(position, toCollapseTo);
 		}
@@ -46,7 +46,7 @@ extern "C"  {
 		return 0;
 	}
 
-	_declspec(dllexport) bool IWFCManager_GetResult(IWFCManager* manager, unsigned long* arrayToFill, int length)
+	_declspec(dllexport) bool IWFCManager_GetResult(IWFCManager* manager, unsigned long long* arrayToFill, int length)
 	{
 		auto vector = manager->Export();
 		if (length != vector->size()) {
@@ -55,11 +55,14 @@ extern "C"  {
 		}
 		for (int i = 0; i < length; i++) {
 			arrayToFill[i] = (*vector)[i];
+			std::cout << "Inserting " << std::to_string((*vector)[i]) << "(";
+			printf("%llu", (*vector)[i]);
+			std::cout << ") to " << std::to_string(i) << "\n";
 		}
 		return true;
 	}
 
-	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long tile, unsigned long goal, unsigned int localTargetCount, WFCPosition localTargets[])
+	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long long tile, unsigned long long goal, unsigned int localTargetCount, WFCPosition localTargets[])
 	{
 		std::vector<WFCPosition*>localTargetsVec {};
 		for (unsigned int i = 0; i < localTargetCount; ++i) {

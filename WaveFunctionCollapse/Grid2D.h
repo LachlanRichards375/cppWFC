@@ -19,7 +19,7 @@ public:
     virtual void DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister) override;
     virtual void PrintGrid() override;
     virtual void Reset() override;
-    virtual std::vector<unsigned long>* IWFCGrid::Export() override;
+    virtual std::vector<unsigned long long>* IWFCGrid::Export() override;
 };
 
 

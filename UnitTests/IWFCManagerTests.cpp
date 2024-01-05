@@ -10,10 +10,10 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace UnitTests
 {
 
-	const unsigned long EMPTY = 0;
-	const unsigned long GRASS = 1 << 0;
-	const unsigned long SAND = 1 << 1;
-	const unsigned long WATER = 1 << 2;
+	const unsigned long long EMPTY = 0;
+	const unsigned long long GRASS = 1 << 0;
+	const unsigned long long SAND = 1 << 1;
+	const unsigned long long WATER = 1 << 2;
 
 	
 

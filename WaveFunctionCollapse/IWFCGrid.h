@@ -23,7 +23,7 @@ public:
 	//Concrete Methods
 	void SortQueue();
 	WFCCell* PopNextCellToCollapse();
-	WFCCell* PopSpecificCell(WFCPosition* position, int bitsInDomain);
+	WFCCell* PopSpecificCell(WFCPosition* position, unsigned long long bitsInDomain);
 	size_t RemainingCellsToCollapse();
 
 	virtual void Reset() = 0;
@@ -35,8 +35,8 @@ public:
 	virtual void RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister) = 0;
 	virtual void DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister) = 0;
 	virtual void PrintGrid() = 0;
-	virtual std::vector<unsigned long>* Export() = 0;
+	virtual std::vector<unsigned long long>* Export() = 0;
 
-	void MarkDirty(unsigned long oldDomainCount, int index);
+	void MarkDirty(unsigned long long oldDomainCount, int index);
 	std::vector<const WFCPosition*> GetLowestEntropy();
 };

@@ -7,15 +7,15 @@
 SortedVector::SortedVector()
 {
     //Set sortedData to contain 4bytes*8 = 32 (bits) array positions
-    sortedData.resize(sizeof(unsigned long) * 8);
-    dirtyData.resize(sizeof(unsigned long) * 8);
+    sortedData.resize(sizeof(unsigned long long) * 8);
+    dirtyData.resize(sizeof(unsigned long long) * 8);
     vectorSize = 0;
 }
 
 void SortedVector::insert(WFCCell* value)
 {
     //ZoneScopedN("insert");
-    int bitsInDomain = value->CalculateEntropy();
+    unsigned long long bitsInDomain = value->CalculateEntropy();
     sortedData[bitsInDomain].push_back(value);
     value->SetEntropyID(sortedData[bitsInDomain].size()-1);
     ++vectorSize;
@@ -78,7 +78,7 @@ void SortedVector::sort() {
         std::vector<WFCCell*> toReinsert{};
 
         auto sortedIt = sortedData[NumOfBits].begin();
-        int numToRemoveAtStart = dirtyData[NumOfBits].size();
+        unsigned long long numToRemoveAtStart = dirtyData[NumOfBits].size();
         std::sort(dirtyData[NumOfBits].begin(), dirtyData[NumOfBits].end());
         //remove all the dirty values
         for (int numberRemovedFromSorted = 0; numberRemovedFromSorted < numToRemoveAtStart; ++numberRemovedFromSorted) {
@@ -112,7 +112,7 @@ void SortedVector::ResetEntropyID(int bitNumToReset, int numToStartAt = 0) {
     }
 }
 
-void SortedVector::SetDirty(unsigned long oldDomainCount, int index) {
+void SortedVector::SetDirty(unsigned long long oldDomainCount, int index) {
     for (int check : dirtyData[oldDomainCount]) {
         if (check == index) {
             return;
@@ -127,8 +127,8 @@ size_t SortedVector::size() {
 
 void SortedVector::clear()
 {
-    sortedData.resize(sizeof(unsigned long) * 8);
-    dirtyData.resize(sizeof(unsigned long) * 8);
+    sortedData.resize(sizeof(unsigned long long) * 8);
+    dirtyData.resize(sizeof(unsigned long long) * 8);
     vectorSize = 0;
 }
 

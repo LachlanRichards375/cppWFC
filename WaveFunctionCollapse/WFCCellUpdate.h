@@ -4,10 +4,10 @@
 struct WFCCellUpdate
 {
 public:
-	WFCCellUpdate(unsigned long removed, unsigned long added, unsigned long collapsed, const WFCPosition* position);
-	unsigned long removedFromDomain;
-	unsigned long addedToDomain;
-	unsigned long collapsedTo;
+	WFCCellUpdate(unsigned long long removed, unsigned long long added, unsigned long long collapsed, const WFCPosition* position);
+	unsigned long long removedFromDomain;
+	unsigned long long addedToDomain;
+	unsigned long long collapsedTo;
 	const WFCPosition* updatedCell;
 };
 

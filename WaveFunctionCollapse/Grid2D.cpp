@@ -102,7 +102,7 @@ void Grid2D::PrintGrid()
 	//for (int x = 0; x < size.x; ++x) { //0 top left
 		std::string output = "|";
 		for (int col = 0; col < size.y; ++col) {
-			unsigned long collapsedTile = grid[col][row]->CollapsedTile;
+			unsigned long long collapsedTile = grid[col][row]->CollapsedTile;
 
 			if (collapsedTile < 100) {
 				output.append(" ");
@@ -143,8 +143,8 @@ void Grid2D::Reset() {
 }
 
 
-std::vector<unsigned long> exporter;
-std::vector<unsigned long>* Grid2D::Export() {
+std::vector<unsigned long long > exporter;
+std::vector<unsigned long long>* Grid2D::Export() {
 	for (auto& row : grid) {
 		for (auto& column : row) {
 			exporter.push_back(column->CollapsedTile);

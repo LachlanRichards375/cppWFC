@@ -1,7 +1,7 @@
 #include "WFCRuleCellIsNot.h"
 #include "WFCCell.h"
 
-WFCRuleCellIsNot::WFCRuleCellIsNot(unsigned long goal, unsigned long tile, std::vector<WFCPosition*> localPositionsWeCareAbout)
+WFCRuleCellIsNot::WFCRuleCellIsNot(unsigned long long goal, unsigned long long tile, std::vector<WFCPosition*> localPositionsWeCareAbout)
     :IWFCRule(goal, tile, localPositionsWeCareAbout)
 {
 }

@@ -4,7 +4,7 @@
 #include <iostream>
 #include "../tracy/public/tracy/Tracy.hpp"
 
-WFCCell::WFCCell(IWFCManager* m, WFCPosition* position, unsigned long domain) : manager(m), position(position)
+WFCCell::WFCCell(IWFCManager* m, WFCPosition* position, unsigned long long domain) : manager(m), position(position)
 {
     CollapsedTile = 0;
     WFCCell::domain = domain;
@@ -36,15 +36,15 @@ WFCCellUpdate* WFCCell::Collapse()
     int index = 0;
     int flippedBitsFound = 0;
     while(flippedBitsFound <= bitNumToUse){
-        if ((1 << index & domain) != 0) {
+        if ((static_cast<unsigned long long>(1) << index & domain) != 0) {
             ++flippedBitsFound;
         }
         ++index;
     }
-    return Collapse(1 << index - 1);
+    return Collapse(static_cast<unsigned long long>(1) << index - 1);
 }
 
-WFCCellUpdate* WFCCell::Collapse(unsigned long toCollapseTo)
+WFCCellUpdate* WFCCell::Collapse(unsigned long long toCollapseTo)
 {
     CollapsedTile = toCollapseTo;
     #ifdef _DEBUG
@@ -115,12 +115,12 @@ const WFCPosition* WFCCell::GetPosition()
     return position;
 }
 
-void WFCCell::SetDomain(const unsigned long newDomain)
+void WFCCell::SetDomain(const unsigned long long newDomain)
 {
     domain = newDomain;
 }
 
-const unsigned long WFCCell::GetDomain() { 
+const unsigned long long WFCCell::GetDomain() { 
     if (CollapsedTile > 0) {
         return 0;
     } else {
@@ -128,7 +128,7 @@ const unsigned long WFCCell::GetDomain() {
     }
 }
 
-unsigned long WFCCell::CalculateEntropy() const
+unsigned long long WFCCell::CalculateEntropy() const
 {
 
     if (CollapsedTile > 0) {

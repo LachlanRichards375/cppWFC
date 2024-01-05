@@ -2,19 +2,19 @@
 #include "WFCRuleManager.h"
 #include <math.h>
 //PreAllocate the rulesOnTiles
-//std::vector<std::shared_ptr<IWFCRule>> WFCRuleManager::rulesOnTiles[sizeof(unsigned long)];
+//std::vector<std::shared_ptr<IWFCRule>> WFCRuleManager::rulesOnTiles[sizeof(unsigned long long)];
 std::vector<std::vector<IWFCRule*>> WFCRuleManager::rulesOnTiles;
-unsigned long WFCRuleManager::activeDomain{0};
+unsigned long long WFCRuleManager::activeDomain{0};
 
-void WFCRuleManager::AddToInitialDomain(unsigned long domain) {
+void WFCRuleManager::AddToInitialDomain(unsigned long long domain) {
 	WFCRuleManager::activeDomain |= domain;
 }
 
-unsigned long WFCRuleManager::GetInitialDomain() {
+unsigned long long WFCRuleManager::GetInitialDomain() {
 	return activeDomain;
 }
 
-int WFCRuleManager::GetBitsInDomain(unsigned long domain)
+int WFCRuleManager::GetBitsInDomain(unsigned long long domain)
 {
 	int numBits{ 0 };
 	int index = getLeastSignifigantBit(domain);
@@ -30,10 +30,10 @@ int WFCRuleManager::GetBitsInDomain(unsigned long domain)
 	return numBits;
 }
 
-void WFCRuleManager::AddRuleToTile(unsigned long ruleAppliesTo, IWFCRule* rule)
+void WFCRuleManager::AddRuleToTile(unsigned long long ruleAppliesTo, IWFCRule* rule)
 {
 	if (rulesOnTiles.size() == 0) {
-		rulesOnTiles.resize(sizeof(unsigned long) * 8); //sizeof returns bytes
+		rulesOnTiles.resize(sizeof(unsigned long long) * 8); //sizeof returns bytes
 	}
 
 	auto& lookup {rulesOnTiles[getLeastSignifigantBit(ruleAppliesTo)]};
@@ -44,7 +44,7 @@ void WFCRuleManager::AddRuleToTile(unsigned long ruleAppliesTo, IWFCRule* rule)
 	lookup.push_back(rule);
 }
 
-int WFCRuleManager::getLeastSignifigantBit(unsigned long ulong) {
+int WFCRuleManager::getLeastSignifigantBit(unsigned long long ulong) {
 	int index{ 0 };
 	while ((ulong & 1) == 0) {
 		ulong >>= 1;
@@ -53,7 +53,7 @@ int WFCRuleManager::getLeastSignifigantBit(unsigned long ulong) {
 	return index;
 }
 
-std::vector<IWFCRule*> WFCRuleManager::GetRulesForTile(unsigned long tile)
+std::vector<IWFCRule*> WFCRuleManager::GetRulesForTile(unsigned long long tile)
 {
 	if (tile == 0) {
 		return rulesOnTiles.at(0);
@@ -63,11 +63,11 @@ std::vector<IWFCRule*> WFCRuleManager::GetRulesForTile(unsigned long tile)
 	return rulesOnTiles[getLeastSignifigantBit(tile)];
 }
 
-std::vector<IWFCRule*> WFCRuleManager::GetRulesForDomain(unsigned long domain)
+std::vector<IWFCRule*> WFCRuleManager::GetRulesForDomain(unsigned long long domain)
 {
 	std::vector<IWFCRule*> rulesToReturn{};
 	for (int i = 0; i < rulesOnTiles.size(); ++i) {
-		if ((1 << i & domain) > 0) {
+		if ((static_cast<unsigned long long>(1) << i & domain) > 0) {
 			for (IWFCRule* ruleToApply : rulesOnTiles[i]) {
 				rulesToReturn.push_back(ruleToApply);
 			}

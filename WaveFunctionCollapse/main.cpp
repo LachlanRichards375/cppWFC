@@ -3,9 +3,9 @@
 #include <iostream>
 #include "../tracy/public/tracy/Tracy.hpp"
 
-const unsigned long GRASS = 1<<0;
-const unsigned long SAND  = 1<<1;
-const unsigned long WATER = 1<<2;
+const unsigned long long GRASS = 1<<0;
+const unsigned long long SAND  = 1<<1;
+const unsigned long long WATER = 1<<2;
 
 
 void createRules() {

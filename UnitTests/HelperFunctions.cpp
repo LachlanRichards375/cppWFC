@@ -14,7 +14,7 @@ namespace UnitTests
 			//for (int x = 0; x < size.x; ++x) { //0 top left
 			std::string output = "|";
 			for (int col = 0; col < expectedSize.y; ++col) {
-				unsigned long collapsedTile = grid.GetCell(new WFCPosition(col, row))->CollapsedTile;
+				unsigned long long collapsedTile = grid.GetCell(new WFCPosition(col, row))->CollapsedTile;
 
 				if (collapsedTile < 100) {
 					output.append(" ");
@@ -38,7 +38,7 @@ namespace UnitTests
 			//for (int x = 0; x < size.x; ++x) { //0 top left
 			std::string output = "|";
 			for (int col = 0; col < expectedSize.y; ++col) {
-				unsigned long collapsedTile = grid.GetCell(new WFCPosition(col, row))->CalculateEntropy();
+				unsigned long long collapsedTile = grid.GetCell(new WFCPosition(col, row))->CalculateEntropy();
 
 				if (collapsedTile < 100) {
 					output.append(" ");
@@ -62,7 +62,7 @@ namespace UnitTests
 			//for (int x = 0; x < size.x; ++x) { //0 top left
 			std::string output = "|";
 			for (int col = 0; col < expectedSize.y; ++col) {
-				unsigned long collapsedTile = grid.GetCell(new WFCPosition(col, row))->GetDomain();
+				unsigned long long collapsedTile = grid.GetCell(new WFCPosition(col, row))->GetDomain();
 
 				if (collapsedTile < 100) {
 					output.append(" ");
@@ -80,17 +80,17 @@ namespace UnitTests
 		Logger::WriteMessage("\n");
 	}
 	
-	void AddToDomain(unsigned long tilesToAdd)
+	void AddToDomain(unsigned long long tilesToAdd)
 	{
 		//calls WFCExtern AddTileToDomain
 		AddTileToDomain(tilesToAdd);
 	}
 
 	void createRules() {
-		const unsigned long EMPTY = 0;
-		const unsigned long GRASS = 1 << 0;
-		const unsigned long SAND = 1 << 1;
-		const unsigned long WATER = 1 << 2;
+		const unsigned long long EMPTY = 0;
+		const unsigned long long GRASS = 1 << 0;
+		const unsigned long long SAND = 1 << 1;
+		const unsigned long long WATER = 1 << 2;
 		WFCPosition IgnoreWest[]{ new WFCPosition(-1,0), new WFCPosition(-1,1), new WFCPosition(-1,-1) };
 		WFCPosition IgnoreEast[]{ new WFCPosition(1,0), new WFCPosition(1,1), new WFCPosition(1,-1) };
 		WFCPosition IgnoreAllAround[]{ new WFCPosition(-1,1), new WFCPosition(0,1), new WFCPosition(1,1),

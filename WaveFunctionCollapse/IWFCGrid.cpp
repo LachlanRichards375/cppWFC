@@ -24,7 +24,7 @@ WFCCell* IWFCGrid::PopNextCellToCollapse() {
     return entropyQueue.pop();
 }
 
-WFCCell* IWFCGrid::PopSpecificCell(WFCPosition* position, int bitsInDomain)
+WFCCell* IWFCGrid::PopSpecificCell(WFCPosition* position, unsigned long long bitsInDomain)
 {
     return entropyQueue.popSpecific(position, bitsInDomain);
 }
@@ -34,7 +34,7 @@ size_t IWFCGrid::RemainingCellsToCollapse()
     return entropyQueue.size();
 }
 
-void IWFCGrid::MarkDirty(unsigned long oldDomainCount, int index) {
+void IWFCGrid::MarkDirty(unsigned long long oldDomainCount, int index) {
     entropyQueue.SetDirty(oldDomainCount, index);
 }
 

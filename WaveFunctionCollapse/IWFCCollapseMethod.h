@@ -17,7 +17,7 @@ protected:
 	int JobsInQueue;
 	SafeQueue<int> errorMessages;
 
-	void Enqueue(WFCCell* position, std::optional<unsigned long> toCollapseTo);
+	void Enqueue(WFCCell* position, std::optional<unsigned long long> toCollapseTo);
 	void ThreadWork(WFCCellUpdate* cellUpdate);
 	
 	std::mutex job_count_mutex;
@@ -32,6 +32,6 @@ public:
 	~IWFCCollapseMethod();
 	void Initialize(IWFCManager* manager);
 	void Collapse(WFCCell* position);
-	void CollapseSpecificCell(WFCCell* position, unsigned long collapseTo);
+	void CollapseSpecificCell(WFCCell* position, unsigned long long collapseTo);
 	void Reset();
 };
