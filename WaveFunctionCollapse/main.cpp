@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
 	{
 		ZoneScopedN("Generate Result");
-		WFCPosition* size = new WFCPosition(100, 100);
+		WFCPosition* size = new WFCPosition(5, 5);
 		IWFCCollapseMethod* collapse;
 		IWFCGrid* grid;
 
@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
 			}
 			{
 				ZoneScopedN("Manager Create");
-				manager = IWFCManager_Create(collapse, grid, 12);
+				manager = IWFCManager_Create(collapse, grid, 2);
 			}
 		}
 

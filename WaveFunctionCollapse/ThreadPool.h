@@ -3,6 +3,7 @@
 #include <vector>
 #include <queue>
 #include <functional>
+#include "../tracy/public/tracy/Tracy.hpp"
 
 //https://stackoverflow.com/questions/15752659/thread-pooling-in-c11
 class ThreadPool {

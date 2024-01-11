@@ -92,9 +92,15 @@ void IWFCCollapseMethod::AddJobToQueue(const std::function<void()>& job)
 }
 void IWFCCollapseMethod::Collapse(WFCCell* position)
 {
-	Enqueue(position, std::optional<unsigned long long>());
+	{
 
-	WaitForJobsToFinish();
+		ZoneScopedN("Enquing");
+		Enqueue(position, std::optional<unsigned long long>());
+	}
+	{
+		ZoneScopedN("Waiting For Jobs To Finish");
+		WaitForJobsToFinish();
+	}
 }
 
 void IWFCCollapseMethod::CollapseSpecificCell(WFCCell* position, unsigned long long collapseTo)
