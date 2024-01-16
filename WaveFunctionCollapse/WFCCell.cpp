@@ -31,12 +31,12 @@ void WFCCell::RuleSetup() const
 
 WFCCellUpdate* WFCCell::Collapse()
 {
-    //std::cout << "(Collapse() does not do tile weighting) ";
     int bitNumToUse{ rand() % (WFCRuleManager::GetBitsInDomain(domain)) };
     int index = 0;
     int flippedBitsFound = 0;
+    std::cout << "\n" << position->to_string() + "\t- bitsInDomain: " << WFCRuleManager::GetBitsInDomain(domain) << " (Domain:" << domain << ") BitNumToUse: " << bitNumToUse;
     while(flippedBitsFound <= bitNumToUse){
-        if ((static_cast<unsigned long long>(1) << index & domain) != 0) {
+        if (unsigned long long (1) << index & domain) {
             ++flippedBitsFound;
         }
         ++index;

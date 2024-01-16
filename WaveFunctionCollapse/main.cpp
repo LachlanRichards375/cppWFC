@@ -3,9 +3,11 @@
 #include <iostream>
 #include "../tracy/public/tracy/Tracy.hpp"
 
-const unsigned long long GRASS = 1<<0;
-const unsigned long long SAND  = 1<<1;
-const unsigned long long WATER = 1<<2;
+const unsigned long long DEEP_GRASS = 1 << 0;
+const unsigned long long GRASS = 1 << 1;
+const unsigned long long SAND  = 1 << 2;
+const unsigned long long WATER = 1 << 3;
+const unsigned long long DEEP_WATER = 1 << 4;
 
 
 void createRules() {
@@ -19,18 +21,29 @@ void createRules() {
 									new WFCPosition(-1,0),	/*	   TILE		*/	 new WFCPosition(1,0),
 									new WFCPosition(-1,-1),new WFCPosition(0,-1),new WFCPosition(1,-1), };
 	{
+		ZoneScopedN("Adding Deep_Grass Rules");
+		//Grass can't have Sand or Water anywhere
+		WFCRule_Add_CellIsNot(DEEP_GRASS, SAND, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(DEEP_GRASS, WATER, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(DEEP_GRASS, DEEP_WATER, 8, IgnoreAllAround);
+	}
+	{
 		ZoneScopedN("Adding Grass Rules");
 		//Grass cant have Sand West
 		WFCRule_Add_CellIsNot(GRASS, SAND, 3, IgnoreWest);
 		//Grass can't have Water anywhere
 		WFCRule_Add_CellIsNot(GRASS, WATER, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(GRASS, DEEP_WATER, 8, IgnoreAllAround);
 	}
 	{
 		ZoneScopedN("Adding Sand Rules");
 		//Sand can't have Water West
+		WFCRule_Add_CellIsNot(SAND, DEEP_WATER, 8, IgnoreAllAround);
 		WFCRule_Add_CellIsNot(SAND, WATER, 3, IgnoreWest);
 		//Sand can't have Grass East
 		WFCRule_Add_CellIsNot(SAND, GRASS, 3, IgnoreEast);
+		WFCRule_Add_CellIsNot(SAND, DEEP_GRASS, 8, IgnoreAllAround);
+
 	}
 	{
 		ZoneScopedN("Adding Water Rules");
@@ -38,14 +51,25 @@ void createRules() {
 		WFCRule_Add_CellIsNot(WATER, SAND, 3, IgnoreEast);
 		//Water can't have Grass anywhere
 		WFCRule_Add_CellIsNot(WATER, GRASS, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(WATER, DEEP_GRASS, 8, IgnoreAllAround);
+	}
+	{
+		ZoneScopedN("Adding Water Rules");
+		//Water cant have Grass or Sand Anywhere
+		WFCRule_Add_CellIsNot(DEEP_WATER, SAND, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(DEEP_WATER, GRASS, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(DEEP_WATER, DEEP_GRASS, 8, IgnoreAllAround);
 	}
 
 	{
 		ZoneScopedN("Printing tile id's to screen");
 		std::string output = "Cells: ";
-		output.append("\n\t| -GRASS ->").append(std::to_string(GRASS))
-			.append("\n\t|- SAND  ->").append(std::to_string(SAND))
-			.append("\n\t|- WATER ->").append(std::to_string(WATER));
+		output
+			.append("\n\t| -DEEP_GRASS ->").append(std::to_string(DEEP_GRASS))
+			.append("\n\t| -GRASS ->").append(std::to_string(GRASS))
+			.append("\n\t| -SAND  ->").append(std::to_string(SAND))
+			.append("\n\t| -WATER ->").append(std::to_string(WATER))
+			.append("\n\t| -DEEP_WATER ->").append(std::to_string(DEEP_WATER));
 		std::cout << output << std::endl;
 	}
 }
@@ -57,14 +81,14 @@ int main(int argc, char* argv[]) {
 
 	{
 		ZoneScopedN("Generate Result");
-		WFCPosition* size = new WFCPosition(5, 5);
+		WFCPosition* size = new WFCPosition(10, 10);
 		IWFCCollapseMethod* collapse;
 		IWFCGrid* grid;
 
 		{
 			ZoneScopedN("Initialize");
 
-			AddTileToDomain(SAND + WATER + GRASS);
+			AddTileToDomain(DEEP_GRASS + GRASS + SAND + WATER + DEEP_WATER);
 			createRules();
 
 			{
