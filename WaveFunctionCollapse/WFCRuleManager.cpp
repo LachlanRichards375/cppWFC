@@ -1,6 +1,7 @@
 #pragma once
 #include "WFCRuleManager.h"
 #include <math.h>
+#include <iostream>
 //PreAllocate the rulesOnTiles
 //std::vector<std::shared_ptr<IWFCRule>> WFCRuleManager::rulesOnTiles[sizeof(unsigned long long)];
 std::vector<std::vector<IWFCRule*>> WFCRuleManager::rulesOnTiles;
@@ -41,6 +42,7 @@ void WFCRuleManager::AddRuleToTile(unsigned long long ruleAppliesTo, IWFCRule* r
 	if (std::find(lookup.begin(), lookup.end(), rule) != lookup.end()) {
 		return;
 	}
+	std::cout << "Adding rule: " << rule->to_string();
 	lookup.push_back(rule);
 }
 
