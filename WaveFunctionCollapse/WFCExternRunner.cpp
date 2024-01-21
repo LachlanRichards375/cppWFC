@@ -62,10 +62,11 @@ extern "C"  {
 		return true;
 	}
 
-	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long long tile, unsigned long long goal, unsigned int localTargetCount, WFCPosition localTargets[])
+	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long long tile, unsigned long long goal, WFCPosition* localTargets, unsigned int localTargetCount)
 	{
 		std::vector<WFCPosition*>localTargetsVec {};
 		for (unsigned int i = 0; i < localTargetCount; ++i) {
+			//Create new copy so we own the positions
 			localTargetsVec.push_back(new WFCPosition { localTargets[i] });
 		}
 		WFCRuleManager::AddRuleToTile(tile, new WFCRuleCellIsNot(goal, tile, localTargetsVec));

@@ -23,42 +23,42 @@ void createRules() {
 	{
 		ZoneScopedN("Adding Deep_Grass Rules");
 		//Grass can't have Sand or Water anywhere
-		WFCRule_Add_CellIsNot(DEEP_GRASS, SAND, 8, IgnoreAllAround);
-		WFCRule_Add_CellIsNot(DEEP_GRASS, WATER, 8, IgnoreAllAround);
-		WFCRule_Add_CellIsNot(DEEP_GRASS, DEEP_WATER, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(DEEP_GRASS, SAND, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_GRASS, WATER, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_GRASS, DEEP_WATER, IgnoreAllAround, 8);
 	}
 	{
 		ZoneScopedN("Adding Grass Rules");
 		//Grass cant have Sand West
-		WFCRule_Add_CellIsNot(GRASS, SAND, 3, IgnoreWest);
+		WFCRule_Add_CellIsNot(GRASS, SAND, IgnoreWest, 3);
 		//Grass can't have Water anywhere
-		WFCRule_Add_CellIsNot(GRASS, WATER, 8, IgnoreAllAround);
-		WFCRule_Add_CellIsNot(GRASS, DEEP_WATER, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(GRASS, WATER, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(GRASS, DEEP_WATER, IgnoreAllAround, 8);
 	}
 	{
 		ZoneScopedN("Adding Sand Rules");
 		//Sand can't have Water West
-		WFCRule_Add_CellIsNot(SAND, DEEP_WATER, 8, IgnoreAllAround);
-		WFCRule_Add_CellIsNot(SAND, WATER, 3, IgnoreWest);
+		WFCRule_Add_CellIsNot(SAND, DEEP_WATER, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(SAND, WATER, IgnoreWest, 3);
 		//Sand can't have Grass East
-		WFCRule_Add_CellIsNot(SAND, GRASS, 3, IgnoreEast);
-		WFCRule_Add_CellIsNot(SAND, DEEP_GRASS, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(SAND, GRASS, IgnoreEast, 3);
+		WFCRule_Add_CellIsNot(SAND, DEEP_GRASS, IgnoreAllAround, 8);
 
 	}
 	{
 		ZoneScopedN("Adding Water Rules");
 		//Water cant have Sand East
-		WFCRule_Add_CellIsNot(WATER, SAND, 3, IgnoreEast);
+		WFCRule_Add_CellIsNot(WATER, SAND, IgnoreEast, 3);
 		//Water can't have Grass anywhere
-		WFCRule_Add_CellIsNot(WATER, GRASS, 8, IgnoreAllAround);
-		WFCRule_Add_CellIsNot(WATER, DEEP_GRASS, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(WATER, GRASS, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(WATER, DEEP_GRASS, IgnoreAllAround, 8);
 	}
 	{
 		ZoneScopedN("Adding Water Rules");
 		//Water cant have Grass or Sand Anywhere
-		WFCRule_Add_CellIsNot(DEEP_WATER, SAND, 8, IgnoreAllAround);
-		WFCRule_Add_CellIsNot(DEEP_WATER, GRASS, 8, IgnoreAllAround);
-		WFCRule_Add_CellIsNot(DEEP_WATER, DEEP_GRASS, 8, IgnoreAllAround);
+		WFCRule_Add_CellIsNot(DEEP_WATER, SAND, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_WATER, GRASS, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_WATER, DEEP_GRASS, IgnoreAllAround, 8);
 	}
 
 	{
@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
 			}
 			{
 				ZoneScopedN("Manager Create");
-				manager = IWFCManager_Create(collapse, grid, 2);
+				manager = IWFCManager_Create(collapse, grid, 12);
 			}
 		}
 
