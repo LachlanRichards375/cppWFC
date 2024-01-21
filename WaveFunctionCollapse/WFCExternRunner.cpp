@@ -9,9 +9,9 @@ extern "C"  {
 		return new IWFCCollapseMethod();
 	}
 
-	_declspec(dllexport) WFCPosition * WFCPosition_Create2D(unsigned int x, unsigned int y)									{ return new WFCPosition(x, y); }
-	_declspec(dllexport) WFCPosition * WFCPosition_Create3D(unsigned int x, unsigned int y, unsigned int z)					{ return new WFCPosition(x, y, z); }
-	_declspec(dllexport) WFCPosition * WFCPosition_Create4D(unsigned int x, unsigned int y, unsigned int z, unsigned int w)	{ return new WFCPosition(x, y, z, w); }
+	_declspec(dllexport) WFCPosition * WFCPosition_Create2D(int x, int y)				{ return new WFCPosition(x, y); }
+	_declspec(dllexport) WFCPosition * WFCPosition_Create3D(int x, int y, int z)		{ return new WFCPosition(x, y, z); }
+	_declspec(dllexport) WFCPosition * WFCPosition_Create4D(int x, int y, int z, int w)	{ return new WFCPosition(x, y, z, w); }
 	
 	_declspec(dllexport) Grid2D* Grid2D_Create(WFCPosition* position) {
 		return new Grid2D(*position);

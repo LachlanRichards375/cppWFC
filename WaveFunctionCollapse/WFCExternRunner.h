@@ -11,9 +11,9 @@ extern "C" {
 
 	_declspec(dllexport) Grid2D * Grid2D_Create(WFCPosition * position);
 
-	_declspec(dllexport) WFCPosition * WFCPosition_Create2D(unsigned int x, unsigned int y);
-	_declspec(dllexport) WFCPosition * WFCPosition_Create3D(unsigned int x, unsigned int y, unsigned int z);
-	_declspec(dllexport) WFCPosition * WFCPosition_Create4D(unsigned int x, unsigned int y, unsigned int z, unsigned int w);
+	_declspec(dllexport) WFCPosition * WFCPosition_Create2D(int x, int y);
+	_declspec(dllexport) WFCPosition * WFCPosition_Create3D(int x, int y, int z);
+	_declspec(dllexport) WFCPosition * WFCPosition_Create4D(int x, int y, int z, int w);
 
 	_declspec(dllexport) IWFCManager * IWFCManager_Create(IWFCCollapseMethod * collapseMethod, IWFCGrid * grid, short threadCount);
 
