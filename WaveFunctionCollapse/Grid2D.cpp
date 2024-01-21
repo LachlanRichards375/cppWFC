@@ -145,6 +145,7 @@ void Grid2D::Reset() {
 
 std::vector<unsigned long long > exporter;
 std::vector<unsigned long long>* Grid2D::Export() {
+	exporter.clear();
 	for (auto& row : grid) {
 		for (auto& column : row) {
 			exporter.push_back(column->CollapsedTile);
