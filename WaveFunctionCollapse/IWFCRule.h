@@ -14,6 +14,7 @@ public:
 	unsigned long long const GetGoal();
 	unsigned long long const GetTile();
 	std::vector< WFCPosition*> GetPositions();
+	virtual std::string to_string() = 0;
 };
 
 /*

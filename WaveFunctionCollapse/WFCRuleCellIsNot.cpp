@@ -18,3 +18,12 @@ bool WFCRuleCellIsNot::Test(WFCCellUpdate update, const WFCPosition* currentCell
     }
     return true;
 }
+
+std::string WFCRuleCellIsNot::to_string()
+{
+    std::string returner{ std::to_string(tile) + " Is Not " + std::to_string(goal) };
+    for (auto& localPos : localPositionsWeCareAbout) {
+        returner += ", " + localPos->to_string();
+    }
+    return returner + "\n";
+}
