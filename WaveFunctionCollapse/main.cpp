@@ -15,50 +15,56 @@ void createRules() {
 	//1 Grass
 	//2 Sand
 	//4 Water
-	WFCPosition IgnoreWest[]{ new WFCPosition(-1,0), new WFCPosition(-1,1), new WFCPosition(-1,-1) };
-	WFCPosition IgnoreEast[]{ new WFCPosition(1,0), new WFCPosition(1,1), new WFCPosition(1,-1) };
-	WFCPosition IgnoreAllAround[]{  new WFCPosition(-1,1), new WFCPosition(0,1), new WFCPosition(1,1), 
-									new WFCPosition(-1,0),	/*	   TILE		*/	 new WFCPosition(1,0),
-									new WFCPosition(-1,-1),new WFCPosition(0,-1),new WFCPosition(1,-1), };
+	//WFCPosition IgnoreWest[]{ new WFCPosition(-1,0), new WFCPosition(-1,1), new WFCPosition(-1,-1) };
+	//WFCPosition IgnoreEast[]{ new WFCPosition(1,0), new WFCPosition(1,1), new WFCPosition(1,-1) };
+	//WFCPosition IgnoreAllAround[]{  new WFCPosition(-1,1), new WFCPosition(0,1), new WFCPosition(1,1), 
+	//								new WFCPosition(-1,0),	/*	   TILE		*/	 new WFCPosition(1,0),
+	//								new WFCPosition(-1,-1),new WFCPosition(0,-1),new WFCPosition(1,-1), };
+
+	int IgnoreWest[] = { -1, 0	,-1, 1	,-1,-1 };
+	int IgnoreEast[] = {  1, 0	, 1, 1	, 1,-1 };
+	int IgnoreAllAround[] = { -1,1	,0,1	,1,1
+							,-1,0			,1,0
+							,-1,-1	,0,-1	,1,-1 };
 	{
 		ZoneScopedN("Adding Deep_Grass Rules");
 		//Grass can't have Sand or Water anywhere
-		WFCRule_Add_CellIsNot(DEEP_GRASS, SAND, IgnoreAllAround, 8);
-		WFCRule_Add_CellIsNot(DEEP_GRASS, WATER, IgnoreAllAround, 8);
-		WFCRule_Add_CellIsNot(DEEP_GRASS, DEEP_WATER, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_GRASS, SAND, 2, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_GRASS, WATER, 2, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_GRASS, DEEP_WATER, 2, IgnoreAllAround, 8);
 	}
 	{
 		ZoneScopedN("Adding Grass Rules");
 		//Grass cant have Sand West
-		WFCRule_Add_CellIsNot(GRASS, SAND, IgnoreWest, 3);
+		WFCRule_Add_CellIsNot(GRASS, SAND, 2, IgnoreWest, 3);
 		//Grass can't have Water anywhere
-		WFCRule_Add_CellIsNot(GRASS, WATER, IgnoreAllAround, 8);
-		WFCRule_Add_CellIsNot(GRASS, DEEP_WATER, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(GRASS, WATER, 2, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(GRASS, DEEP_WATER, 2, IgnoreAllAround, 8);
 	}
 	{
 		ZoneScopedN("Adding Sand Rules");
 		//Sand can't have Water West
-		WFCRule_Add_CellIsNot(SAND, DEEP_WATER, IgnoreAllAround, 8);
-		WFCRule_Add_CellIsNot(SAND, WATER, IgnoreWest, 3);
+		WFCRule_Add_CellIsNot(SAND, DEEP_WATER, 2, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(SAND, WATER, 2, IgnoreWest, 3);
 		//Sand can't have Grass East
-		WFCRule_Add_CellIsNot(SAND, GRASS, IgnoreEast, 3);
-		WFCRule_Add_CellIsNot(SAND, DEEP_GRASS, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(SAND, GRASS, 2, IgnoreEast, 3);
+		WFCRule_Add_CellIsNot(SAND, DEEP_GRASS, 2, IgnoreAllAround, 8);
 
 	}
 	{
 		ZoneScopedN("Adding Water Rules");
 		//Water cant have Sand East
-		WFCRule_Add_CellIsNot(WATER, SAND, IgnoreEast, 3);
+		WFCRule_Add_CellIsNot(WATER, SAND, 2, IgnoreEast, 3);
 		//Water can't have Grass anywhere
-		WFCRule_Add_CellIsNot(WATER, GRASS, IgnoreAllAround, 8);
-		WFCRule_Add_CellIsNot(WATER, DEEP_GRASS, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(WATER, GRASS, 2, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(WATER, DEEP_GRASS, 2, IgnoreAllAround, 8);
 	}
 	{
 		ZoneScopedN("Adding Water Rules");
 		//Water cant have Grass or Sand Anywhere
-		WFCRule_Add_CellIsNot(DEEP_WATER, SAND, IgnoreAllAround, 8);
-		WFCRule_Add_CellIsNot(DEEP_WATER, GRASS, IgnoreAllAround, 8);
-		WFCRule_Add_CellIsNot(DEEP_WATER, DEEP_GRASS, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_WATER, SAND, 2, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_WATER, GRASS, 2, IgnoreAllAround, 8);
+		WFCRule_Add_CellIsNot(DEEP_WATER, DEEP_GRASS, 2, IgnoreAllAround, 8);
 	}
 
 	{
@@ -79,9 +85,9 @@ int main(int argc, char* argv[]) {
 	int messageNo = 0;
 	auto t1 = std::chrono::high_resolution_clock::now();
 
+	WFCPosition* size = new WFCPosition(100, 100);
 	{
 		ZoneScopedN("Generate Result");
-		WFCPosition* size = new WFCPosition(10, 10);
 		IWFCCollapseMethod* collapse;
 		IWFCGrid* grid;
 
@@ -133,7 +139,9 @@ int main(int argc, char* argv[]) {
 
 		std::cout << ms_double.count() << "ms" << std::endl;
 		std::cout << "Remaining cells: " << std::to_string(manager->RemainingCellsToCollapse()) << "\n";
-		manager->PrintGrid();
+		if (size->x < 50 || size->y < 50) {
+			manager->PrintGrid();
+		}
 	}
 	delete manager;
 	return 0;
