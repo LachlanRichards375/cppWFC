@@ -10,29 +10,19 @@ void ThreadPool::Start(uint32_t MaxThreadCount) {
 
 void ThreadPool::ThreadLoop() {
     while (true) {
-        ZoneScopedN("ThreadLoop");
         std::function<void()> job;
         {
             std::unique_lock<std::mutex> lock(queue_mutex);
-            {
-                ZoneScopedN("Waiting For Lock");
                 mutex_condition.wait(lock, [this] {
                     return !jobs.empty() || should_terminate;
-                    });
-            }
-            {
-                ZoneScopedN("Lock Aquired");
+                });
                 if (should_terminate) {
                     return;
                 }
                 job = jobs.front();
                 jobs.pop();
-            }
         }
-        {
-            ZoneScopedN("Performing Job");
-            job();
-        }
+        job();
     }
 }
 
