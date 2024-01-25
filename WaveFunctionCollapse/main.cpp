@@ -80,12 +80,11 @@ void createRules() {
 	}
 }
 
-int main(int argc, char* argv[]) {
+void iteration(WFCPosition* size, bool print) {
 	IWFCManager* manager;
 	int messageNo = 0;
 	auto t1 = std::chrono::high_resolution_clock::now();
 
-	WFCPosition* size = new WFCPosition(100, 100);
 	{
 		ZoneScopedN("Generate Result");
 		IWFCCollapseMethod* collapse;
@@ -116,7 +115,6 @@ int main(int argc, char* argv[]) {
 			messageNo = IWFCManager_Collapse(manager, SAND, new WFCPosition(size->x / 2, size->y / 2));
 			if (messageNo != 0) {
 				std::cout << "Error (" << messageNo << ") collapsing first cell to Sand. Program Aborting." << std::endl;
-				return 0;
 			}
 		}
 
@@ -129,7 +127,7 @@ int main(int argc, char* argv[]) {
 		}
 
 	}
-	{
+	if(print){
 		ZoneScopedN("Printing result");
 
 		auto t2 = std::chrono::high_resolution_clock::now();
@@ -144,5 +142,27 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	delete manager;
+}
+
+void averageResults(int iterationCount, WFCPosition* size) {
+
+	auto t1 = std::chrono::high_resolution_clock::now();
+
+	for (int i = 0; i < iterationCount; ++i) {
+		iteration(size, false);
+	}
+
+	auto t2 = std::chrono::high_resolution_clock::now();
+
+	/* Getting number of milliseconds as a double. */
+	std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+
+	std::cout << ms_double.count() << "ms, avg: " << std::to_string(ms_double.count() / iterationCount) << "ms" << std::endl;
+}
+
+int main(int argc, char* argv[]) {
+	WFCPosition* size = new WFCPosition{ 50,50 };
+	//iteration(size, true);
+	averageResults(10, size);
 	return 0;
 }
