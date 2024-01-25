@@ -79,8 +79,9 @@ void createRules() {
 		std::cout << output << std::endl;
 	}
 }
-
+const char* const tracy_newFrame = "iteration";
 void iteration(WFCPosition* size, bool print) {
+	FrameMarkStart(tracy_newFrame);
 	IWFCManager* manager;
 	int messageNo = 0;
 	auto t1 = std::chrono::high_resolution_clock::now();
@@ -142,6 +143,7 @@ void iteration(WFCPosition* size, bool print) {
 		}
 	}
 	delete manager;
+	FrameMarkEnd(tracy_newFrame);
 }
 
 void averageResults(int iterationCount, WFCPosition* size) {
