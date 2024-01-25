@@ -108,7 +108,6 @@ void domainGrid(IWFCGrid* grid, WFCPosition expectedSize) {
 
 void IWFCManager::Generate()
 {
-	std::cout << "In Generate, cells to collapse:" << _grid->RemainingCellsToCollapse() << std::endl;
 	#ifdef _DEBUG
 		domainGrid(_grid, _grid->GetSize());
 		std::cout << std::endl << "---------------- DIVIDER ----------------" << std::endl;

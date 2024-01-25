@@ -55,9 +55,6 @@ extern "C"  {
 		}
 		for (int i = 0; i < length; i++) {
 			arrayToFill[i] = (*vector)[i];
-			std::cout << "Inserting " << std::to_string((*vector)[i]) << "(";
-			printf("%llu", (*vector)[i]);
-			std::cout << ") to " << std::to_string(i) << "\n";
 		}
 		return true;
 	}
@@ -65,9 +62,6 @@ extern "C"  {
 	_declspec(dllexport) void WFCRule_Add_CellIsNot(unsigned long long tile, unsigned long long goal, int gridDimensions, int* localTargets, unsigned int localTargetCount)
 	{
 		std::vector<WFCPosition*>localTargetsVec {};
-		//Need to do a check for what grid we're using, 2d, 3d, 4d
-		//Should be able to multiply by number grid dimensions to get index value
-		std::cout << "\ndimenstion: " << std::to_string(gridDimensions) << " localTargetCount: " << std::to_string(localTargetCount);
 		for (unsigned int i = 0; i < localTargetCount; ++i) {
 			//Create new copy so we own the positions
 			switch (gridDimensions)
