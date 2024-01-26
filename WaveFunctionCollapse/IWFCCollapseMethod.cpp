@@ -5,6 +5,7 @@
 #include "WFCCell.h"
 #include "../tracy/public/tracy/Tracy.hpp"
 #include <iostream>
+#include <unordered_set>
 
 IWFCCollapseMethod::IWFCCollapseMethod(){
 	manager = nullptr;
@@ -35,7 +36,7 @@ void IWFCCollapseMethod::ThreadWork(WFCCellUpdate* cellUpdate) {
 
 	const WFCPosition* cellUpdatePosition{ (*cellUpdate).updatedCell };
 
-	std::vector<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
+	std::unordered_set<WFCCell*> toAlert = manager->GetAlertees(cellUpdatePosition);
 	std::vector<int> dirtyIndex{};
 	std::vector<unsigned long long> dirtyDomain{};
 	for (auto& cell : toAlert)

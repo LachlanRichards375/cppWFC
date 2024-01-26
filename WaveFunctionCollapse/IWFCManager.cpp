@@ -75,7 +75,7 @@ bool IWFCManager::IsThreadPoolBusy()
 	return _threadPool.busy();
 }
 
-std::vector<WFCCell*> IWFCManager::GetAlertees(const WFCPosition* position)
+std::unordered_set<WFCCell*> IWFCManager::GetAlertees(const WFCPosition* position)
 {
 	return _grid->GetAlertees(position);
 }

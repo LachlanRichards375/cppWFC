@@ -3,7 +3,7 @@
 #include <vector>
 #include "WFCPosition.h"
 #include <queue>
-#include <set>
+#include <unordered_set>
 #include "SortedVector.h"
 class WFCCell;
 class IWFCManager;
@@ -31,7 +31,7 @@ public:
 	//Abstract methods
 	virtual WFCPosition& GetSize() const; 
 	virtual WFCCell* GetCell(WFCPosition* position) = 0;
-	virtual std::vector<WFCCell*> GetAlertees(const WFCPosition* positionOfInterest) = 0;
+	virtual std::unordered_set<WFCCell*> GetAlertees(const WFCPosition* positionOfInterest) = 0;
 	virtual void RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister) = 0;
 	virtual void DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister) = 0;
 	virtual void PrintGrid() = 0;

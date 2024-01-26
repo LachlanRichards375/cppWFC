@@ -3,6 +3,7 @@
 #include "WFCposition.h"
 #include <vector>
 #include "ThreadPool.h"
+#include <unordered_set>
 struct WFCCellUpdate;
 class IWFCGrid;
 class IWFCCollapseMethod;
@@ -33,7 +34,7 @@ public:
 	void QueueJobToThreadPool(const std::function<void()>& job);
 	bool IsThreadPoolBusy();
 	void RegisterForAlert(WFCPosition* position, WFCCell* alertee);
-	std::vector<WFCCell*> GetAlertees(const WFCPosition* position);
+	std::unordered_set<WFCCell*> GetAlertees(const WFCPosition* position);
 	void Generate();
 	void MarkDirty(unsigned long long oldDomainCount, int index);
 	int RemainingCellsToCollapse();

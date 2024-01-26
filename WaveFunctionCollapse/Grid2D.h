@@ -1,6 +1,7 @@
 #pragma once
 #include "IWFCGrid.h"
 #include <memory>
+#include <unordered_set>
 
 class Grid2D :
     public IWFCGrid
@@ -8,13 +9,13 @@ class Grid2D :
 protected:
     std::vector<std::vector<WFCCell*>> grid;
     //2d vector of a list of shared pointers
-    std::vector<std::vector<std::vector<WFCCell*>>> cellsToUpdate;
+    std::vector<std::vector<std::unordered_set<WFCCell*>>> cellsToUpdate;
 public:
     Grid2D(WFCPosition& newSize);
     virtual void Initialize(IWFCManager* manager) override;
 
     virtual WFCCell* GetCell(WFCPosition* position) override;
-    virtual std::vector<WFCCell*> GetAlertees(const WFCPosition* positionOfInterest) override;
+    virtual std::unordered_set<WFCCell*> GetAlertees(const WFCPosition* positionOfInterest) override;
     virtual void RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister) override;
     virtual void DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister) override;
     virtual void PrintGrid() override;

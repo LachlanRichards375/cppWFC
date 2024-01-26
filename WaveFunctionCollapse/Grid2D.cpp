@@ -22,7 +22,7 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 		//Set grid size
 		grid.resize(size.x, std::vector<WFCCell*>(size.y));
 		//Initialize cells to update list
-		cellsToUpdate.resize(size.x, std::vector<std::vector<WFCCell*>>(size.y));
+		cellsToUpdate.resize(size.x, std::vector<std::unordered_set<WFCCell*>>(size.y));
 	}
 
 	{
@@ -56,24 +56,16 @@ inline WFCCell* Grid2D::GetCell(WFCPosition* position) {
 	return grid[position->x][position->y];
 }
 
-inline std::vector<WFCCell*> Grid2D::GetAlertees(const WFCPosition* positionOfInterest) {
+inline std::unordered_set<WFCCell*> Grid2D::GetAlertees(const WFCPosition* positionOfInterest) {
 	return cellsToUpdate[positionOfInterest->x][positionOfInterest->y];
 }
 
 void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister)
 {
+	ZoneScopedN("RegisterForCellUpdates");
 	if (positionOfInterest->x >= 0 && positionOfInterest->x < size.x) {
 		if (positionOfInterest->y >= 0 && positionOfInterest->y < size.y) {
-			std::vector<WFCCell*>::iterator it = cellsToUpdate[positionOfInterest->x][positionOfInterest->y].begin();
-			std::vector<WFCCell*>::iterator endIt = cellsToUpdate[positionOfInterest->x][positionOfInterest->y].end();
-			while (it != endIt) {
-				if ((*it) == toRegister) {
-					//If we already have registered an interest in this cell
-					return;
-				}
-				++it;
-			}
-			cellsToUpdate[positionOfInterest->x][positionOfInterest->y].push_back(toRegister);
+			cellsToUpdate[positionOfInterest->x][positionOfInterest->y].insert(toRegister);
 		}
 	}
 }
@@ -82,15 +74,7 @@ void Grid2D::DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* 
 {
 	if (positionOfInterest->x > 0 && positionOfInterest->x <= size.x) {
 		if (positionOfInterest->y > 0 && positionOfInterest->y <= size.y) {
-			std::vector<WFCCell*> removeFrom{ cellsToUpdate[positionOfInterest->x][positionOfInterest->y] };
-			std::vector<WFCCell*>::iterator it = removeFrom.begin();
-			int index = 0;
-			while (index < removeFrom.size()) {
-				if (removeFrom[index] == toDeregister) {
-					break;
-				}
-			}
-			removeFrom.erase(it + index);
+			cellsToUpdate[positionOfInterest->x][positionOfInterest->y].erase(toDeregister);
 		}
 	}
 }
@@ -125,7 +109,7 @@ void Grid2D::Reset() {
 	grid.resize(size.x, std::vector<WFCCell*>(size.y));
 	//clear cells to update list
 	cellsToUpdate.clear();
-	cellsToUpdate.resize(size.x, std::vector<std::vector<WFCCell*>>(size.y));
+	cellsToUpdate.resize(size.x, std::vector<std::unordered_set<WFCCell*>>(size.y));
 	
 	entropyQueue.clear();
 
