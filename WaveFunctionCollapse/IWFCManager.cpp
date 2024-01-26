@@ -7,7 +7,7 @@
 #include "../tracy/public/tracy/Tracy.hpp"
 
 
-IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount) : _collapseMethod(collapse), _grid(grid), _threadPool(ThreadPool())
+IWFCManager::IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount) : _collapseMethod(collapse), _grid(grid), _threadPool(ThreadPool()), NumThreads(threadCount)
 {
 	{
 		ZoneScopedN("Starting Thread pool");

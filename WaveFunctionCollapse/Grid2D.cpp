@@ -23,6 +23,7 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 		grid.resize(size.x, std::vector<WFCCell*>(size.y));
 		//Initialize cells to update list
 		cellsToUpdate.resize(size.x, std::vector<std::unordered_set<WFCCell*>>(size.y));
+		threadCellsToUpdateBufferCopy = cellsToUpdate;
 	}
 
 	{
@@ -34,6 +35,12 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 
 	{
 		ZoneScopedN("Filling the cells");
+		//Start Buffer threads
+		for (int i = 0; i < manager->NumThreads; ++i) {
+			manager->QueueJobToThreadPool([this] {RegisterForCellUpdateBuffer(); });
+		}
+		//Setup each cell
+		numInBuffer = 0;
 		for (int x = 0; x < size.x; ++x) {
 			for (int y = 0; y < size.y; ++y) {
 				WFCCell* cell;
@@ -49,6 +56,11 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 				entropyQueue.insert(cell);
 			}
 		}
+		//Wait for buffer to fill then release them
+		waitForBufferToFill();
+		flushBuffer = true;
+		c.notify_all(); //Wake up threads there's monsters in the hallways
+
 	}
 }
 
@@ -60,23 +72,87 @@ inline std::unordered_set<WFCCell*> Grid2D::GetAlertees(const WFCPosition* posit
 	return cellsToUpdate[positionOfInterest->x][positionOfInterest->y];
 }
 
-void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister)
+#pragma optimize("", off)
+void Grid2D::waitForBufferToFill()
 {
-	ZoneScopedN("RegisterForCellUpdates");
-	if (positionOfInterest->x >= 0 && positionOfInterest->x < size.x) {
-		if (positionOfInterest->y >= 0 && positionOfInterest->y < size.y) {
-			cellsToUpdate[positionOfInterest->x][positionOfInterest->y].insert(toRegister);
+	ZoneScopedN("Filling the cells");
+	while (numInBuffer < (size.x * size.y)-1) {
+
+	}
+}
+#pragma optimize("", on)
+
+//This is thread loop
+//RegisterForCellUpdates will notify when they have added a cell into the ThreadSafeQueue
+//Dequeue and add to the buffer
+//When FlushBuffer() is set to true we continue trying to add our elements to the regular queue with a lock.
+void Grid2D::RegisterForCellUpdateBuffer() {
+	//std::vector<std::vector<std::unordered_set<WFCCell*>>> buffer = {threadCellsToUpdateBufferCopy};
+	std::vector<BufferNotification> bufferNotifications;
+	while (!flushBuffer) {
+		//Wait notification
+		//Dequeue and add to buffer
+
+		std::unique_lock<std::mutex> lock(m);
+
+		while (toBeAddedToBuffer.getCount() <= 0)
+		{
+			// release lock as long as the wait and reaquire it afterwards.
+			c.wait(lock);
 		}
+
+		if (flushBuffer) {
+			break;
+		}
+		/*
+		auto bN = toBeAddedToBuffer.dequeue();
+		buffer[bN.positionOfInterest->x][bN.positionOfInterest->y].insert(bN.toRegister);
+		*/
+
+		bufferNotifications.push_back(toBeAddedToBuffer.dequeue());
+		++numInBuffer;
+	}
+	//Lock mutex
+	//Add our buffer to main
+	//Release mutex
+
+	std::lock_guard<std::mutex> lock(m);
+	for (auto& current : bufferNotifications) {
+		cellsToUpdate[current.positionOfInterest->x][current.positionOfInterest->y].insert(current.toRegister);
 	}
 }
 
-void Grid2D::DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister)
+//Register on the local thread
+void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister)
 {
-	if (positionOfInterest->x > 0 && positionOfInterest->x <= size.x) {
-		if (positionOfInterest->y > 0 && positionOfInterest->y <= size.y) {
-			cellsToUpdate[positionOfInterest->x][positionOfInterest->y].erase(toDeregister);
+	ZoneScopedN("RegisterForCellUpdates");
+	if (positionOfInterest->x < 0 || positionOfInterest->x >= size.x) {
+		if (positionOfInterest->y < 0 || positionOfInterest->y >= size.y) {
+			return;
 		}
 	}
+
+	if (flushBuffer) {
+		cellsToUpdate[positionOfInterest->x][positionOfInterest->y].insert(toRegister);
+	}
+	else {
+		BufferNotification bN = { positionOfInterest, toRegister };
+		toBeAddedToBuffer.enqueue(bN);
+		c.notify_one();
+	}
+}
+
+//Register on the main thread
+
+void Grid2D::DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister)
+{
+	if (positionOfInterest->x < 0 || positionOfInterest->x >= size.x) {
+		if (positionOfInterest->y < 0 || positionOfInterest->y >= size.y) {
+			return;
+		}
+	}
+
+	cellsToUpdate[positionOfInterest->x][positionOfInterest->y].erase(toDeregister);
 }
 
 void Grid2D::PrintGrid()

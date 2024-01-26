@@ -2,16 +2,39 @@
 #include "IWFCGrid.h"
 #include <memory>
 #include <unordered_set>
+#include <mutex>
+#include <condition_variable>
+#include "ThreadSafeQueue.h"
+
+struct BufferNotification {
+public:
+    WFCPosition* positionOfInterest;
+    WFCCell* toRegister;
+};
 
 class Grid2D :
     public IWFCGrid
 {
 protected:
     std::vector<std::vector<WFCCell*>> grid;
-    //2d vector of a list of shared pointers
+    //2d vector of a list of pointers
     std::vector<std::vector<std::unordered_set<WFCCell*>>> cellsToUpdate;
+
+    //Threaded Variables
+
+    mutable std::mutex m;
+    std::condition_variable c;
+    bool flushBuffer;
+    SafeQueue<BufferNotification> toBeAddedToBuffer;
+    int numInBuffer;
+    void waitForBufferToFill();
+    std::vector<std::vector<std::unordered_set<WFCCell*>>> threadCellsToUpdateBufferCopy;
+
 public:
     Grid2D(WFCPosition& newSize);
+
+    void RegisterForCellUpdateBuffer();
+
     virtual void Initialize(IWFCManager* manager) override;
 
     virtual WFCCell* GetCell(WFCPosition* position) override;

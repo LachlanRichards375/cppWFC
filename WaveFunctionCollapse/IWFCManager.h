@@ -23,6 +23,8 @@ public:
 	IWFCManager(IWFCCollapseMethod* collapse, IWFCGrid* grid, short threadCount);
 	~IWFCManager();
 
+	const short NumThreads;
+
 	void PrintGrid();
 
 	void Reset();
