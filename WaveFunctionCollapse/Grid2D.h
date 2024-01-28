@@ -24,9 +24,10 @@ protected:
     std::condition_variable c;
     bool initializing;
     SafeQueue<WFCCell*> cellsToSetup;
-    std::map<std::thread::id, std::vector<BufferNotification>*> bufferMap;
+    std::map<std::thread::id, int> bufferIndexMap;
+    std::vector<std::vector<BufferNotification>> buffers;
     volatile int ruleSetupsFinished;
-    void RuleSetupJob(std::vector<BufferNotification>* localBuffer);
+    void RuleSetupJob(int bufferIndex);
     void WaitForRulesToSetup();
 public:
     Grid2D(WFCPosition& newSize);

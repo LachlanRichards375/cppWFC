@@ -52,18 +52,23 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 			}
 		}
 		{
-			ZoneScopedN("Flushing Buffers");
-			std::vector<std::vector<BufferNotification>> buffers;
+			ZoneScopedN("Queueing jobs");
 			//Start threads to deal with the rules
 			for (int i = 0; i < manager->NumThreads; i++) {
 				buffers.push_back(std::vector<BufferNotification>());
-				auto localBuffer = &buffers[i];
-				manager->QueueJobToThreadPool([this,localBuffer] {RuleSetupJob(localBuffer); });
 			}
-
+			for (int i = 0; i < manager->NumThreads; i++) {
+				int localIndex = i;
+				manager->QueueJobToThreadPool([this, localIndex] {RuleSetupJob(localIndex); });
+			}
+		}
+		{
+			ZoneScopedN("Waiting for jobs to finish");
 			//Wait for rules to setup
 			WaitForRulesToSetup();
-
+		}
+		{
+			ZoneScopedN("Flushing buffers");
 			//flush buffer
 			for (auto buffer : buffers) {
 				for (BufferNotification bufferNotification : buffer) {
@@ -75,12 +80,12 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 	}
 }
 
-void Grid2D::RuleSetupJob(std::vector<BufferNotification>* localBuffer) {
+void Grid2D::RuleSetupJob(int bufferIndex) {
 	ZoneScopedN("RuleSetupThread");
 	{
 		//Commender the JobCountMutex to insert buffers
-		std::unique_lock<std::mutex> lock(job_count_mutex);
-		bufferMap.insert({ std::this_thread::get_id(), localBuffer});
+		std::unique_lock<std::mutex> BufferIndexMapInsertion(job_count_mutex);
+		bufferIndexMap.insert({ std::this_thread::get_id(),bufferIndex });
 	}
 	while (cellsToSetup.getCount() > 0) {
 		ZoneScopedN("Cell.Setup()");
@@ -90,7 +95,7 @@ void Grid2D::RuleSetupJob(std::vector<BufferNotification>* localBuffer) {
 		WFCCell* cell = cellsToSetup.dequeue();
 		cell->RuleSetup();
 		{
-			std::unique_lock<std::mutex> lock(job_count_mutex);
+			std::unique_lock<std::mutex> NumRuleSetupFinishedLock(job_count_mutex);
 			--ruleSetupsFinished;
 		}
 	}
@@ -116,7 +121,12 @@ void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* to
 
 	if (initializing) {
 		//if initializing we have the buffer threads active
-		bufferMap[std::this_thread::get_id()]->push_back({positionOfInterest, toRegister});
+		int index = bufferIndexMap[std::this_thread::get_id()];
+		//std::cout << "\nwriting into buffer index: " << index;
+		BufferNotification toPushBack ;
+		WFCPosition* test{ positionOfInterest };
+		WFCCell* cellTest{ toRegister };
+		buffers[index].push_back({test, cellTest});
 	}
 	else {
 		cellsToUpdate[positionOfInterest->x][positionOfInterest->y].insert(toRegister);
