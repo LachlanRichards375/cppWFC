@@ -27,7 +27,8 @@ protected:
     bool flushBuffer;
     SafeQueue<BufferNotification> toBeAddedToBuffer;
     int numInBuffer;
-    void waitForBufferToFill();
+    int buffersFlushed;
+    void waitForBufferToFill(int* counter, int* toWaitFor);
     std::vector<std::vector<std::unordered_set<WFCCell*>>> threadCellsToUpdateBufferCopy;
 
 public:

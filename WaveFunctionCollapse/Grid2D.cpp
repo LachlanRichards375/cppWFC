@@ -35,6 +35,7 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 
 	{
 		ZoneScopedN("Filling the cells");
+		flushBuffer = false;
 		//Start Buffer threads
 		for (int i = 0; i < manager->NumThreads; ++i) {
 			manager->QueueJobToThreadPool([this] {RegisterForCellUpdateBuffer(); });
@@ -57,10 +58,16 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 			}
 		}
 		//Wait for buffer to fill then release them
-		waitForBufferToFill();
+		//waitForBufferToFill(&numInBuffer, ());
+		while (toBeAddedToBuffer.getCount() > 0) {
+
+		}
 		flushBuffer = true;
+		buffersFlushed = 0;
 		c.notify_all(); //Wake up threads there's monsters in the hallways
 
+		waitForBufferToFill(&buffersFlushed, new int{ manager->NumThreads });
+		//std::cout << "\nall buffers Flushed";
 	}
 }
 
@@ -73,10 +80,11 @@ inline std::unordered_set<WFCCell*> Grid2D::GetAlertees(const WFCPosition* posit
 }
 
 #pragma optimize("", off)
-void Grid2D::waitForBufferToFill()
+void Grid2D::waitForBufferToFill(int* counter, int* toWaitFor)
 {
-	ZoneScopedN("Filling the cells");
-	while (numInBuffer < (size.x * size.y)-1) {
+	ZoneScopedN("Waiting for threads to flush");
+	while (*counter < *toWaitFor) {
+	//while (numInBuffer < (size.x * size.y)-1) {
 
 	}
 }
@@ -88,6 +96,7 @@ void Grid2D::waitForBufferToFill()
 //When FlushBuffer() is set to true we continue trying to add our elements to the regular queue with a lock.
 void Grid2D::RegisterForCellUpdateBuffer() {
 	//std::vector<std::vector<std::unordered_set<WFCCell*>>> buffer = {threadCellsToUpdateBufferCopy};
+	ZoneScopedN("Cell Buffer Active");
 	std::vector<BufferNotification> bufferNotifications;
 	while (!flushBuffer) {
 		//Wait notification
@@ -95,30 +104,39 @@ void Grid2D::RegisterForCellUpdateBuffer() {
 
 		std::unique_lock<std::mutex> lock(m);
 
-		while (toBeAddedToBuffer.getCount() <= 0)
-		{
-			// release lock as long as the wait and reaquire it afterwards.
-			c.wait(lock);
-		}
+		// release lock as long as the wait and reaquire it afterwards.
+		c.wait(lock, [this] {
+			return toBeAddedToBuffer.getCount() > 0 || flushBuffer;
+			});
 
 		if (flushBuffer) {
 			break;
 		}
-		/*
-		auto bN = toBeAddedToBuffer.dequeue();
-		buffer[bN.positionOfInterest->x][bN.positionOfInterest->y].insert(bN.toRegister);
-		*/
-
-		bufferNotifications.push_back(toBeAddedToBuffer.dequeue());
-		++numInBuffer;
+		{
+			ZoneScopedN("Adding cell to buffer");
+			/*
+			auto bN = toBeAddedToBuffer.dequeue();
+			buffer[bN.positionOfInterest->x][bN.positionOfInterest->y].insert(bN.toRegister);
+			*/
+			BufferNotification toAdd{ toBeAddedToBuffer.dequeue() };
+			bufferNotifications.push_back(toAdd);
+			//std::cout << "\n dequeing " + toAdd.positionOfInterest->to_string();
+			++numInBuffer;
+		}
 	}
 	//Lock mutex
 	//Add our buffer to main
 	//Release mutex
-
-	std::lock_guard<std::mutex> lock(m);
-	for (auto& current : bufferNotifications) {
-		cellsToUpdate[current.positionOfInterest->x][current.positionOfInterest->y].insert(current.toRegister);
+	{
+		ZoneScopedN("Flushing Buffer");
+		std::lock_guard<std::mutex> lock(m);
+		//std::cout << "\nAdding to main buffer";
+		for (auto& current : bufferNotifications) {
+			cellsToUpdate[current.positionOfInterest->x][current.positionOfInterest->y].insert(current.toRegister);
+			//	std::cout << ", " << current.positionOfInterest->to_string();
+		}
+		//std::cout << "thread out.";
+		buffersFlushed++;
 	}
 }
 
@@ -127,15 +145,17 @@ void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* to
 {
 	ZoneScopedN("RegisterForCellUpdates");
 	if (positionOfInterest->x < 0 || positionOfInterest->x >= size.x) {
-		if (positionOfInterest->y < 0 || positionOfInterest->y >= size.y) {
-			return;
-		}
+		return;
+	}
+	if (positionOfInterest->y < 0 || positionOfInterest->y >= size.y) {
+		return;
 	}
 
 	if (flushBuffer) {
 		cellsToUpdate[positionOfInterest->x][positionOfInterest->y].insert(toRegister);
 	}
 	else {
+		//std::cout << "\nAdding " + positionOfInterest->to_string() + " to the queue.";
 		BufferNotification bN = { positionOfInterest, toRegister };
 		toBeAddedToBuffer.enqueue(bN);
 		c.notify_one();
@@ -147,9 +167,10 @@ void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* to
 void Grid2D::DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister)
 {
 	if (positionOfInterest->x < 0 || positionOfInterest->x >= size.x) {
-		if (positionOfInterest->y < 0 || positionOfInterest->y >= size.y) {
-			return;
-		}
+		return;
+	}
+	if (positionOfInterest->y < 0 || positionOfInterest->y >= size.y) {
+		return;
 	}
 
 	cellsToUpdate[positionOfInterest->x][positionOfInterest->y].erase(toDeregister);
