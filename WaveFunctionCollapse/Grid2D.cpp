@@ -11,12 +11,19 @@ Grid2D::Grid2D(WFCPosition& newSize)
 {
 	
 }
+#pragma optimize("", off)
+void Grid2D::WaitForRulesToSetup() {
+	while (ruleSetupsFinished > 0) {
+
+	}
+}
+#pragma optimize("", on)
 
 void Grid2D::Initialize(IWFCManager* newManager) {
 	ZoneScopedN("Grid2D Initialize");
 	//Set manager
 	IWFCGrid::manager = newManager;
-
+	initializing = true;
 	{
 		ZoneScopedN("Resizing grid and cells to update");
 		//Set grid size
@@ -34,20 +41,57 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 
 	{
 		ZoneScopedN("Filling the cells");
+		ruleSetupsFinished = 0;
 		for (int x = 0; x < size.x; ++x) {
 			for (int y = 0; y < size.y; ++y) {
-				WFCCell* cell;
-				{
-					ZoneScopedN("Create New Cell");
-					cell = new WFCCell(manager, new WFCPosition{ x, y }, WFCRuleManager::GetInitialDomain());
-				}
+				WFCCell* cell = new WFCCell(manager, new WFCPosition{ x, y }, WFCRuleManager::GetInitialDomain());
 				grid[x][y] = cell;
-				{
-					ZoneScopedN("Rule Setup");
-					cell->RuleSetup();
-				}
+				cellsToSetup.enqueue(cell);
 				entropyQueue.insert(cell);
+				++ruleSetupsFinished;
 			}
+		}
+		{
+			ZoneScopedN("Flushing Buffers");
+			std::vector<std::vector<BufferNotification>> buffers;
+			//Start threads to deal with the rules
+			for (int i = 0; i < manager->NumThreads; i++) {
+				buffers.push_back(std::vector<BufferNotification>());
+				auto localBuffer = &buffers[i];
+				manager->QueueJobToThreadPool([this,localBuffer] {RuleSetupJob(localBuffer); });
+			}
+
+			//Wait for rules to setup
+			WaitForRulesToSetup();
+
+			//flush buffer
+			for (auto buffer : buffers) {
+				for (BufferNotification bufferNotification : buffer) {
+					cellsToUpdate[bufferNotification.positionOfInterest->x][bufferNotification.positionOfInterest->y].insert(bufferNotification.toRegister);
+				}
+			}
+		}
+		initializing = false;
+	}
+}
+
+void Grid2D::RuleSetupJob(std::vector<BufferNotification>* localBuffer) {
+	ZoneScopedN("RuleSetupThread");
+	{
+		//Commender the JobCountMutex to insert buffers
+		std::unique_lock<std::mutex> lock(job_count_mutex);
+		bufferMap.insert({ std::this_thread::get_id(), localBuffer});
+	}
+	while (cellsToSetup.getCount() > 0) {
+		ZoneScopedN("Cell.Setup()");
+		if (cellsToSetup.getCount() == 0) {
+			continue;
+		}
+		WFCCell* cell = cellsToSetup.dequeue();
+		cell->RuleSetup();
+		{
+			std::unique_lock<std::mutex> lock(job_count_mutex);
+			--ruleSetupsFinished;
 		}
 	}
 }
@@ -63,20 +107,31 @@ inline std::unordered_set<WFCCell*> Grid2D::GetAlertees(const WFCPosition* posit
 void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toRegister)
 {
 	ZoneScopedN("RegisterForCellUpdates");
-	if (positionOfInterest->x >= 0 && positionOfInterest->x < size.x) {
-		if (positionOfInterest->y >= 0 && positionOfInterest->y < size.y) {
-			cellsToUpdate[positionOfInterest->x][positionOfInterest->y].insert(toRegister);
-		}
+	if (positionOfInterest->x < 0 || positionOfInterest->x >= size.x) {
+		return;
+	}
+	if (positionOfInterest->y < 0 || positionOfInterest->y >= size.y) {
+		return;
+	}
+
+	if (initializing) {
+		//if initializing we have the buffer threads active
+		bufferMap[std::this_thread::get_id()]->push_back({positionOfInterest, toRegister});
+	}
+	else {
+		cellsToUpdate[positionOfInterest->x][positionOfInterest->y].insert(toRegister);
 	}
 }
 
 void Grid2D::DeRegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* toDeregister)
 {
-	if (positionOfInterest->x > 0 && positionOfInterest->x <= size.x) {
-		if (positionOfInterest->y > 0 && positionOfInterest->y <= size.y) {
-			cellsToUpdate[positionOfInterest->x][positionOfInterest->y].erase(toDeregister);
-		}
+	if (positionOfInterest->x < 0 || positionOfInterest->x >= size.x) {
+		return;
 	}
+	if (positionOfInterest->y < 0 || positionOfInterest->y >= size.y) {
+		return;
+	}
+	cellsToUpdate[positionOfInterest->x][positionOfInterest->y].erase(toDeregister);
 }
 
 void Grid2D::PrintGrid()

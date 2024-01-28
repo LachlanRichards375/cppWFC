@@ -2,6 +2,14 @@
 #include "IWFCGrid.h"
 #include <memory>
 #include <unordered_set>
+#include "ThreadSafeQueue.h"
+#include <map>
+
+struct BufferNotification {
+public:
+    WFCPosition* positionOfInterest;
+    WFCCell* toRegister;
+};
 
 class Grid2D :
     public IWFCGrid
@@ -10,6 +18,16 @@ protected:
     std::vector<std::vector<WFCCell*>> grid;
     //2d vector of a list of shared pointers
     std::vector<std::vector<std::unordered_set<WFCCell*>>> cellsToUpdate;
+
+    //Threaded
+    mutable std::mutex job_count_mutex;
+    std::condition_variable c;
+    bool initializing;
+    SafeQueue<WFCCell*> cellsToSetup;
+    std::map<std::thread::id, std::vector<BufferNotification>*> bufferMap;
+    volatile int ruleSetupsFinished;
+    void RuleSetupJob(std::vector<BufferNotification>* localBuffer);
+    void WaitForRulesToSetup();
 public:
     Grid2D(WFCPosition& newSize);
     virtual void Initialize(IWFCManager* manager) override;
