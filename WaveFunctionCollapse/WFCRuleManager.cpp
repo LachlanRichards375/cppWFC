@@ -66,6 +66,7 @@ std::vector<IWFCRule*> WFCRuleManager::GetRulesForTile(unsigned long long tile)
 
 std::vector<IWFCRule*> WFCRuleManager::GetRulesForDomain(unsigned long long domain)
 {
+	ZoneScopedN("WFCRuleManager.GetRulesForDomain()");
 	std::vector<IWFCRule*> rulesToReturn{};
 	for (int i = 0; i < rulesOnTiles.size(); ++i) {
 		if ((static_cast<unsigned long long>(1) << i & domain) > 0) {
