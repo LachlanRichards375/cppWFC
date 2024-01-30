@@ -163,7 +163,7 @@ void averageResults(int iterationCount, WFCPosition* size) {
 }
 
 int main(int argc, char* argv[]) {
-	WFCPosition* size = new WFCPosition{ 5,5 };
+	WFCPosition* size = new WFCPosition{ 50,50 };
 	//iteration(size, true);
 	averageResults(10, size);
 	return 0;

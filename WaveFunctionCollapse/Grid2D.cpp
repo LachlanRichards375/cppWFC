@@ -19,6 +19,7 @@ void Grid2D::WaitForRulesToSetup() {
 }
 #pragma optimize("", on)
 
+int Grid2D::nextUnclaimedBuffer = 0;
 void Grid2D::Initialize(IWFCManager* newManager) {
 	ZoneScopedN("Grid2D Initialize");
 	//Set manager
@@ -57,6 +58,7 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 			for (int i = 0; i < manager->NumThreads; i++) {
 				buffers.push_back(std::vector<BufferNotification>());
 			}
+			Grid2D::nextUnclaimedBuffer = 0;
 			for (int i = 0; i < manager->NumThreads; i++) {
 				int localIndex = i;
 				manager->QueueJobToThreadPool([this, localIndex] {RuleSetupJob(localIndex); });
@@ -67,27 +69,17 @@ void Grid2D::Initialize(IWFCManager* newManager) {
 			//Wait for rules to setup
 			WaitForRulesToSetup();
 		}
-		//{
-		//	ZoneScopedN("Flushing buffers");
-		//	//flush buffer
-		//	for (auto buffer : buffers) {
-		//		ZoneScopedN("Flushing buffer");
-		//		for (BufferNotification bufferNotification : buffer) {
-		//			cellsToUpdate[bufferNotification.positionOfInterest->x][bufferNotification.positionOfInterest->y].insert(bufferNotification.toRegister);
-		//		}
-		//	}
-		//}
 		initializing = false;
 	}
 }
 
 void Grid2D::RuleSetupJob(int bufferIndex) {
 	ZoneScopedN("RuleSetupThread");
-	std::cout << "\nBufferIndex: " << bufferIndex;
 	{
 		//Commender the JobCountMutex to insert into buffer index map
 		std::lock_guard<std::mutex> BufferIndexMapInsertion(job_count_mutex);
-		bufferIndexMap.insert({ std::this_thread::get_id(),bufferIndex });
+		bufferIndexMap.insert({ std::this_thread::get_id(),Grid2D::nextUnclaimedBuffer });
+		++Grid2D::nextUnclaimedBuffer;
 	}
 	int cellsSetUp = 0;
 	while (cellsToSetup.getCount() > 0) {
@@ -100,18 +92,13 @@ void Grid2D::RuleSetupJob(int bufferIndex) {
 			continue;
 		}
 		cell->RuleSetup();
-		//{
-		//	std::unique_lock<std::mutex> NumRuleSetupFinishedLock(job_count_mutex);
-		//	--ruleSetupsFinished;
-		//}
 		cellsSetUp++;
 	}
 	{
 		//Flush buffer to main
 		std::lock_guard<std::mutex> NumRuleSetupFinishedLock(job_count_mutex);
-		for (BufferNotification bufferNotification : buffers[bufferIndex]) {
-			//std::cout << "\n\t|-bLocation" << &bufferNotification << " POI: " << bufferNotification.positionOfInterest->to_string() << " toRegister == " << bufferNotification.toRegister;
-			//std::cout << "\n" << bufferNotification.positionOfInterest->to_string();
+		int index = bufferIndexMap[std::this_thread::get_id()];
+		for (BufferNotification bufferNotification : buffers[index]) {
 			cellsToUpdate[bufferNotification.positionOfInterest->x][bufferNotification.positionOfInterest->y].insert(bufferNotification.toRegister);
 		}
 		ruleSetupsFinished-=cellsSetUp;
@@ -139,10 +126,7 @@ void Grid2D::RegisterForCellUpdates(WFCPosition* positionOfInterest, WFCCell* to
 	if (initializing) {
 		//if initializing we have the buffer threads active
 		int index = bufferIndexMap[std::this_thread::get_id()];
-		//std::cout << "\nwriting into buffer index: " << index;
-		BufferNotification b{ positionOfInterest, toRegister };
-		//std::cout << "\n b*Location" << &b << " POI: " << positionOfInterest->to_string() << " toRegister == " << toRegister;
-		buffers[index].push_back(b);
+		buffers[index].push_back({ positionOfInterest, toRegister });
 	}
 	else {
 		cellsToUpdate[positionOfInterest->x][positionOfInterest->y].insert(toRegister);

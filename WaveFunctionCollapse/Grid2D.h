@@ -27,6 +27,7 @@ protected:
     std::map<std::thread::id, int> bufferIndexMap;
     std::vector<std::vector<BufferNotification>> buffers;
     volatile int ruleSetupsFinished;
+    static int nextUnclaimedBuffer;
     void RuleSetupJob(int bufferIndex);
     void WaitForRulesToSetup();
 public:
