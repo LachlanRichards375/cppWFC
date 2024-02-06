@@ -299,6 +299,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="gif.h" />
     <ClInclude Include="Grid2D.h" />
     <ClInclude Include="IWFCCollapseMethod.h" />
     <ClInclude Include="IWFCGrid.h" />
@@ -319,6 +320,7 @@
   <ItemGroup>
     <ClCompile Include="..\tracy\public\TracyClient.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="gif-h-demo.cpp" />
     <ClCompile Include="Grid2D.cpp" />
     <ClCompile Include="IWFCCollapseMethod.cpp" />
     <ClCompile Include="IWFCGrid.cpp" />
