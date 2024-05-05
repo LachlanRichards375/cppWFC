@@ -64,35 +64,38 @@ WFCCellUpdate* WFCCell::DomainCheck(WFCCellUpdate* update)
     WFCCellUpdate* updateToReturn = new WFCCellUpdate(0, 0, 0, position);
     std::vector<IWFCRule*> rulesList = WFCRuleManager::GetRulesForDomain(domain);
     bool returnUpdate = false;
-    for (auto& rule : rulesList) {
-        if (!rule->Test(*update, position)) {
-            //Remove this tile from the domain
-            updateToReturn->removedFromDomain |= rule->GetTile();
-            returnUpdate = true;
+    {
+        ZoneScopedN("DomainCheck");
+        for (auto& rule : rulesList) {
+            if (!rule->Test(*update, position)) {
+                //Remove this tile from the domain
+                updateToReturn->removedFromDomain |= rule->GetTile();
+                returnUpdate = true;
+            }
         }
     }
-   
+
     if (!returnUpdate) {
         return nullptr;
     }
 
-    //Before we update we need to notify sorted queue we want to mark cell as dirty
-    //manager->MarkDirty(this);
+    {
+        ZoneScopedN("Returning Update");
+        domain &= ~updateToReturn->removedFromDomain;
 
-    domain &= ~updateToReturn->removedFromDomain;
-    
-    
-    #ifdef _DEBUG
-        std::cout << "(" << position->x << "," << position->y << ") has domain " << domain << " after domain check " << std::endl;
-    #endif // DEBUG
 
-    //only include bits not flipped in removed from domain
-    if (domain == 0 && CollapsedTile == 0) {
-        std::cout << "\n\nERROR: Domain = 0 on cell " << position->x << "," << position->y << std::endl;
-       errorID = - 2;
-       return nullptr;
+        #ifdef _DEBUG
+            std::cout << "(" << position->x << "," << position->y << ") has domain " << domain << " after domain check " << std::endl;
+        #endif // DEBUG
+
+        //only include bits not flipped in removed from domain
+        if (domain == 0 && CollapsedTile == 0) {
+            std::cout << "\n\nERROR: Domain = 0 on cell " << position->x << "," << position->y << std::endl;
+            errorID = -2;
+            return nullptr;
+        }
+        return updateToReturn;
     }
-    return updateToReturn;
 }
 
 int WFCCell::GetError()

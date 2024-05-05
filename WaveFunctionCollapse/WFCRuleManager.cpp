@@ -2,9 +2,14 @@
 #include "WFCRuleManager.h"
 #include <math.h>
 #include <iostream>
-//PreAllocate the rulesOnTiles
-//std::vector<std::shared_ptr<IWFCRule>> WFCRuleManager::rulesOnTiles[sizeof(unsigned long long)];
+
 std::vector<std::vector<IWFCRule*>> WFCRuleManager::rulesOnTiles;
+const int RuleBufferLength = 32;
+//RuleNode WFCRuleManager::ruleBuffer[RuleBufferLength];
+std::vector<RuleNode> WFCRuleManager::ruleBuffer{};
+
+std::mutex WFCRuleManager::ruleBufferMutex;
+
 unsigned long long WFCRuleManager::activeDomain{0};
 
 void WFCRuleManager::AddToInitialDomain(unsigned long long domain) {
@@ -66,14 +71,44 @@ std::vector<IWFCRule*> WFCRuleManager::GetRulesForTile(unsigned long long tile)
 
 std::vector<IWFCRule*> WFCRuleManager::GetRulesForDomain(unsigned long long domain)
 {
+	ZoneScopedN("GetRules");
+	int ruleBufferLastIndex = 0;
+	if (ruleBuffer.size() != RuleBufferLength) {
+		ruleBuffer.resize(RuleBufferLength);
+	}
+
+	for (int i = 0; i < RuleBufferLength; i++) {
+		ruleBufferLastIndex = i;
+		if (ruleBuffer[i].tileAppliedTo == 0) {
+			break;
+		}
+
+		if (ruleBuffer[i].tileAppliedTo == domain) {
+			//swap current buffer up one if possible
+			if (i > 0) {
+				std::lock_guard<std::mutex> lock(ruleBufferMutex);
+				std::swap(ruleBuffer[i], ruleBuffer[i - 1]);
+				return ruleBuffer[i].rules;
+			}
+		}
+	}
 	std::vector<IWFCRule*> rulesToReturn{};
+	const unsigned long long One = 1;
 	for (int i = 0; i < rulesOnTiles.size(); ++i) {
-		if ((static_cast<unsigned long long>(1) << i & domain) > 0) {
+		ZoneScopedN("for each rule list");
+		if ((One << i) & domain) {
 			for (IWFCRule* ruleToApply : rulesOnTiles[i]) {
+				ZoneScopedN("pushBack rules To Return");
 				rulesToReturn.push_back(ruleToApply);
 			}
 		}
 	}
-	// Add 1 to get the 1-based index
+	// Replace the last element in the RuleBuffer array with this ruleset
+	{
+
+		std::lock_guard<std::mutex> lock(ruleBufferMutex);
+		ruleBuffer[ruleBufferLastIndex].rules = { rulesToReturn };
+		ruleBuffer[ruleBufferLastIndex].tileAppliedTo = domain;
+	}
 	return rulesToReturn;
 }

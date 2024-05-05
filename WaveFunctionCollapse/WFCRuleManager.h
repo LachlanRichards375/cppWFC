@@ -3,6 +3,12 @@
 #include "IWFCRule.h"
 #include <vector>
 
+struct RuleNode {
+public:
+	std::vector<IWFCRule*> rules;
+	unsigned long long tileAppliedTo = 0;
+};
+
 class WFCRuleManager
 {
 private:
@@ -10,6 +16,10 @@ private:
 	static std::vector<std::vector<IWFCRule*>> rulesOnTiles;
 	static int getLeastSignifigantBit(unsigned long long);
 	static unsigned long long activeDomain;
+	static std::mutex ruleBufferMutex;
+
+
+	static std::vector<RuleNode> ruleBuffer;
 public:
 	//static std::vector<WFCPosition&> GetRulesAffectingDomain(unsigned long long domain);
 	static void AddRuleToTile(unsigned long long ruleAppliesTo, IWFCRule* rule);
